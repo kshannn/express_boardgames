@@ -59,6 +59,16 @@ exports.up = function (db) {
       type: 'datetime',
       notNull: true
     },
+    designer:{
+      type: 'string',
+      length: 100,
+      notNull: true
+    },
+    publisher:{
+      type: 'string',
+      length: 100,
+      notNull: true
+    },
     stock: {
       type: 'int',
       notNull: true
@@ -67,20 +77,6 @@ exports.up = function (db) {
       type: 'string',
       length: 300,
       notNull: true
-    },
-    publisher_id: {
-      type: 'int',
-      unsigned: true,
-      notNull: true,
-      foreignKey: {
-        name: 'game_publisher_fk',
-        table: 'publishers',
-        mapping: 'id',
-        rules: {
-          onDelete: 'cascade',
-          onUpdate: 'restrict'
-        }
-      }
     },
     vendor_id: {
       type: 'int',
