@@ -71,6 +71,7 @@ exports.up = function (db) {
     publisher_id: {
       type: 'int',
       unsigned: true,
+      notNull: true,
       foreignKey: {
         name: 'game_publisher_fk',
         table: 'publishers',
@@ -84,6 +85,7 @@ exports.up = function (db) {
     vendor_id: {
       type: 'int',
       unsigned: true,
+      notNull: true,
       foreignKey: {
         name: 'game_vendor_fk',
         table: 'vendors',
