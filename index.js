@@ -28,8 +28,11 @@ app.use(
     })
 );
 
+// import routes
+const landingRoutes = require('./routes/landing')
 
 async function main() {
+    app.use('/', landingRoutes);
 }
 
 
