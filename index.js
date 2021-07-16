@@ -30,9 +30,12 @@ app.use(
 
 // import routes
 const landingRoutes = require('./routes/landing')
+const gameRoutes = require('./routes/games')
 
 async function main() {
     app.use('/', landingRoutes);
+    app.use('/games', gameRoutes);
+
 }
 
 

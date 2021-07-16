@@ -1,0 +1,26 @@
+{{#extends 'base'}}
+
+{{#block "content"}}
+
+{{#each games}}
+    <p>id: {{this.id}}</p>
+    <p>name: {{this.name}}</p>
+    <p>price: {{this.price}}</p>
+    <p>description: {{this.description}}</p>
+    <p>min_player: {{this.min_player_count}}</p>
+    <p>max_player: {{this.max_player_count}}</p>
+    <p>age: {{this.min_age}}</p>
+    <p>duration: {{this.duration}}</p>
+    <p>posted on: {{this.posted_date}}</p>
+    <p>published on: {{this.published_date}}</p>
+    <p>designer: {{this.designer}}</p>
+    <p>publisher: {{this.publisher}}</p>
+    <p>stock: {{this.stock}}</p>
+    <p>image: {{this.image}}</p>
+    <p>vendor_id: {{this.vendor_id}}</p>
+{{/each}}
+
+
+{{/block}}
+
+{{/extends}}

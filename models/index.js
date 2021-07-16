@@ -6,7 +6,7 @@ const bookshelf = require('../bookshelf')
 const Vendor = bookshelf.model('Vendor', {
     tableName: 'vendors', 
     game() {
-        return this.hasMany('game')
+        return this.hasMany('Game')
     }
 })
 
@@ -18,7 +18,7 @@ const Vendor = bookshelf.model('Vendor', {
 const Game = bookshelf.model('Game', {
     tableName: 'games',
     vendor() {
-        return this.belongsTo('vendor')
+        return this.belongsTo('Vendor')
     }
 })
 
