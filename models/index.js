@@ -88,4 +88,4 @@ const Order = bookshelf.model('Order', {
     }
 })
 
-module.exports = { Game, Vendor }
+module.exports = { User, Vendor, Category, Status, Game, CartItem, Transaction, Order }
