@@ -15,7 +15,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.createTable('games_transactions', {
+  return db.createTable('orders', {
     id: {
       type: 'int',
       primaryKey: true,
@@ -57,26 +57,12 @@ exports.up = function(db) {
           onUpdate: 'restrict'
         }
       }
-    },
-    vendor_id :{
-      type: 'int',
-      unsigned: true,
-      notNull: true,
-      foreignKey: {
-        name: 'games_transactions_vendor_fk',
-        table: 'vendors',
-        mapping: 'id',
-        rules: {
-          onDelete: 'cascade',
-          onUpdate: 'restrict'
-        }
-      }
     }
   });
 };
 
 exports.down = function(db) {
-  return db.dropTable('games_transactions');
+  return db.dropTable('orders');
 };
 
 exports._meta = {
