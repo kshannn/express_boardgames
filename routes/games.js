@@ -1,6 +1,6 @@
 const express = require('express');
-const { bootstrapField, createGameForm } = require('../forms');
 const router = express.Router();
+const { bootstrapField, createGameForm } = require('../forms');
 
 // import model
 const { Game } = require('../models')

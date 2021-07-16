@@ -26,7 +26,58 @@ var bootstrapField = function (name, object) {
 };
 
 
-// games
+// ===== Vendor =====
+const createVendorRegistrationForm = () => {
+    return forms.create({
+        'username': fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'address': fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'phone_number': fields.tel({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'email': fields.email({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'password': fields.password({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'confirm_password': fields.password({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            validators: [validators.matchField('password')]
+        })
+
+    })
+}
+
+
+// ===== Games =====
 const createGameForm = () => {
     return forms.create({
         'name': fields.string({
@@ -119,7 +170,9 @@ const createGameForm = () => {
     })
 }
 
+
 module.exports = {
     bootstrapField,
-    createGameForm
+    createGameForm,
+    createVendorRegistrationForm
 }
