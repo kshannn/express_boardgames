@@ -19,18 +19,18 @@ router.post('/create', async (req,res) => {
     const vendorRegistrationForm = createVendorRegistrationForm();
     vendorRegistrationForm.handle(req, {
         'success': async (form) => {
+            console.log(form.data)
             const vendor = new Vendor()
             vendor.set('username', form.data.username)
             vendor.set('address', form.data.address)
-            vendor.set('phone_number', form.data.phone_number)
             vendor.set('email', form.data.email)
             vendor.set('password', form.data.password)
             await vendor.save();
             res.redirect('/')
         },
-        'error': async (vendorRegistrationForm) => {
+        'error': async (form) => {
             res.render('auth/create', {
-                'form': vendorRegistrationForm.toHTML(bootstrapField)
+                'form': form.toHTML(bootstrapField)
             })
         }
     })

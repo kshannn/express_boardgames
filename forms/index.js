@@ -43,13 +43,6 @@ const createVendorRegistrationForm = () => {
                 label: ['form-label']
             }
         }),
-        'phone_number': fields.tel({
-            required: true,
-            errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            }
-        }),
         'email': fields.email({
             required: true,
             errorAfterField: true,
