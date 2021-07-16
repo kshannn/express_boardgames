@@ -48,7 +48,8 @@ const createVendorRegistrationForm = () => {
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators: [validators.email()]
         }),
         'password': fields.password({
             required: true,
@@ -69,6 +70,25 @@ const createVendorRegistrationForm = () => {
     })
 }
 
+// ===== Login (Vendor) =====
+const createLoginForm = () => {
+    return forms.create({
+        'email': fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'password': fields.password({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        })
+    })
+}
 
 // ===== Games =====
 const createGameForm = () => {
@@ -167,5 +187,6 @@ const createGameForm = () => {
 module.exports = {
     bootstrapField,
     createGameForm,
-    createVendorRegistrationForm
+    createVendorRegistrationForm,
+    createLoginForm
 }

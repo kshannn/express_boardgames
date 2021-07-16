@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router();
-const { bootstrapField, createVendorRegistrationForm } = require('../forms');
+const { bootstrapField, createVendorRegistrationForm, createLoginForm } = require('../forms');
 
 // import model
 const { Vendor } = require('../models')
@@ -19,7 +19,6 @@ router.post('/create', async (req,res) => {
     const vendorRegistrationForm = createVendorRegistrationForm();
     vendorRegistrationForm.handle(req, {
         'success': async (form) => {
-            console.log(form.data)
             const vendor = new Vendor()
             vendor.set('username', form.data.username)
             vendor.set('address', form.data.address)
@@ -35,6 +34,24 @@ router.post('/create', async (req,res) => {
         }
     })
 })
+
+
+// === [U] update vendor account ===
+// 1. render form
+// router.get('/update', async (req,res), {
+    
+// })
+
+
+// === Login for Vendor ===
+router.get('/login', async (req,res) => {
+    const loginForm = createLoginForm();
+    res.render('auth/login', {
+        'form': loginForm.toHTML(bootstrapField)
+    })
+})
+
+
 
 
 module.exports = router;
