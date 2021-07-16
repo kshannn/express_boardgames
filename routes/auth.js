@@ -25,12 +25,14 @@ router.post('/create', async (req,res) => {
             vendor.set('email', form.data.email)
             vendor.set('password', form.data.password)
             await vendor.save();
-            res.redirect('/')
+            req.flash("success_messages", `Account successfully created.`)
+            res.redirect('/auth/login')
         },
         'error': async (form) => {
             res.render('auth/create', {
                 'form': form.toHTML(bootstrapField)
             })
+            req.flash('error_messages', 'Failed to create account. Please try again.')
         }
     })
 })

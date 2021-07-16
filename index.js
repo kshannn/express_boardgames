@@ -28,10 +28,39 @@ app.use(
     })
 );
 
+
+// === sessions and flash messages ===
+const session = require('express-session')
+const flash = require('connect-flash')
+
+
+// session file store
+const FileStore = require('session-file-store')(session);
+
+// set up sessions
+app.use(session({
+    'store': new FileStore(),
+    'secret': process.env.SESSION_SECRET,
+    'resave': false,
+    saveUninitialized: true
+}))
+
+// set up flash messages
+app.use(flash())
+
+// register flash middleware
+app.use(function (req, res, next) {
+    res.locals.success_messages = req.flash("success_messages");
+    res.locals.error_messages = req.flash("error_messages");
+    next();
+});
+
+
 // import routes
 const landingRoutes = require('./routes/landing')
 const gameRoutes = require('./routes/games')
 const authRoutes = require('./routes/auth')
+
 
 async function main() {
     app.use('/', landingRoutes);
