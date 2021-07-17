@@ -31,25 +31,25 @@ router.post('/create', async (req,res) => {
     gameForm.handle(req, {
         'success': async (form) => {
             // create new instance in games table
-            const gameListing = new GameListing();
-            gameListing.set('name', form.data.name)
-            gameListing.set('price', form.data.price)
-            gameListing.set('description', form.data.description)
-            gameListing.set('min_player_count', form.data.min_player_count)
-            gameListing.set('max_player_count', form.data.max_player_count)
-            gameListing.set('min_age', form.data.min_age)
-            gameListing.set('duration', form.data.duration)
-            gameListing.set('designer', form.data.designer)
-            gameListing.set('publisher', form.data.publisher)
-            gameListing.set('stock', form.data.stock)
+            let {categories, ...gameListingData} = form.data 
+
+            // set all the fields from form.data in object format when creating an instance of GameListing
+            const gameListing = new GameListing(gameListingData);
+
+            console.log(form.data) // returns all key/value of all form fields
+            console.log(gameListingData) // returns all keu/values for each form fields except for 'categories' field
+            console.log(categories) // returns just the values for categories in string
+
+        
             gameListing.set('image', 'testimageurl')
             gameListing.set('posted_date', new Date())
-            gameListing.set('published_date', form.data.published_date)
             gameListing.set('vendor_id', req.session.vendor.id)
             await gameListing.save()
 
-            // create new instance in categories_games table
-            // const category_game = new 
+            // if categories are selected, add them to the associative table (i.e. categories_gameListings)
+            if (categories) {
+                await gameListing.category().attach(categories.split(","))
+            }
 
             res.redirect('/listings')
 
