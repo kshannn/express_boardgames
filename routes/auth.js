@@ -8,8 +8,7 @@ const {
 
 // import model
 const {
-    Vendor,
-    User
+    Vendor
 } = require('../models')
 
 // === [C] create vendor account ===
@@ -26,14 +25,36 @@ router.post('/create', async (req, res) => {
     const vendorRegistrationForm = createVendorRegistrationForm();
     vendorRegistrationForm.handle(req, {
         'success': async (form) => {
-            const vendor = new Vendor()
-            vendor.set('username', form.data.username)
-            vendor.set('address', form.data.address)
-            vendor.set('email', form.data.email)
-            vendor.set('password', form.data.password)
-            await vendor.save();
-            req.flash("success_messages", `Account successfully created.`)
-            res.redirect('/auth/login')
+
+            // case 1 - email already exist in database
+            // find vendor by email
+            let vendor = await Vendor.where({
+                'email': form.data.email
+            }).fetch({
+                require: false
+            });
+
+            let emailExist = false
+
+            if (vendor) {
+                emailExist = true
+            }
+
+            // case 2 - email does not exist in database
+            if (!emailExist) {
+                const vendor = new Vendor()
+                vendor.set('username', form.data.username)
+                vendor.set('address', form.data.address)
+                vendor.set('email', form.data.email)
+                vendor.set('password', form.data.password)
+                await vendor.save();
+                req.flash("success_messages", `Account successfully created.`)
+                res.redirect('/auth/login')
+            } 
+            else {
+                req.flash('error_messages', 'Current email has already been used. Please pick another email.')
+                res.redirect('/auth/create')
+            }
         },
         'error': async (form) => {
             res.render('auth/create', {
@@ -66,44 +87,40 @@ router.post('/login', async (req, res) => {
     const loginForm = createLoginForm();
     loginForm.handle(req, {
         'success': async (form) => {
-            // find user by email
-            let user = await User.where({
+            // find vendor by email
+            let vendor = await Vendor.where({
                 'email': form.data.email
             }).fetch({
                 require: false
             });
 
-            // 1. case1 - user email doesn't match database (no data fetched)
-            if (!user) {
+            // 1. case1 - vendor email doesn't match database (no data fetched)
+            if (!vendor) {
                 req.flash("error_messages", "Sorry, the authentication details you have provided is invalid. Please try again.")
                 res.redirect('/auth/login')
             } else {
-            // 2. case2 - user email match database
-                // check if password matches database
-                if (user.get('password') === form.data.password) {
-                    // add to the session that login succeed
+                // 2. case2 - vendor email match database
+                // check if password matches database too
+                if (vendor.get('password') === form.data.password) {
 
-                    // store the user details
-                    req.session.user = {
-                        id: user.get('id'),
-                        username: user.get('username'),
-                        email: user.get('email')
+                    // store vendor details in session if login is successful
+                    req.session.vendor = {
+                        id: vendor.get('id'),
+                        username: vendor.get('username'),
+                        email: vendor.get('email')
                     }
-                    req.flash("success_messages", "Welcome back, " + user.get('username'));
+                    req.flash("success_messages", "Welcome, " + vendor.get('username'));
                     res.redirect('/users/profile');
                 } else {
                     req.flash("error_messages", "Sorry, the authentication details you have provided is invalid. Please try again.")
-                    res.redirect('/users/login')
+                    res.redirect('/auth/login')
                 }
-
             }
-
-            
         }
     })
-    
 
-    
+
+
 })
 
 
