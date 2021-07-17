@@ -15,20 +15,20 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.createTable('categories_games', {
+  return db.createTable('categories_gameListings', {
     id: {
       type: 'int',
       primaryKey: true,
       autoIncrement: true,
       unsigned: true
     },
-    game_id :{
+    gameListing_id :{
       type: 'int',
       unsigned: true,
       notNull: true,
       foreignKey: {
-        name: 'game_category_fk',
-        table: 'games',
+        name: 'gameListing_category_fk',
+        table: 'gameListings',
         mapping: 'id',
         rules: {
           onDelete: 'cascade',
@@ -41,7 +41,7 @@ exports.up = function(db) {
       unsigned: true,
       notNull: true,
       foreignKey: {
-        name: 'category_game_fk',
+        name: 'category_gameListing_fk',
         table: 'categories',
         mapping: 'id',
         rules: {
@@ -54,7 +54,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return dropTable('categories_games');
+  return dropTable('categories_gameListings');
 };
 
 exports._meta = {

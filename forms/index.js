@@ -1,6 +1,9 @@
 // import in caolan forms
 const forms = require('forms');
 
+// import in models
+const { GameListing } = require('../models')
+
 // create shortcuts
 const fields = forms.fields;
 const validators = forms.validators;
@@ -91,7 +94,7 @@ const createLoginForm = () => {
 }
 
 // ===== Games =====
-const createGameForm = () => {
+const createGameForm = (category) => {
     return forms.create({
         'name': fields.string({
             required: true,
@@ -99,6 +102,15 @@ const createGameForm = () => {
             cssClasses: {
                 label: ['form-label']
             }
+        }),
+        'categories':fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses:{
+                label: ['form-label']
+            },
+            widget: widgets.multipleSelect(),
+            choices: category
         }),
         'price': fields.string({
             required: true,
@@ -160,14 +172,6 @@ const createGameForm = () => {
         'stock': fields.string({
             required: true,
             errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            }
-        }),
-        'posted_date': fields.date({
-            required: true,
-            errorAfterField: true,
-            widget: forms.widgets.date(),
             cssClasses: {
                 label: ['form-label']
             }

@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router();
 const crypto = require('crypto');
 
+// =================================== IMPORT =================================== 
+
 // import caolan form 
 const {
     bootstrapField,
@@ -21,7 +23,7 @@ const getHashedPassword = (password) => {
     return hash;
 }
  
-
+// =================================== ROUTES =================================== 
 // === [C] create vendor account ===
 // 1. render form
 router.get('/create', async (req, res) => {

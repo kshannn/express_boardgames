@@ -30,13 +30,13 @@ exports.up = function(db) {
       type: 'int',
       notNull: true
     },
-    game_id :{
+    gameListing_id :{
       type: 'int',
       unsigned: true,
       notNull: true,
       foreignKey: {
-        name: 'games_transactions_game_fk',
-        table: 'games',
+        name: 'order_gameListing_fk',
+        table: 'gameListings',
         mapping: 'id',
         rules: {
           onDelete: 'cascade',
@@ -49,7 +49,7 @@ exports.up = function(db) {
       unsigned: true,
       notNull: true,
       foreignKey: {
-        name: 'games_transactions_transaction_fk',
+        name: 'order_transaction_fk',
         table: 'transactions',
         mapping: 'id',
         rules: {

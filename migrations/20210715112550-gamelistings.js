@@ -15,7 +15,7 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable('games', {
+  return db.createTable('gameListings', {
     id: {
       type: 'int',
       primaryKey: true,
@@ -83,7 +83,7 @@ exports.up = function (db) {
       unsigned: true,
       notNull: true,
       foreignKey: {
-        name: 'game_vendor_fk',
+        name: 'gameListing_vendor_fk',
         table: 'vendors',
         mapping: 'id',
         rules: {
@@ -96,7 +96,7 @@ exports.up = function (db) {
 };
 
 exports.down = function (db) {
-  return db.dropTable('games');
+  return db.dropTable('gameListings');
 };
 
 exports._meta = {

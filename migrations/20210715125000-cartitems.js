@@ -44,13 +44,13 @@ exports.up = function(db) {
         }
       }
     },
-    game_id :{
+    gameListing_id :{
       type: 'int',
       unsigned: true,
       notNull: true,
       foreignKey: {
-        name: 'game_cartItem_fk',
-        table: 'games',
+        name: 'gameListing_cartItem_fk',
+        table: 'gameListings',
         mapping: 'id',
         rules: {
           onDelete: 'cascade',
