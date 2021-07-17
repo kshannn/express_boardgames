@@ -1,8 +1,7 @@
+// =================================== IMPORTED =================================== 
+// import express and express router
 const express = require('express')
 const router = express.Router();
-const crypto = require('crypto');
-
-// =================================== IMPORT =================================== 
 
 // import caolan form 
 const {
@@ -17,6 +16,7 @@ const {
 } = require('../models')
 
 // import crypto for password encryption
+const crypto = require('crypto');
 const getHashedPassword = (password) => {
     const sha256 = crypto.createHash('sha256');
     const hash = sha256.update(password).digest('base64');
@@ -131,12 +131,13 @@ router.post('/login', async (req, res) => {
             }
         }
     })
-
-
-
 })
 
-
-
+// === Logout for Vendor ===
+router.get('/logout', async (req, res) => {
+    req.session.vendor = null
+    req.flash('success_messages','Logged out successfully. See you again!')
+    res.redirect('/auth/login')
+})
 
 module.exports = router;

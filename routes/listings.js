@@ -1,10 +1,16 @@
+// =================================== IMPORTED =================================== 
+// import express and express router
 const express = require('express');
 const router = express.Router();
+
+// import caolan form
 const { bootstrapField, createGameForm } = require('../forms');
 
 // import model
 const { GameListing, Category } = require('../models')
 
+
+// =================================== ROUTES =================================== 
 // === [R] display all games ===
 router.get('/', async (req,res) => {
     let gameListings = await GameListing.collection().fetch({withRelated: ['vendor']});
@@ -40,7 +46,6 @@ router.post('/create', async (req,res) => {
             console.log(gameListingData) // returns all keu/values for each form fields except for 'categories' field
             console.log(categories) // returns just the values for categories in string
 
-        
             gameListing.set('image', 'testimageurl')
             gameListing.set('posted_date', new Date())
             gameListing.set('vendor_id', req.session.vendor.id)
@@ -52,10 +57,8 @@ router.post('/create', async (req,res) => {
             }
 
             res.redirect('/listings')
-
         }
     })
-
 })
 
 module.exports = router;

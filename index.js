@@ -55,6 +55,12 @@ app.use(function (req, res, next) {
     next();
 });
 
+// make vendor available to all HBS files by storing sessions in res.locals
+app.use(function (req, res, next) {
+    res.locals.vendor = req.session.vendor;
+    next();
+})
+
 
 // import routes
 const landingRoutes = require('./routes/landing')
