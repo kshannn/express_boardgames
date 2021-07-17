@@ -13,9 +13,18 @@ const { GameListing, Category } = require('../models')
 // =================================== ROUTES =================================== 
 // === [R] display all games ===
 router.get('/', async (req,res) => {
-    let gameListings = await GameListing.collection().fetch({withRelated: ['vendor']});
+    // let gameListings = await GameListing.collection().fetch({withRelated: ['vendor']});
+    // console.log(gameListings.toJSON())
+    // let gameListings = await GameListing.collection().fetch()
+    let gameListings = await GameListing.collection().where(
+        'vendor_id', req.session.vendor.id
+    ).fetch()
+    
+    // if return single item (i.e. not array), put in array
+    gameListings = Array.isArray(gameListings.toJSON())? gameListings.toJSON(): [gameListings.toJSON()]
+    
     res.render('listings/index',{
-        'gameListings': gameListings.toJSON()
+        'gameListings': gameListings
     })
 })
 

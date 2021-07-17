@@ -123,7 +123,7 @@ router.post('/login', async (req, res) => {
                         email: vendor.get('email')
                     }
                     req.flash("success_messages", "Welcome, " + vendor.get('username'));
-                    res.redirect('/profile/listings');
+                    res.redirect('/listings');
                 } else {
                     req.flash("error_messages", "Sorry, the authentication details you have provided is invalid. Please try again.")
                     res.redirect('/auth/login')
