@@ -58,14 +58,16 @@ app.use(function (req, res, next) {
 
 // import routes
 const landingRoutes = require('./routes/landing')
-const gameRoutes = require('./routes/games')
+const listingsRoutes = require('./routes/listings')
 const authRoutes = require('./routes/auth')
+const profileRoutes = require('./routes/profile')
 
 
 async function main() {
     app.use('/', landingRoutes);
-    app.use('/games', gameRoutes);
+    app.use('/listings', listingsRoutes);
     app.use('/auth', authRoutes)
+    app.use('/profile', profileRoutes)
 
 }
 

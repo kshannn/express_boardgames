@@ -8,7 +8,7 @@ const { Game } = require('../models')
 // === [R] display all games ===
 router.get('/', async (req,res) => {
     let games = await Game.collection().fetch({withRelated: ['vendor']});
-    res.render('games/index',{
+    res.render('listings/index',{
         'games': games.toJSON()
     })
 })
@@ -17,7 +17,7 @@ router.get('/', async (req,res) => {
 // 1. render form
 router.get('/create', async (req,res) => {
     const gameForm = createGameForm();
-    res.render('games/create',{
+    res.render('listings/create',{
         'form': gameForm.toHTML(bootstrapField)
     })
 })

@@ -1,5 +1,8 @@
 const express = require('express')
 const router = express.Router();
+const crypto = require('crypto');
+
+// import caolan form 
 const {
     bootstrapField,
     createVendorRegistrationForm,
@@ -10,6 +13,14 @@ const {
 const {
     Vendor
 } = require('../models')
+
+// import crypto for password encryption
+const getHashedPassword = (password) => {
+    const sha256 = crypto.createHash('sha256');
+    const hash = sha256.update(password).digest('base64');
+    return hash;
+}
+ 
 
 // === [C] create vendor account ===
 // 1. render form
@@ -46,7 +57,7 @@ router.post('/create', async (req, res) => {
                 vendor.set('username', form.data.username)
                 vendor.set('address', form.data.address)
                 vendor.set('email', form.data.email)
-                vendor.set('password', form.data.password)
+                vendor.set('password', getHashedPassword(form.data.password))
                 await vendor.save();
                 req.flash("success_messages", `Account successfully created.`)
                 res.redirect('/auth/login')
@@ -101,7 +112,7 @@ router.post('/login', async (req, res) => {
             } else {
                 // 2. case2 - vendor email match database
                 // check if password matches database too
-                if (vendor.get('password') === form.data.password) {
+                if (vendor.get('password') === getHashedPassword(form.data.password)){
 
                     // store vendor details in session if login is successful
                     req.session.vendor = {
@@ -110,7 +121,7 @@ router.post('/login', async (req, res) => {
                         email: vendor.get('email')
                     }
                     req.flash("success_messages", "Welcome, " + vendor.get('username'));
-                    res.redirect('/users/profile');
+                    res.redirect('/profile/listings');
                 } else {
                     req.flash("error_messages", "Sorry, the authentication details you have provided is invalid. Please try again.")
                     res.redirect('/auth/login')
