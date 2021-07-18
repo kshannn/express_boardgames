@@ -45,10 +45,10 @@ router.post('/create', async (req,res) => {
     const gameForm = createGameForm();
     gameForm.handle(req, {
         'success': async (form) => {
-            // create new instance in games table
+           // set all the fields from form.data in object format when creating an instance of GameListing
             let {categories, ...gameListingData} = form.data 
 
-            // set all the fields from form.data in object format when creating an instance of GameListing
+             // create new instance in games table
             const gameListing = new GameListing(gameListingData);
 
             console.log(form.data) // returns all key/value of all form fields
@@ -64,7 +64,7 @@ router.post('/create', async (req,res) => {
             if (categories) {
                 await gameListing.category().attach(categories.split(","))
             }
-
+            req.flash('success_messages','Listing successfully created!')
             res.redirect('/listings')
         },
         'error': async (form) => {
@@ -110,10 +110,56 @@ router.get('/:listingId/update', async (req, res) => {
 
     // render form
     res.render('listings/update', {
-        'form': gameForm.toHTML(bootstrapField)
+        'form': gameForm.toHTML(bootstrapField),
+        'gameListing': gameListing.toJSON()
     })
 })
 
 // 2. process form
+router.post('/:listingId/update', async(req,res) => {
+    // retrieve listing to update
+    const gameListing = await GameListing.where('id',req.params.listingId).fetch({
+        require: true,
+        withRelated: ['category']
+    })
+
+     // fetch categories
+     let allCategories = await Category.fetchAll().map( category => [category.get('id'),category.get('name')])
+
+    // retrieve form
+    const gameForm = createGameForm(allCategories); 
+    
+    // process form
+    gameForm.handle(req, {
+        'success': async(form) => {
+            let {categories, ...gameListingData} = form.data
+            gameListing.set (gameListingData)
+            gameListing.set('image', 'testimageurl')
+            await gameListing.save()
+
+            // clear existing categories
+            let existingCategories = await gameListing.related('category').pluck('id');
+            gameListing.category().detach(existingCategories);
+
+            // re-add selected categories
+            if (categories) {
+                await gameListing.category().attach(categories.split(","))
+            }
+
+            req.flash('success_messages','Listing successfully updated!')
+            res.redirect('/listings')
+        },
+        'error': async (form) => {
+            res.render('listings/update', {
+                'form': gameForm.toHTML(bootstrapField),
+                'gameListing': gameListing.toJSON()
+            }),
+            req.flash('error_messages','There was an error in updating the listing. Please try again.')
+        }
+    })
+    
+ 
+    
+})
 
 module.exports = router;
