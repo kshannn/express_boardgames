@@ -9,13 +9,13 @@ const { bootstrapField, createGameForm } = require('../forms');
 // import model
 const { GameListing, Category } = require('../models')
 
+// import dal
+const dataLayer = require('../dal/listings')
+
 
 // =================================== ROUTES =================================== 
 // === [R] display all games ===
 router.get('/', async (req,res) => {
-    // let gameListings = await GameListing.collection().fetch({withRelated: ['vendor']});
-    // console.log(gameListings.toJSON())
-    // let gameListings = await GameListing.collection().fetch()
     let gameListings = await GameListing.collection().where(
         'vendor_id', req.session.vendor.id
     ).fetch()
@@ -32,7 +32,7 @@ router.get('/', async (req,res) => {
 // 1. render form
 router.get('/create', async (req,res) => {
     // fetch categories
-    let allCategories = await Category.fetchAll().map( category => [category.get('id'),category.get('name')])
+    let allCategories = await dataLayer.getAllCategories()
 
     const gameForm = createGameForm(allCategories);
     res.render('listings/create',{
@@ -46,16 +46,16 @@ router.post('/create', async (req,res) => {
     gameForm.handle(req, {
         'success': async (form) => {
            // set all the fields from form.data in object format when creating an instance of GameListing
-            let {categories, ...gameListingData} = form.data 
+            let {categories, image, ...gameListingData} = form.data 
 
              // create new instance in games table
             const gameListing = new GameListing(gameListingData);
 
-            console.log(form.data) // returns all key/value of all form fields
-            console.log(gameListingData) // returns all keu/values for each form fields except for 'categories' field
-            console.log(categories) // returns just the values for categories in string
-
-            gameListing.set('image', 'testimageurl')
+            // console.log(form.data) // returns all key/value of all form fields
+            // console.log(gameListingData) // returns all key/values for each form fields except for 'categories' field
+            // console.log(categories) // returns just the values for categories in string
+        
+            gameListing.set('image', image.slice(1))
             gameListing.set('posted_date', new Date())
             gameListing.set('vendor_id', req.session.vendor.id)
             await gameListing.save()
@@ -80,13 +80,10 @@ router.post('/create', async (req,res) => {
 // 1. render form
 router.get('/:listingId/update', async (req, res) => {
     // retrieve game listing
-    const gameListing = await GameListing.where('id',req.params.listingId).fetch({
-        require: true,
-        withRelated: ['category']
-    })
+    const gameListing = await dataLayer.getGameListingById(req.params.listingId)
 
     // fetch categories
-    let allCategories = await Category.fetchAll().map( category => [category.get('id'),category.get('name')])
+    let allCategories = await dataLayer.getAllCategories()
 
     // retrieve form
     const gameForm = createGameForm(allCategories);
@@ -118,13 +115,10 @@ router.get('/:listingId/update', async (req, res) => {
 // 2. process form
 router.post('/:listingId/update', async (req,res) => {
     // retrieve listing to update
-    const gameListing = await GameListing.where('id',req.params.listingId).fetch({
-        require: true,
-        withRelated: ['category']
-    })
+    const gameListing = await dataLayer.getGameListingById(req.params.listingId)
 
      // fetch categories
-     let allCategories = await Category.fetchAll().map( category => [category.get('id'),category.get('name')])
+     let allCategories = await dataLayer.getAllCategories()
 
     // retrieve form
     const gameForm = createGameForm(allCategories); 
@@ -167,10 +161,7 @@ router.post('/:listingId/update', async (req,res) => {
 // 1. render 
 router.get('/:listingId/delete', async (req,res)=> {
     // fetch listing to be deleted
-    const gameListing = await GameListing.where('id',req.params.listingId).fetch({
-        require: true,
-        withRelated: ['category']
-    })
+    const gameListing = await dataLayer.getGameListingById(req.params.listingId)
 
     res.render('listings/delete', {
         'gameListing': gameListing.toJSON()
@@ -180,10 +171,7 @@ router.get('/:listingId/delete', async (req,res)=> {
 // 2. process
 router.post('/:listingId/delete', async (req,res) => {
     // fetch listing to be deleted
-    const gameListing = await GameListing.where('id',req.params.listingId).fetch({
-        require: true,
-        withRelated: ['category']
-    })
+    const gameListing = await dataLayer.getGameListingById(req.params.listingId)
 
     await gameListing.destroy()
     req.flash('success_messages', 'Listing has been successfully removed')
