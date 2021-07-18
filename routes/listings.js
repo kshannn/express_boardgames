@@ -116,7 +116,7 @@ router.get('/:listingId/update', async (req, res) => {
 })
 
 // 2. process form
-router.post('/:listingId/update', async(req,res) => {
+router.post('/:listingId/update', async (req,res) => {
     // retrieve listing to update
     const gameListing = await GameListing.where('id',req.params.listingId).fetch({
         require: true,
@@ -160,6 +160,34 @@ router.post('/:listingId/update', async(req,res) => {
     
  
     
+})
+
+
+// === [D] delete game ===
+// 1. render 
+router.get('/:listingId/delete', async (req,res)=> {
+    // fetch listing to be deleted
+    const gameListing = await GameListing.where('id',req.params.listingId).fetch({
+        require: true,
+        withRelated: ['category']
+    })
+
+    res.render('listings/delete', {
+        'gameListing': gameListing.toJSON()
+    })
+})
+
+// 2. process
+router.post('/:listingId/delete', async (req,res) => {
+    // fetch listing to be deleted
+    const gameListing = await GameListing.where('id',req.params.listingId).fetch({
+        require: true,
+        withRelated: ['category']
+    })
+
+    await gameListing.destroy()
+    req.flash('success_messages', 'Listing has been successfully removed')
+    res.redirect('/listings')
 })
 
 module.exports = router;

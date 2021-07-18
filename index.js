@@ -73,8 +73,6 @@ async function main() {
     app.use('/', landingRoutes);
     app.use('/listings', listingsRoutes);
     app.use('/auth', authRoutes)
-
-
 }
 
 
