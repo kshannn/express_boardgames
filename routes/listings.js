@@ -66,8 +66,54 @@ router.post('/create', async (req,res) => {
             }
 
             res.redirect('/listings')
+        },
+        'error': async (form) => {
+            res.render('listings/create',{
+                'form': form.toHTML(bootstrapField)
+            })
+            req.flash('error_messages','There was an error in creating the listing. Please try again.')
         }
     })
 })
+
+// === [U] update game ===
+// 1. render form
+router.get('/:listingId/update', async (req, res) => {
+    // retrieve game listing
+    const gameListing = await GameListing.where('id',req.params.listingId).fetch({
+        require: true,
+        withRelated: ['category']
+    })
+
+    // fetch categories
+    let allCategories = await Category.fetchAll().map( category => [category.get('id'),category.get('name')])
+
+    // retrieve form
+    const gameForm = createGameForm(allCategories);
+
+    // fill in existing form
+    gameForm.fields.name.value = gameListing.get('name')
+    gameForm.fields.price.value = gameListing.get('price')
+    gameForm.fields.description.value = gameListing.get('description')
+    gameForm.fields.min_player_count.value = gameListing.get('min_player_count')
+    gameForm.fields.max_player_count.value = gameListing.get('max_player_count')
+    gameForm.fields.min_age.value = gameListing.get('min_age')
+    gameForm.fields.duration.value = gameListing.get('duration')
+    gameForm.fields.designer.value = gameListing.get('designer')
+    gameForm.fields.publisher.value = gameListing.get('publisher')
+    gameForm.fields.stock.value = gameListing.get('stock')
+    gameForm.fields.published_date.value = gameListing.get('published_date')
+
+    // fill in existing category (many-to-many), rmb to bring in the relationship with the model using withRelated
+    let selectedCategories = await gameListing.related('category').pluck('id'); // returns an array of id
+    gameForm.fields.categories.value = selectedCategories
+
+    // render form
+    res.render('listings/update', {
+        'form': gameForm.toHTML(bootstrapField)
+    })
+})
+
+// 2. process form
 
 module.exports = router;
