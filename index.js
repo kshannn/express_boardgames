@@ -69,7 +69,8 @@ const authRoutes = require('./routes/auth')
 
 // import api routes
 const api = {
-    users: require('./routes/api/users')
+    users: require('./routes/api/users'),
+    cart: require('./routes/api/cart')
 }
 
 
@@ -78,6 +79,7 @@ async function main() {
     app.use('/listings', listingsRoutes);
     app.use('/auth', authRoutes)
     app.use('/api/users', express.json(), api.users)
+    app.use('/api/cart', express.json(), api.cart)
 }
 
 
