@@ -10,7 +10,10 @@ const { bootstrapField, createGameForm } = require('../forms');
 const { GameListing, Category } = require('../models')
 
 // import dal
-const dataLayer = require('../dal/listings')
+const listingDataLayer = require('../dal/listings')
+
+// import uploadcare public key 
+const img_key = process.env.UPLOADCARE_PUBLIC_KEY
 
 
 // =================================== ROUTES =================================== 
@@ -32,11 +35,12 @@ router.get('/', async (req,res) => {
 // 1. render form
 router.get('/create', async (req,res) => {
     // fetch categories
-    let allCategories = await dataLayer.getAllCategories()
+    let allCategories = await listingDataLayer.getAllCategories()
 
     const gameForm = createGameForm(allCategories);
     res.render('listings/create',{
-        'form': gameForm.toHTML(bootstrapField)
+        'form': gameForm.toHTML(bootstrapField),
+        'img_key': img_key
     })
 })
 
@@ -80,10 +84,10 @@ router.post('/create', async (req,res) => {
 // 1. render form
 router.get('/:listingId/update', async (req, res) => {
     // retrieve game listing
-    const gameListing = await dataLayer.getGameListingById(req.params.listingId)
+    const gameListing = await listingDataLayer.getGameListingById(req.params.listingId)
 
     // fetch categories
-    let allCategories = await dataLayer.getAllCategories()
+    let allCategories = await listingDataLayer.getAllCategories()
 
     // retrieve form
     const gameForm = createGameForm(allCategories);
@@ -115,10 +119,10 @@ router.get('/:listingId/update', async (req, res) => {
 // 2. process form
 router.post('/:listingId/update', async (req,res) => {
     // retrieve listing to update
-    const gameListing = await dataLayer.getGameListingById(req.params.listingId)
+    const gameListing = await listingDataLayer.getGameListingById(req.params.listingId)
 
      // fetch categories
-     let allCategories = await dataLayer.getAllCategories()
+     let allCategories = await listingDataLayer.getAllCategories()
 
     // retrieve form
     const gameForm = createGameForm(allCategories); 
@@ -161,7 +165,7 @@ router.post('/:listingId/update', async (req,res) => {
 // 1. render 
 router.get('/:listingId/delete', async (req,res)=> {
     // fetch listing to be deleted
-    const gameListing = await dataLayer.getGameListingById(req.params.listingId)
+    const gameListing = await listingDataLayer.getGameListingById(req.params.listingId)
 
     res.render('listings/delete', {
         'gameListing': gameListing.toJSON()
@@ -171,7 +175,7 @@ router.get('/:listingId/delete', async (req,res)=> {
 // 2. process
 router.post('/:listingId/delete', async (req,res) => {
     // fetch listing to be deleted
-    const gameListing = await dataLayer.getGameListingById(req.params.listingId)
+    const gameListing = await listingDataLayer.getGameListingById(req.params.listingId)
 
     await gameListing.destroy()
     req.flash('success_messages', 'Listing has been successfully removed')

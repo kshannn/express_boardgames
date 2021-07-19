@@ -183,7 +183,8 @@ const createGameForm = (category) => {
             cssClasses: {
                 label: ['form-label']
             }
-        }),
+        })
+        ,
         'image': fields.string({
             required: true,
             errorAfterField: true,

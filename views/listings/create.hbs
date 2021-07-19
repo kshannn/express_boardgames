@@ -4,6 +4,12 @@
 <h1>Create Boardgame Listing</h1>
 <form method="POST">
     {{{form}}}
+    <input
+      type="hidden"
+      role="uploadcare-uploader"
+      data-public-key={{img_key}}
+      id="uploadcareImage"
+      name="image" />
     <button class="btn btn-primary my-3">Create listing</button>
 </form>
 
