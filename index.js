@@ -1,6 +1,7 @@
 const express = require("express");
 const hbs = require("hbs");
 const wax = require("wax-on");
+const cors = require('cors')
 require("dotenv").config();
 
 
@@ -28,6 +29,8 @@ app.use(
     })
 );
 
+// Enable CORS
+app.use(cors())
 
 // === sessions and flash messages ===
 const session = require('express-session')
