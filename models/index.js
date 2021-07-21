@@ -56,7 +56,7 @@ const GameListing = bookshelf.model('GameListing', {
 const CartItem = bookshelf.model('CartItem', {
     tableName: 'cartItems',
     gameListing() {
-        return this.hasOne('GameListing')
+        return this.belongsTo('GameListing')
     },
     user() {
         return this.belongsTo('User')

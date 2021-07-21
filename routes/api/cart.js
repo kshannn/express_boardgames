@@ -11,7 +11,9 @@ const { CartItem, GameListing } = require('../../models')
 // === [R] read cart items for a particular user ===
 router.get('/:userId', async (req,res) => {
     try {
-        const cartItem = await CartItem.collection().where('user_id',req.params.userId).fetch()
+        const cartItem = await CartItem.collection().where('user_id',req.params.userId).fetch({
+            withRelated: ['gameListing']
+        })
         
         res.send(cartItem.toJSON())
         res.status(200)
