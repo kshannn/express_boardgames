@@ -14,6 +14,22 @@ const getHashedPassword = (password) => {
     return hash;
 }
 
+// import JSON web token
+const jwt = require('jsonwebtoken');
+const generateAccessToken = (user) => {
+    return jwt.sign({
+        'username': user.get('username'),
+        'id': user.get('id'),
+        'email': user.get('email')
+    }, process.env.TOKEN_SECRET, {
+        expiresIn: "1h"
+    });
+}
+
+// import middleware
+const {checkIfAuthenticatedJWT} = require('../../middlewares')
+
+
 // =================================== ROUTES =================================== 
 
 // === [C] create user account ===
@@ -50,9 +66,13 @@ router.post('/login', async (req, res) => {
 
         // case 1 - email exist and password match. grant access token
         if (user && (user.get('password') == getHashedPassword(req.body.password))){
-            res.send('log in successful')
+            let accessToken = generateAccessToken(user);
+            res.send({
+                accessToken
+            })
         } else {
             // case 2 - email doesn't exist or password doesn't match
+            res.status(401)
             res.send({
                 'error': 'Invalid login details. Please try again.'
             })
@@ -63,6 +83,13 @@ router.post('/login', async (req, res) => {
         res.status(500)
         res.send('Unexpected internal server error')
     }
+})
+
+
+// FOR TEST: [R] User profile page
+router.get('/profile', checkIfAuthenticatedJWT, async (req,res) => {
+    const user = req.user
+    res.send(user)
 })
 
 

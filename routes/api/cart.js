@@ -24,17 +24,33 @@ router.get('/:userId', async (req,res) => {
 
 
 // === [C] add game listing to cart ===
-router.post('/:userId/:gameListingId/add', async (req,res) => {
+router.post('/:gameListingId/add', async (req,res) => {
     try {
 
-        let gameListing = await GameListing.collection().where('gameListing_id', req.params.gameListingId).fetch()
+        // let gameListing = await GameListing.collection().where('gameListing_id', req.params.gameListingId).fetch()
+        // find if a game listing exist in the user's cart
+        let  cartItem= await CartItem.where({
+            'gameListing_id': req.params.gameListingId,
+            'user_id': 5
+        }).fetch({
+            require: false
+        })
 
-        const cartItem = new CartItem()
-        cartItem.set('user_id', req.params.userId)
-        cartItem.set('gameListing_id', req.params.gameListingId)
-        cartItem.set('quantity', 1)
-        cartItem.set('total_cost', 3000)
-        await cartItem.save()
+
+        // case 1 - Game exist in cart, add 1 to existing quantity
+        if (cartItem) {
+            cartItem.set('quantity', cartItem.get('quantity') + 1)
+            await cartItem.save()
+        } else {
+             // case 2 - Game does not exist in cart, add game to cart item
+             const cartItem = new CartItem()
+             cartItem.set('user_id', 5)
+             cartItem.set('gameListing_id', req.params.gameListingId)
+             cartItem.set('quantity', 1)
+             cartItem.set('total_cost', 3000)
+             await cartItem.save()
+        }
+
         
         res.send(cartItem.toJSON())
         res.status(200)
