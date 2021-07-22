@@ -29,11 +29,10 @@ router.get('/:userId', async (req,res) => {
 router.post('/:gameListingId/add', async (req,res) => {
     try {
 
-        // let gameListing = await GameListing.collection().where('gameListing_id', req.params.gameListingId).fetch()
         // find if a game listing exist in the user's cart
         let  cartItem= await CartItem.where({
             'gameListing_id': req.params.gameListingId,
-            'user_id': 5
+            'user_id': req.body.user_id
         }).fetch({
             require: false
         })
@@ -46,10 +45,10 @@ router.post('/:gameListingId/add', async (req,res) => {
         } else {
              // case 2 - Game does not exist in cart, add game to cart item
              const cartItem = new CartItem()
-             cartItem.set('user_id', 5)
+             cartItem.set('user_id', req.body.user_id)
              cartItem.set('gameListing_id', req.params.gameListingId)
              cartItem.set('quantity', 1)
-             cartItem.set('total_cost', 3000)
+             cartItem.set('total_cost', req.body.total_cost)
              await cartItem.save()
         }
 
@@ -64,13 +63,6 @@ router.post('/:gameListingId/add', async (req,res) => {
 
 })
 
-// fetch user id 
-
-// fetch gameListing id
-
-// if item not in cart, set quantity to one
-
-// if item in cart, add to quantity
 
 
 
