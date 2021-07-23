@@ -4,7 +4,7 @@ const express = require('express')
 const router = express.Router()
 
 // import model
-const { CartItem, GameListing } = require('../../models')
+const { CartItem } = require('../../models')
 
 
 // =================================== ROUTES =================================== 
@@ -61,6 +61,34 @@ router.post('/:gameListingId/add', async (req,res) => {
         res.send('Unexpected internal server error')
     }
 
+})
+
+
+// === [D] remove game listing from cart ===
+router.post('/:gameListingId/remove', async (req,res) => {
+    try {
+
+        // get a game listing from a particular user's cart
+        let  cartItem= await CartItem.where({
+            'gameListing_id': req.params.gameListingId,
+            'user_id': req.body.user_id
+        }).fetch({
+            require: false
+        })
+
+        // if cartItem exist, remove it from cart
+        if (cartItem){
+            cartItem.destroy()
+        }
+    
+        
+        res.send(cartItem.toJSON())
+        res.status(200)
+    } catch (e) {
+        console.log(e)
+        res.status(500)
+        res.send('Unexpected internal server error')
+    }
 })
 
 
