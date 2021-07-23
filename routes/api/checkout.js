@@ -24,13 +24,13 @@ router.get('/', async (req,res) => {
         if (err) {
             return res.sendStatus(403);
         }
-        console.log(user);
+
         req.user = user;
     });
 
     // console.log(req.query.token);
     const user = req.user
-    console.log(user)
+    // console.log('userrr', user)
 
     // get all items from cart
     const cartItems = await CartItem.collection().where('user_id',user.id).fetch({
@@ -69,20 +69,25 @@ router.get('/', async (req,res) => {
     const payment = {
         payment_method_types: ['card'],
         line_items: lineItems,
-        success_url: process.env.STRIPE_SUCCESS_URL + '?sessionId={CHECKOUT_SESSION_ID}',
+        success_url: process.env.STRIPE_SUCCESS_URL,
         cancel_url: process.env.STRIPE_ERROR_URL,
         metadata: {
             'orders': metaData
         }
     }
+   
 
     // step 3: register the session
     let stripeSession = await Stripe.checkout.sessions.create(payment)
+    
+    
 
     res.render('checkout/checkout', {
         'sessionId': stripeSession.id, // 4. get session id
         'publishableKey': process.env.STRIPE_PUBLISHABLE_KEY
     })
+
+    
 
 })
 
