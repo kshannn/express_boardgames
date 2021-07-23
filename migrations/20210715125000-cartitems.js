@@ -26,7 +26,7 @@ exports.up = function(db) {
       type: 'int',
       notNull: true
     },
-    total_cost: {
+    unit_price: {
       type: 'int',
       notNull: true
     },

@@ -48,7 +48,7 @@ router.post('/:gameListingId/add', async (req,res) => {
              cartItem.set('user_id', req.body.user_id)
              cartItem.set('gameListing_id', req.params.gameListingId)
              cartItem.set('quantity', 1)
-             cartItem.set('total_cost', req.body.total_cost)
+             cartItem.set('unit_price', req.body.unit_price)
              await cartItem.save()
         }
 
