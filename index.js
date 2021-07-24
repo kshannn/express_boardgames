@@ -64,6 +64,19 @@ app.use(function (req, res, next) {
     next();
 })
 
+// import csurf
+const csurf = require('csurf')
+
+// enable CSRF
+app.use(csurf())
+
+// share CSRF with hbs files
+app.use(function (req, res, next) {
+    res.locals.csrfToken = req.csrfToken();
+    next();
+})
+
+
 
 // import routes
 const landingRoutes = require('./routes/landing')

@@ -61,12 +61,12 @@ exports.up = function (db) {
     },
     designer:{
       type: 'string',
-      length: 100,
+      length: 200,
       notNull: true
     },
     publisher:{
       type: 'string',
-      length: 100,
+      length: 150,
       notNull: true
     },
     stock: {
