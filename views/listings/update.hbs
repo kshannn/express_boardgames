@@ -5,9 +5,25 @@
 <form method="POST">
     <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
     {{{form}}}
+
+     <input
+      type="hidden"
+      role="uploadcare-uploader"
+      data-public-key={{img_key}}
+      id="uploadcareImage"
+      name="image"
+      value={{prefilledImage}}
+      />
+    
     <button class="btn btn-primary my-3">Update listing</button>
 </form>
 
+{{/block}}
+
+{{#block 'js'}}
+<script
+  src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js">
+</script>
 {{/block}}
 
 {{/extends}}

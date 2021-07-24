@@ -25,18 +25,26 @@
 <table class="table">
     <thead>
         <tr>
+            <th>Date Posted</th>
             <th>Vendor ID</th>
             <th>Name</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         {{#each gameListings}}
         <tr>
             <td>
+                {{this.posted_date}}
+            </td>
+            <td>
                 {{this.vendor_id}}
             </td>
             <td>
                 {{this.name}}
+            </td>
+            <td>
+                <a href='/listings/{{this.id}}/update' class="btn btn-primary btn-small">Edit</a>
             </td>
         </tr>
 

@@ -112,10 +112,15 @@ router.get('/:listingId/update', checkIfAuthenticated, async (req, res) => {
     let selectedCategories = await gameListing.related('category').pluck('id'); // returns an array of id
     gameForm.fields.categories.value = selectedCategories
 
+    // fill in existing image
+    const prefilledImage = gameListing.get('image')
+
     // render form
     res.render('listings/update', {
         'form': gameForm.toHTML(bootstrapField),
-        'gameListing': gameListing.toJSON()
+        'gameListing': gameListing.toJSON(),
+        'img_key': img_key,
+        'prefilledImage': prefilledImage
     })
 })
 
@@ -133,9 +138,9 @@ router.post('/:listingId/update', checkIfAuthenticated, async (req,res) => {
     // process form
     gameForm.handle(req, {
         'success': async(form) => {
-            let {categories, ...gameListingData} = form.data
+            let {categories, image,...gameListingData} = form.data
             gameListing.set (gameListingData)
-            gameListing.set('image', 'testimageurl')
+            gameListing.set('image', image.slice(1))
             await gameListing.save()
 
             // clear existing categories
