@@ -1,6 +1,16 @@
 // import JSON web token
 const jwt = require('jsonwebtoken');
 
+const checkIfAuthenticated = (req, res, next) => {
+    if (req.session.vendor) {
+        next()
+    } else {
+        req.flash('error_messages', 'Please sign in to access the page')
+        res.redirect('/auth/login')
+    }
+}
+
+
 const checkIfAuthenticatedJWT = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
@@ -20,4 +30,4 @@ const checkIfAuthenticatedJWT = (req, res, next) => {
     }
 };
 
-module.exports = { checkIfAuthenticatedJWT }
+module.exports = { checkIfAuthenticated, checkIfAuthenticatedJWT }

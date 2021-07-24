@@ -15,10 +15,13 @@ const listingDataLayer = require('../dal/listings')
 // import uploadcare public key 
 const img_key = process.env.UPLOADCARE_PUBLIC_KEY
 
+// import middleware
+const { checkIfAuthenticated } = require('../middlewares');
+
 
 // =================================== ROUTES =================================== 
 // === [R] display all games ===
-router.get('/', async (req,res) => {
+router.get('/', checkIfAuthenticated, async (req,res) => {
     let gameListings = await GameListing.collection().where(
         'vendor_id', req.session.vendor.id
     ).fetch()
@@ -33,7 +36,7 @@ router.get('/', async (req,res) => {
 
 // === [C] create game ===
 // 1. render form
-router.get('/create', async (req,res) => {
+router.get('/create', checkIfAuthenticated, async (req,res) => {
     // fetch categories
     let allCategories = await listingDataLayer.getAllCategories()
 
@@ -45,7 +48,7 @@ router.get('/create', async (req,res) => {
 })
 
 // 2. process form
-router.post('/create', async (req,res) => {
+router.post('/create', checkIfAuthenticated, async (req,res) => {
     const gameForm = createGameForm();
     gameForm.handle(req, {
         'success': async (form) => {
@@ -82,7 +85,7 @@ router.post('/create', async (req,res) => {
 
 // === [U] update game ===
 // 1. render form
-router.get('/:listingId/update', async (req, res) => {
+router.get('/:listingId/update', checkIfAuthenticated, async (req, res) => {
     // retrieve game listing
     const gameListing = await listingDataLayer.getGameListingById(req.params.listingId)
 
@@ -117,7 +120,7 @@ router.get('/:listingId/update', async (req, res) => {
 })
 
 // 2. process form
-router.post('/:listingId/update', async (req,res) => {
+router.post('/:listingId/update', checkIfAuthenticated, async (req,res) => {
     // retrieve listing to update
     const gameListing = await listingDataLayer.getGameListingById(req.params.listingId)
 
@@ -163,7 +166,7 @@ router.post('/:listingId/update', async (req,res) => {
 
 // === [D] delete game ===
 // 1. render 
-router.get('/:listingId/delete', async (req,res)=> {
+router.get('/:listingId/delete', checkIfAuthenticated, async (req,res)=> {
     // fetch listing to be deleted
     const gameListing = await listingDataLayer.getGameListingById(req.params.listingId)
 
@@ -173,7 +176,7 @@ router.get('/:listingId/delete', async (req,res)=> {
 })
 
 // 2. process
-router.post('/:listingId/delete', async (req,res) => {
+router.post('/:listingId/delete', checkIfAuthenticated, async (req,res) => {
     // fetch listing to be deleted
     const gameListing = await listingDataLayer.getGameListingById(req.params.listingId)
 

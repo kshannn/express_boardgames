@@ -135,9 +135,16 @@ router.post('/login', async (req, res) => {
 
 // === Logout for Vendor ===
 router.get('/logout', async (req, res) => {
-    req.session.vendor = null
-    req.flash('success_messages','Logged out successfully. See you again!')
-    res.redirect('/auth/login')
+
+    if (req.session.vendor){
+        req.session.vendor = null
+        req.flash('success_messages','Logged out successfully. See you again!')
+        res.redirect('/auth/login')
+    } else {
+        req.flash('error_messages','You are currently not logged in. Please log in to access the feature.')
+        res.redirect('/auth/login')
+    }
+   
 })
 
 module.exports = router;
