@@ -68,11 +68,20 @@ app.use(function (req, res, next) {
 const csurf = require('csurf')
 
 // enable CSRF
-app.use(csurf())
+const csurfInstance = csurf();
+app.use(function(req,res,next){
+  // exclude api routes from CSRF protection (api authentication uses tokens instead)
+  if (req.url === "/checkout/process_payment" || req.url.slice(0,5)==="/api/") {
+    return next();
+  }
+  csurfInstance(req,res,next);
+})
 
 // share CSRF with hbs files
 app.use(function (req, res, next) {
-    res.locals.csrfToken = req.csrfToken();
+    if (req.csrfToken){
+        res.locals.csrfToken = req.csrfToken();
+    }
     next();
 })
 
