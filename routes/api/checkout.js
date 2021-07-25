@@ -22,6 +22,9 @@ const {
 // import bodyparser (for stripe webhooks)
 const bodyParser = require('body-parser');
 
+// import dal
+const cartItemDataLayer = require('../../dal/cartItems')
+
 // =================================== ROUTES =================================== 
 // === [] to obtain session id ===
 router.get('/', async (req, res) => {
@@ -35,15 +38,14 @@ router.get('/', async (req, res) => {
         req.user = user;
     });
 
-    // console.log(req.query.token);
+
     const user = req.user
-    // console.log('userrr', user)
+
 
     // get all items from cart
-    const cartItems = await CartItem.collection().where('user_id', user.id).fetch({
-        withRelated: ['gameListing']
-    })
-    // console.log(cartItems.toJSON())
+    const cartItems = await cartItemDataLayer.getCartItemByUserId(user.id)
+   
+    console.log(cartItems.toJSON())
 
     // 1. create line items
     let lineItems = []
@@ -116,8 +118,29 @@ router.post('/process_payment', bodyParser.raw({type:
         if (event.type == 'checkout.session.completed'){
             let stripeSession = event.data.object
             console.log(stripeSession)
+
+
+            // get cart items, add to order items
+            // const cartItem = await CartItem.collection().where('user_id',stripeSession).fetch({
+            //     withRelated: ['gameListing']
+            // })
+
+            // console.log(cartItem.toJSON())
+
+            // empty cart items
+
+            // deduct quantity from game listing stock
+
+            // add total cost to order 
+
+
         }
         res.send({ received: true })
+
+
+
+
+        
 })
 
 

@@ -7,7 +7,7 @@ const router = express.Router();
 const { bootstrapField, createGameForm } = require('../forms');
 
 // import model
-const { GameListing, Category } = require('../models')
+const { GameListing } = require('../models')
 
 // import dal
 const listingDataLayer = require('../dal/listings')

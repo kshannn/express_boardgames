@@ -6,14 +6,15 @@ const router = express.Router()
 // import model
 const { CartItem } = require('../../models')
 
+// import dal
+const cartItemDataLayer = require('../../dal/cartItems')
+
 
 // =================================== ROUTES =================================== 
 // === [R] read cart items for a particular user ===
 router.get('/:userId', async (req,res) => {
     try {
-        const cartItem = await CartItem.collection().where('user_id',req.params.userId).fetch({
-            withRelated: ['gameListing']
-        })
+        const cartItem = await cartItemDataLayer.getCartItemByUserId(req.params.userId)
         
         res.send(cartItem.toJSON())
         res.status(200)
@@ -30,12 +31,7 @@ router.post('/:gameListingId/add', async (req,res) => {
     try {
 
         // find if a game listing exist in the user's cart
-        let  cartItem= await CartItem.where({
-            'gameListing_id': req.params.gameListingId,
-            'user_id': req.body.user_id
-        }).fetch({
-            require: false
-        })
+        let cartItem = await cartItemDataLayer.getCartItemByGameIdAndUserId(req.params.gameListingId,req.body.user_id)
 
 
         // case 1 - Game exist in cart, add 1 to existing quantity
@@ -69,12 +65,8 @@ router.post('/:gameListingId/remove', async (req,res) => {
     try {
 
         // get a game listing from a particular user's cart
-        let  cartItem= await CartItem.where({
-            'gameListing_id': req.params.gameListingId,
-            'user_id': req.body.user_id
-        }).fetch({
-            require: false
-        })
+        let cartItem = await cartItemDataLayer.getCartItemByGameIdAndUserId(req.params.gameListingId,req.body.user_id)
+    
 
         // if cartItem exist, remove it from cart
         if (cartItem){
