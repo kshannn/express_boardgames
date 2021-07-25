@@ -108,7 +108,7 @@ async function main() {
     app.use('/api/users', express.json(), api.users)
     app.use('/api/cart', express.json(), api.cart)
     app.use('/api/listings', express.json(), api.listings)
-    app.use('/api/checkout', express.json(), api.checkout)
+    app.use('/api/checkout', api.checkout)
 }
 
 

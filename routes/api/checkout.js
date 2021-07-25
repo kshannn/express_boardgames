@@ -4,7 +4,9 @@ const express = require('express')
 const router = express.Router()
 
 // import model
-const { CartItem } = require('../../models')
+const {
+    CartItem
+} = require('../../models')
 
 // import Stripe
 const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
@@ -13,13 +15,18 @@ const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const jwt = require('jsonwebtoken');
 
 // import middleware
-const {checkIfAuthenticatedJWT} = require('../../middlewares')
+const {
+    checkIfAuthenticatedJWT
+} = require('../../middlewares')
+
+// import bodyparser (for stripe webhooks)
+const bodyParser = require('body-parser');
 
 // =================================== ROUTES =================================== 
 // === [] to obtain session id ===
-router.get('/', async (req,res) => {
+router.get('/', async (req, res) => {
 
-    // testing
+    // check if user is logged in (using tokens)
     jwt.verify(req.query.token, process.env.TOKEN_SECRET, (err, user) => {
         if (err) {
             return res.sendStatus(403);
@@ -33,7 +40,7 @@ router.get('/', async (req,res) => {
     // console.log('userrr', user)
 
     // get all items from cart
-    const cartItems = await CartItem.collection().where('user_id',user.id).fetch({
+    const cartItems = await CartItem.collection().where('user_id', user.id).fetch({
         withRelated: ['gameListing']
     })
     // console.log(cartItems.toJSON())
@@ -42,15 +49,15 @@ router.get('/', async (req,res) => {
     let lineItems = []
     let meta = []
     for (let cartItem of cartItems) {
-        
+
         const lineItem = {
-            'name':cartItem.related('gameListing').get('name'),
+            'name': cartItem.related('gameListing').get('name'),
             'amount': cartItem.related('gameListing').get('price'),
             'quantity': cartItem.get('quantity'),
             'currency': 'SGD'
         }
 
-        if (cartItem.related('gameListing').get('image')){
+        if (cartItem.related('gameListing').get('image')) {
             lineItem['images'] = [cartItem.related('gameListing').get('image')]
         }
 
@@ -58,6 +65,7 @@ router.get('/', async (req,res) => {
 
         // save quantity data along with game id
         meta.push({
+            'user_id':user.id,
             'gameListing_id': cartItem.related('gameListing').get('id'),
             'quantity': cartItem.get('quantity')
         })
@@ -75,20 +83,41 @@ router.get('/', async (req,res) => {
             'orders': metaData
         }
     }
-   
+
 
     // step 3: register the session
     let stripeSession = await Stripe.checkout.sessions.create(payment)
-    
-    
 
     res.render('checkout/checkout', {
         'sessionId': stripeSession.id, // 4. get session id
         'publishableKey': process.env.STRIPE_PUBLISHABLE_KEY
     })
 
-    
+})
 
+
+// === [] webhooks for stripe
+router.post('/process_payment', bodyParser.raw({type: 
+    'application/json'}), async (req, res) => {
+
+        let payload = req.body
+        let endpointSecret = process.env.STRIPE_ENDPOINT_SECRET
+        let sigHeader = req.headers["stripe-signature"]
+
+        let event;
+        try {
+            event = Stripe.webhooks.constructEvent(payload, sigHeader, endpointSecret);
+        } catch (e) {
+            res.send({
+                'error': e.message
+            })
+            console.log(e.message)
+        } 
+        if (event.type == 'checkout.session.completed'){
+            let stripeSession = event.data.object
+            console.log(stripeSession)
+        }
+        res.send({ received: true })
 })
 
 

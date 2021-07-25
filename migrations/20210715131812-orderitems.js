@@ -15,7 +15,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.createTable('orders', {
+  return db.createTable('orderItems', {
     id: {
       type: 'int',
       primaryKey: true,
@@ -35,7 +35,7 @@ exports.up = function(db) {
       unsigned: true,
       notNull: true,
       foreignKey: {
-        name: 'order_gameListing_fk',
+        name: 'orderItem_gameListing_fk',
         table: 'gameListings',
         mapping: 'id',
         rules: {
@@ -44,13 +44,13 @@ exports.up = function(db) {
         }
       }
     },
-    transaction_id :{
+    order_id :{
       type: 'int',
       unsigned: true,
       notNull: true,
       foreignKey: {
-        name: 'order_transaction_fk',
-        table: 'transactions',
+        name: 'orderItem_order_fk',
+        table: 'orders',
         mapping: 'id',
         rules: {
           onDelete: 'cascade',
@@ -62,7 +62,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return db.dropTable('orders');
+  return db.dropTable('orderItems');
 };
 
 exports._meta = {

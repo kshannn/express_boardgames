@@ -15,7 +15,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.createTable('transactions',{
+  return db.createTable('orders',{
     id: {
       type: 'int',
       primaryKey: true,
@@ -26,7 +26,7 @@ exports.up = function(db) {
       type: 'int',
       notNull: true
     },
-    transaction_date: {
+    order_date: {
       type: 'datetime',
       notNull: true
     },
@@ -35,7 +35,7 @@ exports.up = function(db) {
       unsigned: true,
       notNull: true,
       foreignKey: {
-        name: 'user_transaction_fk',
+        name: 'user_order_fk',
         table: 'users',
         mapping: 'id',
         rules: {
@@ -49,7 +49,7 @@ exports.up = function(db) {
       unsigned: true,
       notNull: true,
       foreignKey: {
-        name: 'transaction_status_fk',
+        name: 'order_status_fk',
         table: 'statuses',
         mapping: 'id',
         rules: {
@@ -62,7 +62,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return db.dropTable('transactions');
+  return db.dropTable('orders');
 };
 
 exports._meta = {

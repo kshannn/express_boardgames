@@ -6,8 +6,8 @@ const User = bookshelf.model('User', {
     cartItem() {
         return this.hasMany('CartItem')
     },
-    transaction() {
-        return this.hasMany('Transaction')
+    order() {
+        return this.hasMany('Order')
     }
 })
 
@@ -30,8 +30,8 @@ const Category = bookshelf.model('Category', {
 // Status
 const Status = bookshelf.model('Status', {
     tableName: 'statuses',
-    transaction() {
-        return this.belongsToMany('Transaction')
+    order() {
+        return this.belongsToMany('Order')
     }
 })
 
@@ -47,8 +47,8 @@ const GameListing = bookshelf.model('GameListing', {
     cartItem() {
         return this.belongsToMany('CartItem')
     },
-    order() {
-        return this.hasMany('Order')
+    orderItem() {
+        return this.hasMany('OrderItem')
     }
 })
 
@@ -63,29 +63,29 @@ const CartItem = bookshelf.model('CartItem', {
     }
 })
 
-// Transaction
-const Transaction = bookshelf.model('Transaction', {
-    tableName: 'transactions',
+// Order
+const Order = bookshelf.model('Order', {
+    tableName: 'orders',
     user() {
         return this.belongsTo('User')
     },
     status() {
         return this.hasOne('Status')
     },
-    order() {
-        return this.hasMany('Order')
+    orderItem() {
+        return this.hasMany('OrderItem')
     }
 })
 
-// Order
-const Order = bookshelf.model('Order', {
-    tableName: 'orders',
+// OrderItem
+const OrderItem = bookshelf.model('OrderItem', {
+    tableName: 'orderItems',
     gameListing() {
         return this.hasOne('GameListing')
     },
-    transaction() {
-        return this.hasOne('Transaction')
+    order() {
+        return this.belongsTo('Order')
     }
 })
 
-module.exports = { User, Vendor, Category, Status, GameListing, CartItem, Transaction, Order }
+module.exports = { User, Vendor, Category, Status, GameListing, CartItem, OrderItem, Order }
