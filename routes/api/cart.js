@@ -6,6 +6,11 @@ const router = express.Router()
 // import model
 const { CartItem } = require('../../models')
 
+// import middleware
+const {
+    checkIfAuthenticatedJWT
+} = require('../../middlewares')
+
 // import dal
 const cartItemDataLayer = require('../../dal/cartItems')
 
@@ -59,8 +64,30 @@ router.post('/:gameListingId/add', async (req,res) => {
 
 })
 
+// === [] reduce quantity of game listing by one ===
+router.post('/:gameListingId/subtract', async (req,res) => {
+    try {
 
-// === [D] remove game listing from cart ===
+        // find if a game listing exist in the user's cart
+        let cartItem = await cartItemDataLayer.getCartItemByGameIdAndUserId(req.params.gameListingId,req.body.user_id)
+
+        // if cart item exist, subtract one from cart
+        if (cartItem){
+            cartItem.set("quantity", cartItem.get("quantity") - 1)
+            await cartItem.save()
+        }
+        
+        res.send(cartItem.toJSON())
+        res.status(200)
+    } catch (e) {
+        console.log(e)
+        res.status(500)
+        res.send('Unexpected internal server error')
+    }
+})
+
+
+// === [D] remove entire game listing from cart ===
 router.post('/:gameListingId/remove', async (req,res) => {
     try {
 

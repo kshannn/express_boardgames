@@ -131,15 +131,7 @@ router.post('/process_payment', bodyParser.raw({type:
             });
             await order.save()
 
-
-
-            // get cart items, add to orderitems
-            // const cartItems = await cartItemDataLayer.getCartItemByUserId(metaInfo[0].user_id) 
-            // console.log(cartItems.toJSON())
-            
-            
-
-            // if there are multiple order item, loop and set each one
+            // add each orderitems to orders table
             for (let eachMetaInfo of metaInfo){
                 const orderItem = new OrderItem()
                 orderItem.set('order_id', order.get('id'))
@@ -147,28 +139,19 @@ router.post('/process_payment', bodyParser.raw({type:
                 orderItem.set('quantity', eachMetaInfo.quantity)
                 orderItem.set('unit_price', eachMetaInfo.unit_price)
                 await orderItem.save()
-            }
 
-            // for each orderitem, delete corresponding game stock
-            for (let eachMetaInfo of metaInfo){
+                // for each orderitem, delete corresponding game stock
                 let gameListing = await listingDataLayer.getGameListingById(eachMetaInfo.gameListing_id)
-                gameListing.set('quantity', gameListing.get('quantity') - eachMetaInfo.quantity)
+                gameListing.set('stock', gameListing.get('stock') - eachMetaInfo.quantity)
+                await gameListing.save()
             }
-
-            // deduct quantity from game listing stock
-
-            
 
             // empty cart items
-            // let cartItemToEmpty = await cartItemDataLayer.getCartItemByUserId(metaInfo[0].user_id)
-            // cartItemToEmpty.destroy()
+            let cartItemToEmpty = await cartItemDataLayer.getCartItemByUserId(metaInfo[0].user_id)
+            for (let eachCartItemToEmpty of cartItemToEmpty){
+                eachCartItemToEmpty.destroy()
+            } 
             
-
-            
-
-            
-
-
         }
         res.send({ received: true })
 
