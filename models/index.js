@@ -81,7 +81,7 @@ const Order = bookshelf.model('Order', {
 const OrderItem = bookshelf.model('OrderItem', {
     tableName: 'orderItems',
     gameListing() {
-        return this.hasOne('GameListing')
+        return this.belongsTo('GameListing')
     },
     order() {
         return this.belongsTo('Order')

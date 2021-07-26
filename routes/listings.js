@@ -26,6 +26,7 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
         'vendor_id', req.session.vendor.id
     ).fetch()
     
+    
     // if return single item (i.e. not array), put in array
     gameListings = Array.isArray(gameListings.toJSON())? gameListings.toJSON(): [gameListings.toJSON()]
     

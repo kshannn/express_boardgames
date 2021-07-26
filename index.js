@@ -91,6 +91,7 @@ app.use(function (req, res, next) {
 const landingRoutes = require('./routes/landing')
 const listingsRoutes = require('./routes/listings')
 const authRoutes = require('./routes/auth')
+const ordersRoutes = require('./routes/orders')
 
 // import api routes
 const api = {
@@ -105,6 +106,7 @@ async function main() {
     app.use('/', landingRoutes);
     app.use('/listings', listingsRoutes);
     app.use('/auth', authRoutes)
+    app.use('/orders', ordersRoutes)
     app.use('/api/users', express.json(), api.users)
     app.use('/api/cart', express.json(), api.cart)
     app.use('/api/listings', express.json(), api.listings)
