@@ -16,6 +16,12 @@
       />
     
     <button class="btn btn-primary my-3">Update listing</button>
+    <a class="btn btn-danger" href="/listings/{{gameListing.id}}/delete">Delete</a>
+  {{#if gameListing.image}}
+    <div>
+      <img height="200px"src="{{gameListing.image}}"/>
+    </div>
+  {{/if}}
 </form>
 
 {{/block}}

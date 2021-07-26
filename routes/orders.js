@@ -7,7 +7,7 @@ const router = express.Router();
 const { Order } = require('../models')
 
 // =================================== ROUTES =================================== 
-// === [R] display all orders from customers ===
+// === [R] display all orders for vendors ===
 router.get('/', async (req,res) => {
 
     let orders = await Order.collection().fetch({
@@ -33,5 +33,7 @@ router.get('/', async (req,res) => {
         'orders':orders
     })
 })
+
+
 
 module.exports = router;
