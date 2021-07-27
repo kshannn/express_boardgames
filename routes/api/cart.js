@@ -53,6 +53,8 @@ router.post('/:gameListingId/add', async (req,res) => {
              await cartItem.save()
         }
 
+        console.log(cartItem);
+
         
         res.send(cartItem.toJSON())
         res.status(200)

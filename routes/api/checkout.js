@@ -75,12 +75,20 @@ router.get('/', async (req, res) => {
 
     }
 
+    // retrieve order id from potential order (latest order Id)
+    let order = await Order.collection().where({
+        'user_id':user.id,
+        'status_id': 1
+    }).fetchOne()
+
+    let latestOrderId =  order.toJSON().id
+
     // 2. create stripe payment
     let metaData = JSON.stringify(meta)
     const payment = {
         payment_method_types: ['card'],
         line_items: lineItems,
-        success_url: process.env.STRIPE_SUCCESS_URL,
+        success_url: process.env.STRIPE_SUCCESS_URL + "?orderId=" +latestOrderId,
         cancel_url: process.env.STRIPE_ERROR_URL,
         metadata: {
             'orders': metaData

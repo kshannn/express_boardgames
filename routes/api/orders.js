@@ -8,7 +8,7 @@ const { Order } = require('../../models')
 
 // =================================== ROUTES =================================== 
 // === [R] display orders for customer ===
-router.get('/:userId/success', async (req,res) => {
+router.get('/:userId/history', async (req,res) => {
     try {
 
         const orders = await Order.collection().where(
@@ -16,7 +16,7 @@ router.get('/:userId/success', async (req,res) => {
         ).fetch({
             withRelated: ['orderItem']
         })
-        // console.log(orders.toJSON())
+        console.log(orders.toJSON())
         
         
         res.send(orders.toJSON())
@@ -26,6 +26,14 @@ router.get('/:userId/success', async (req,res) => {
         res.status(500)
         res.send('Unexpected internal server error')
     }
+})
+
+// === [R] display recent order for customer ===
+router.get('/success', async (req,res) => {
+    // let latestOrder = await Order.collection().where({
+    //     "order_id": req.query.orderId
+    // }).fetch()
+    console.log(req.query)
 })
 
 module.exports = router;
