@@ -43,6 +43,7 @@ router.post('/:gameListingId/add', async (req,res) => {
         if (cartItem) {
             cartItem.set('quantity', cartItem.get('quantity') + 1)
             await cartItem.save()
+            res.send(cartItem.toJSON())
         } else {
              // case 2 - Game does not exist in cart, add game to cart item
              const cartItem = new CartItem()
@@ -53,10 +54,7 @@ router.post('/:gameListingId/add', async (req,res) => {
              await cartItem.save()
         }
 
-        console.log(cartItem);
-
         
-        res.send(cartItem.toJSON())
         res.status(200)
     } catch (e) {
         console.log(e)
@@ -77,9 +75,10 @@ router.post('/:gameListingId/subtract', async (req,res) => {
         if (cartItem){
             cartItem.set("quantity", cartItem.get("quantity") - 1)
             await cartItem.save()
+            res.send(cartItem.toJSON())
         }
         
-        res.send(cartItem.toJSON())
+        
         res.status(200)
     } catch (e) {
         console.log(e)

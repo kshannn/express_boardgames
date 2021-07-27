@@ -30,10 +30,11 @@ router.get('/:userId/history', async (req,res) => {
 
 // === [R] display recent order for customer ===
 router.get('/success', async (req,res) => {
-    // let latestOrder = await Order.collection().where({
-    //     "order_id": req.query.orderId
-    // }).fetch()
-    console.log(req.query)
+    let latestOrder = await Order.collection().where({
+        "id": req.query.orderid
+    }).fetch()
+    console.log(latestOrder.toJSON())
+    console.log(req.query.orderid)
 })
 
 module.exports = router;

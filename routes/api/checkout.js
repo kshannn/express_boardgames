@@ -29,9 +29,10 @@ const listingDataLayer = require('../../dal/listings')
 // =================================== ROUTES =================================== 
 // === [] to obtain session id ===
 router.get('/', async (req, res) => {
+    console.log(2)
 
     // check if user is logged in (using tokens)
-    jwt.verify(req.query.token, process.env.TOKEN_SECRET, (err, user) => {
+    await jwt.verify(req.query.token, process.env.TOKEN_SECRET, (err, user) => {
         if (err) {
             return res.sendStatus(403);
         }
@@ -42,10 +43,45 @@ router.get('/', async (req, res) => {
 
     const user = req.user
 
+    //
+    //testing
+    // clear previous potential order if any
+        let prevPotentialOrder = await Order.collection().where({
+            'user_id': user.id,
+            'status_id': 1
+        }).fetch({
+            require: false
+        })
+
+        for (let each_prevPotentialOrder of prevPotentialOrder){
+            each_prevPotentialOrder.destroy()
+        }
+
+        // get total cost of current cart item
+        let currentCartItems = await CartItem.collection().where('user_id',user.id).fetch({require:true})
+
+        let total = 0
+        for (let each_cartItem of currentCartItems.toJSON()){
+            total += each_cartItem.unit_price * each_cartItem.quantity
+        }
+    
+
+
+         // add potential order info
+        const potentialOrder = new Order({
+            'user_id': user.id,
+            'status_id': 1,
+            'order_date': new Date(),
+            'total_cost': total
+        });
+        await potentialOrder.save()
+
+    //testing end
+
 
     // get all items from cart
     const cartItems = await cartItemDataLayer.getCartItemByUserId(user.id)
-    // console.log(cartItems.toJSON())
+ 
 
     // 1. create line items
     let lineItems = []
