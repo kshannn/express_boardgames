@@ -4,7 +4,7 @@ const express = require('express')
 const router = express.Router()
 
 // import model
-const { CartItem } = require('../../models')
+const { CartItem, Order } = require('../../models')
 
 // import middleware
 const {
@@ -102,6 +102,39 @@ router.post('/:gameListingId/remove', async (req,res) => {
     
         
         res.send(cartItem.toJSON())
+        res.status(200)
+    } catch (e) {
+        console.log(e)
+        res.status(500)
+        res.send('Unexpected internal server error')
+    }
+})
+
+// === [] potential checkout ===
+router.post('/preparing', async (req,res) => {
+    try {
+        // clear previous potential order if any
+        let prevPotentialOrder = await Order.collection().where({
+            'user_id': req.body.user_id,
+            'status_id': 1
+        }).fetch({
+            require: false
+        })
+
+        for (let each_prevPotentialOrder of prevPotentialOrder){
+            each_prevPotentialOrder.destroy()
+        }
+
+         // add potential order info
+        const order = new Order({
+        'user_id': req.body.user_id,
+        'status_id': 1,
+        'order_date': new Date(),
+        'total_cost': req.body.total_cost
+        });
+        await order.save()
+
+        res.send(order.toJSON())
         res.status(200)
     } catch (e) {
         console.log(e)

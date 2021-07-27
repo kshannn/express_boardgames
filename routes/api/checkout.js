@@ -122,19 +122,23 @@ router.post('/process_payment', bodyParser.raw({type:
             let metaInfo = JSON.parse(stripeSession.metadata.orders)
 
 
-            // add order info
-            const order = new Order({
+            // update order info (change status)
+            let confirmedOrder = await Order.collection().where({
                 'user_id': metaInfo[0].user_id,
-                'status_id': 2,
-                'order_date': new Date(),
-                'total_cost': stripeSession.amount_total
-            });
-            await order.save()
+                'status_id': 1
+            }).fetchOne({
+                require: true
+            })
 
-            // add each orderitems to orders table
+            confirmedOrder.set('status_id', 2)
+            confirmedOrder.set('order_date', new Date())
+            await confirmedOrder.save()
+           
+
+            // add each orderitems to orderItem table
             for (let eachMetaInfo of metaInfo){
                 const orderItem = new OrderItem()
-                orderItem.set('order_id', order.get('id'))
+                orderItem.set('order_id', confirmedOrder.get('id'))
                 orderItem.set('gameListing_id', eachMetaInfo.gameListing_id)
                 orderItem.set('quantity', eachMetaInfo.quantity)
                 orderItem.set('unit_price', eachMetaInfo.unit_price)
@@ -154,31 +158,6 @@ router.post('/process_payment', bodyParser.raw({type:
             
         }
         res.send({ received: true })
-
-
-// === [] potential checkout ===
-router.post('/preparing', async (req,res) => {
-    try {
-        console.log('ran')
-         // add potential order info
-        const order = new Order({
-        'user_id': req.body.user_id,
-        'status_id': 1,
-        'order_date': new Date(),
-        'total_cost': req.body.total_cost
-        });
-    await order.save()
-        res.send(order.toJSON())
-        res.status(200)
-    } catch (e) {
-        console.log(e)
-        res.status(500)
-        res.send('Unexpected internal server error')
-    }
-})
-
-
-
         
 })
 
