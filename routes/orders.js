@@ -95,7 +95,33 @@ router.post('/:orderId', checkIfAuthenticated, async(req,res) => {
 
 })
 
+// === [D] Delete specific order ===
+// 1. Render form 
+router.get('/:orderId/delete', async(req,res) => {
+    // fetch order to be deleted
+    let order = await Order.collection().where('id', req.params.orderId).fetchOne({
+        withRelated: ['orderItem', 'orderItem.gameListing', 'status', 'user'],
+        require: true
+    })
 
+    res.render('orders/delete', {
+        'order': order
+    })
+})
 
+// 2. Process form
+router.post('/:orderId/delete', async(req,res) => {
+    // fetch order to be deleted
+    let order = await Order.collection().where('id', req.params.orderId).fetchOne({
+        withRelated: ['orderItem', 'orderItem.gameListing', 'status', 'user'],
+        require: true
+    })
+
+    await order.destroy();
+
+    req.flash('success_messages', 'Order has been successfully removed')
+    res.redirect('/orders')
+
+})
 
 module.exports = router;
