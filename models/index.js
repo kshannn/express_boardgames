@@ -70,7 +70,7 @@ const Order = bookshelf.model('Order', {
         return this.belongsTo('User')
     },
     status() {
-        return this.hasOne('Status')
+        return this.belongsTo('Status')
     },
     orderItem() {
         return this.hasMany('OrderItem')

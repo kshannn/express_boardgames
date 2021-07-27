@@ -28,6 +28,7 @@
             <th>Date Posted</th>
             <th>Vendor ID</th>
             <th>Name</th>
+            <th>Stock</th>
             <th></th>
         </tr>
     </thead>
@@ -42,6 +43,9 @@
             </td>
             <td>
                 {{this.name}}
+            </td>
+            <td>
+                {{this.stock}}
             </td>
             <td>
                 <a href='/listings/{{this.id}}/update' class="btn btn-primary btn-small">Edit</a>
