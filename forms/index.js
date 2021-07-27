@@ -196,10 +196,27 @@ const createGameForm = (category) => {
     })
 }
 
+// ===== Orders =====
+const updateOrderForm = (status) => {
+    return forms.create({
+        'statuses':fields.string({
+            label: 'Status',
+            required: true,
+            errorAfterField: true,
+            cssClasses:{
+                label: ['form-label']
+            },
+            widget: widgets.select(),
+            choices: status
+        })   
+    })
+}
+
 
 module.exports = {
     bootstrapField,
     createGameForm,
     createVendorRegistrationForm,
-    createLoginForm
+    createLoginForm,
+    updateOrderForm
 }

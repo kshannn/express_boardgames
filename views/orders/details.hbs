@@ -2,6 +2,15 @@
 
 {{#block 'content'}}
 <h1>Displaying Order {{order.id}}</h1>
+<form method="POST">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+    {{{form}}}<button class="btn btn-warning my-3">Save Changes</button>
+</form>
+<h2>Customer's Details</h2>
+<p>Username: {{user.username}}</p>
+<p>Shipping address: {{user.address}}</p>
+<p>Contact number: {{user.phone_number}}</p>
+<p>Email: {{user.email}}</p>
 
 <table class="table">
     <thead>

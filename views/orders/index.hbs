@@ -16,6 +16,7 @@
             </tr>
         </thead>
         <tbody>
+            
             {{#each orders}}
             <tr>
                 <td>
@@ -31,14 +32,14 @@
                     {{this.total_cost}}
                 </td>
                 <td>
-                    {{this.status_id}}
+                    {{this.status.name}}
                 </td>
                 <td>
                     <a href="/orders/{{this.id}}">More details</a>
                 </td>
             </tr>
-
             {{/each}}
+            
         </tbody>
     </table>
 
