@@ -117,7 +117,8 @@ const createGameForm = (category) => {
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators:[validators.integer(), validators.min(0)]
         }),
         'description': fields.string({
             required: true,
@@ -212,11 +213,99 @@ const updateOrderForm = (status) => {
     })
 }
 
+// ===== Search Engine =====
+const createSearchForm = (category) => {
+    return forms.create({
+        'name': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'categories':fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses:{
+                label: ['form-label']
+            },
+            widget: widgets.multipleSelect(),
+            choices: category
+        }),
+        'min_price': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            validators:[validators.integer(), validators.min(0)]
+        }),
+        'max_price': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            validators:[validators.integer(), validators.min(0)]
+        }),
+        'min_player_count': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'max_player_count': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'min_age': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'duration': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'designer': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'publisher': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'published_date': fields.date({
+            required: false,
+            errorAfterField: true,
+            widget: forms.widgets.date(),
+            cssClasses: {
+                label: ['form-label']
+            }
+        })
+    })
+}
 
 module.exports = {
     bootstrapField,
     createGameForm,
     createVendorRegistrationForm,
     createLoginForm,
-    updateOrderForm
+    updateOrderForm,
+    createSearchForm
 }

@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 // import caolan form
-const { bootstrapField, createGameForm } = require('../forms');
+const { bootstrapField, createGameForm, createSearchForm } = require('../forms');
 
 // import model
 const { GameListing } = require('../models')
@@ -22,17 +22,52 @@ const { checkIfAuthenticated } = require('../middlewares');
 // =================================== ROUTES =================================== 
 // === [R] display all games ===
 router.get('/', checkIfAuthenticated, async (req,res) => {
-    let gameListings = await GameListing.collection().where(
-        'vendor_id', req.session.vendor.id
-    ).fetch()
-    
-    
-    // if return single item (i.e. not array), put in array
-    gameListings = Array.isArray(gameListings.toJSON())? gameListings.toJSON(): [gameListings.toJSON()]
-    
-    res.render('listings/index',{
-        'gameListings': gameListings
+
+    // fetch categories and populate form
+    let allCategories = await listingDataLayer.getAllCategories()
+    const searchForm = createSearchForm(allCategories)
+
+    searchForm.handle(req, {
+        'empty': async (form) => {
+            // 1. Case 1 - No search, returns all results
+            let gameListings = await GameListing.collection().where(
+                'vendor_id', req.session.vendor.id
+            ).fetch()
+            
+            // if return single item (i.e. not array), put in array
+            gameListings = Array.isArray(gameListings.toJSON())? gameListings.toJSON(): [gameListings.toJSON()]
+            
+            res.render('listings/index',{
+                'gameListings': gameListings,
+                'form': form.toHTML(bootstrapField)
+            })
+        },
+        'error': async (form) => {
+            // 2. Case 2 - Invalid search field, returns all results with validation msg
+            let gameListings = await GameListing.collection().where(
+                'vendor_id', req.session.vendor.id
+            ).fetch()
+            
+            // if return single item (i.e. not array), put in array
+            gameListings = Array.isArray(gameListings.toJSON())? gameListings.toJSON(): [gameListings.toJSON()]
+            
+            res.render('listings/index',{
+                'gameListings': gameListings,
+                'form': form.toHTML(bootstrapField)
+            })
+        },
+        'success': async (form) => {
+            
+        }
     })
+
+    
+
+
+
+
+
+    
 })
 
 // === [C] create game ===
