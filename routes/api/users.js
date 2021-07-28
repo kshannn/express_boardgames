@@ -88,11 +88,32 @@ router.post('/login', async (req, res) => {
 
 // [R] User profile page
 router.get('/profile', checkIfAuthenticatedJWT, async (req,res) => {
-    // const user = req.user
     try {
         let user = await User.where('id', req.user.id).fetch({
             columns: ['username','id','email','address','phone_number']
         })
+        res.send(user.toJSON())
+        res.status(200)
+    } catch (e) {
+        console.log(e)
+        res.status(500)
+        res.send('Unexpected internal server error')
+    }
+})
+
+// [U] Update user details
+router.post('/profile/update', checkIfAuthenticatedJWT, async(req,res) => {
+    
+    try {
+        let user = await User.where('id', req.user.id).fetch()
+
+        user.set('username', req.body.username)
+        user.set('email', req.body.email)
+        user.set('address', req.body.address)
+        user.set('phone_number', req.body.phone_number)
+        await user.save()
+
+
         res.send(user.toJSON())
         res.status(200)
     } catch (e) {
