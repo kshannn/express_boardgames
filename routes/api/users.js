@@ -86,11 +86,22 @@ router.post('/login', async (req, res) => {
 })
 
 
-// FOR TEST: [R] User profile page
+// [R] User profile page
 router.get('/profile', checkIfAuthenticatedJWT, async (req,res) => {
-    const user = req.user
-    res.send(user)
+    // const user = req.user
+    try {
+        let user = await User.where('id', req.user.id).fetch({
+            columns: ['username','id','email','address','phone_number']
+        })
+        res.send(user.toJSON())
+        res.status(200)
+    } catch (e) {
+        console.log(e)
+        res.status(500)
+        res.send('Unexpected internal server error')
+    }
 })
+
 
 
 module.exports = router;
