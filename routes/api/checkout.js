@@ -29,7 +29,6 @@ const listingDataLayer = require('../../dal/listings')
 // =================================== ROUTES =================================== 
 // === [] to obtain session id ===
 router.get('/', async (req, res) => {
-    console.log(2)
 
     // check if user is logged in (using tokens)
     await jwt.verify(req.query.token, process.env.TOKEN_SECRET, (err, user) => {

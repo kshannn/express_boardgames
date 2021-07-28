@@ -16,7 +16,6 @@ router.get('/:userId/history', async (req,res) => {
         ).fetch({
             withRelated: ['orderItem']
         })
-        console.log(orders.toJSON())
         
         
         res.send(orders.toJSON())
@@ -32,9 +31,13 @@ router.get('/:userId/history', async (req,res) => {
 router.get('/success', async (req,res) => {
     let latestOrder = await Order.collection().where({
         "id": req.query.orderid
-    }).fetch()
-    console.log(latestOrder.toJSON())
-    console.log(req.query.orderid)
+    }).fetchOne({
+        withRelated: ['orderItem', 'orderItem.gameListing']
+    })
+
+    let orderedItems = latestOrder.toJSON().orderItem
+    res.send(orderedItems)
+
 })
 
 module.exports = router;
