@@ -29,7 +29,6 @@ router.get('/', async (req,res) => {
 router.post('/', async (req,res) => {
     try {
         
-    
         // master query
         let q = await GameListing.collection()
 
@@ -47,6 +46,22 @@ router.post('/', async (req,res) => {
             q = q.where('price', '<=', req.body.searchMaxPrice)
         }
 
+        if (req.body.searchMinPlayer){
+            q = q.where('min_player_count', '>=', req.body.searchMinPlayer)
+        }
+        
+        if (req.body.searchMaxPlayer){
+            q = q.where('max_player_count', '<=', req.body.searchMaxPlayer)
+        }
+
+        if (req.body.searchAge){
+            q = q.where('age', '>=', req.body.searchAge)
+        }
+
+        console.log(req.body.searchCategories)
+        if (req.body.searchCategories){
+            q = q.query("join", "categories_gameListings", "gameListings.id", "gameListing_id").where("category_id", "in", req.body.searchCategories)
+        }
 
 
       

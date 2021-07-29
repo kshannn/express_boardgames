@@ -69,6 +69,7 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
                 q = q.where('name', 'like', '%' + form.data.name + '%')
             }
 
+        
             if (form.data.categories){
                 q = q.query("join", "categories_gameListings", "gameListings.id", "gameListing_id").where("category_id", "in", form.data.categories.split(","))
             }
