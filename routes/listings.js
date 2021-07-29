@@ -23,9 +23,15 @@ const { checkIfAuthenticated } = require('../middlewares');
 // === [R] display all games ===
 router.get('/', checkIfAuthenticated, async (req,res) => {
 
+
+    // === Search Engine ===
     // fetch categories and populate form
     let allCategories = await listingDataLayer.getAllCategories()
     const searchForm = createSearchForm(allCategories)
+
+
+    // mastery query
+    let q = GameListing.collection()
 
     searchForm.handle(req, {
         'empty': async (form) => {
@@ -57,7 +63,53 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
             })
         },
         'success': async (form) => {
+            console.log(form.data)
+           
+            if (form.data.name) {
+                console.log(req.session.vendor.id)
+                // not working: query not detecting the second line
+                q = q.where('name', 'like', '%' + form.data.name + '%', 'AND', 'vendor_id', '=' , req.session.vendor.id)
+        
+            }
+            console.log(q.query().toSQL());
+
+            // if (form.data.categories){
+            //     let selectedCategory = form.data.categories.split(',')
+            //     q = q.query("join", "categories_gameListings", "gameListings.id", "gameListing_id").where("category_id", "in", form.data.categories.split(","))
+                
+            // }
+
+            if (form.data.min_price){
+                q = q.where('price', '>=', form.data.min_price)
+            }
             
+            if (form.data.max_price){
+                q = q.where('price', '<=', form.data.max_price)
+            }
+
+            if (form.data.min_player_count){
+                q = q.where('min_player_count', '>=', form.data.min_player_count)
+            }
+
+            if (form.data.max_player_count){
+                q = q.where('max_player_count', '<=', form.data.max_player_count)
+            }
+
+            if (form.data.min_age){
+                q = q.where('min_age', '>=', form.data.min_age)
+            }
+
+            let gameListings = await q.fetch({
+                withRelated: ['category']
+            })
+
+            console.log(gameListings.toJSON())
+
+            res.render('listings/index',{
+                'gameListings': gameListings.toJSON(),
+                'form': form.toHTML(bootstrapField)
+            })
+           
         }
     })
 
