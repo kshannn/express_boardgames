@@ -105,6 +105,16 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
                 q = q.where('publisher', 'like', '%' + form.data.publisher + '%')
             }
 
+            // if (form.data.published_date){
+
+            // }
+
+            // if (form.data.stock){
+
+            // }
+
+            console.log(q.query().toSQL());
+            
             // additional 'where' query set to limit to returning speficic vendor results
             let gameListings = await q.where('vendor_id', req.session.vendor.id).fetch({
                 withRelated: ['category']

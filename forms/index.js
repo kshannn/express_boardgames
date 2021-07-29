@@ -290,6 +290,13 @@ const createSearchForm = (category) => {
                 label: ['form-label']
             }
         }),
+        'stock': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
         'published_date': fields.date({
             required: false,
             errorAfterField: true,

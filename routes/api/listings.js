@@ -13,6 +13,7 @@ const listingDataLayer = require('../../dal/listings')
 // === [R] display all games ===
 router.get('/', async (req,res) => {
     try {
+
         const gameListings = await GameListing.collection().fetch()
         
         res.send(gameListings.toJSON())
@@ -23,6 +24,48 @@ router.get('/', async (req,res) => {
         res.send('Unexpected internal server error')
     }
 })
+
+// === [] display filtered games ===
+router.post('/', async (req,res) => {
+    try {
+        
+    
+        // master query
+        let q = await GameListing.collection()
+
+        if (req.body.searchName){
+            console.log(req.body);
+            q = q.where('name', 'like', '%' + req.body.searchName + '%')
+        }
+
+        
+        if (req.body.searchMinPrice){
+            q = q.where('price', '>=', req.body.searchMinPrice)
+        }
+        
+        if (req.body.searchMaxPrice){
+            q = q.where('price', '<=', req.body.searchMaxPrice)
+        }
+
+
+
+      
+
+        let gameListings = await q.fetch({
+            withRelated: ['category']
+        })
+
+        
+        res.send(gameListings.toJSON())
+        res.status(200)
+    } catch (e) {
+        console.log(e)
+        res.status(500)
+        res.send('Unexpected internal server error')
+    }
+})
+
+
 
 // === [R] display selected game ===
 router.get('/:listingId', async (req,res) => {
