@@ -63,21 +63,15 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
             })
         },
         'success': async (form) => {
-            console.log(form.data)
            
             if (form.data.name) {
                 console.log(req.session.vendor.id)
-                // not working: query not detecting the second line
-                q = q.where('name', 'like', '%' + form.data.name + '%', 'AND', 'vendor_id', '=' , req.session.vendor.id)
-        
+                q = q.where('name', 'like', '%' + form.data.name + '%')
             }
-            console.log(q.query().toSQL());
 
-            // if (form.data.categories){
-            //     let selectedCategory = form.data.categories.split(',')
-            //     q = q.query("join", "categories_gameListings", "gameListings.id", "gameListing_id").where("category_id", "in", form.data.categories.split(","))
-                
-            // }
+            if (form.data.categories){
+                q = q.query("join", "categories_gameListings", "gameListings.id", "gameListing_id").where("category_id", "in", form.data.categories.split(","))
+            }
 
             if (form.data.min_price){
                 q = q.where('price', '>=', form.data.min_price)
@@ -99,7 +93,20 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
                 q = q.where('min_age', '>=', form.data.min_age)
             }
 
-            let gameListings = await q.fetch({
+            // if (form.data.duration){
+            //     q = q.where('duration', )
+            // }
+
+            if (form.data.designer){
+                q = q.where('designer', 'like', '%' + form.data.designer + '%')
+            }
+
+            if (form.data.publisher){
+                q = q.where('publisher', 'like', '%' + form.data.publisher + '%')
+            }
+
+            // additional 'where' query set to limit to returning speficic vendor results
+            let gameListings = await q.where('vendor_id', req.session.vendor.id).fetch({
                 withRelated: ['category']
             })
 
