@@ -6,9 +6,14 @@ const router = express.Router()
 // import model
 const { Order } = require('../../models')
 
+// import middleware
+const {
+    checkIfAuthenticatedJWT
+} = require('../../middlewares')
+
 // =================================== ROUTES =================================== 
 // === [R] display orders for customer ===
-router.get('/:userId/history', async (req,res) => {
+router.get('/:userId/history', checkIfAuthenticatedJWT, async (req,res) => {
     try {
 
         const orders = await Order.collection().where(

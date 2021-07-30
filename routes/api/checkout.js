@@ -33,7 +33,8 @@ router.get('/', async (req, res) => {
     // check if user is logged in (using tokens)
     await jwt.verify(req.query.token, process.env.TOKEN_SECRET, (err, user) => {
         if (err) {
-            return res.sendStatus(403);
+            res.redirect('https://3000-green-prawn-u4ktudfo.ws-us13.gitpod.io/login' + '?' + 'session=expire&' + 'callback_url=' + 'https://3000-green-prawn-u4ktudfo.ws-us13.gitpod.io/cart')
+
         }
 
         req.user = user;
