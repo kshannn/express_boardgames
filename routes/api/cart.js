@@ -4,7 +4,7 @@ const express = require('express')
 const router = express.Router()
 
 // import model
-const { CartItem, Order } = require('../../models')
+const { CartItem } = require('../../models')
 
 // import middleware
 const {
@@ -17,7 +17,7 @@ const cartItemDataLayer = require('../../dal/cartItems')
 
 // =================================== ROUTES =================================== 
 // === [R] read cart items for a particular user ===
-router.get('/:userId', async (req,res) => {
+router.get('/:userId', checkIfAuthenticatedJWT, async (req,res) => {
     try {
         const cartItem = await cartItemDataLayer.getCartItemByUserId(req.params.userId)
         
@@ -32,7 +32,7 @@ router.get('/:userId', async (req,res) => {
 
 
 // === [C] add game listing to cart ===
-router.post('/:gameListingId/add', async (req,res) => {
+router.post('/:gameListingId/add', checkIfAuthenticatedJWT, async (req,res) => {
     try {
 
         // find if a game listing exist in the user's cart
@@ -65,7 +65,7 @@ router.post('/:gameListingId/add', async (req,res) => {
 })
 
 // === [] reduce quantity of game listing by one ===
-router.post('/:gameListingId/subtract', async (req,res) => {
+router.post('/:gameListingId/subtract', checkIfAuthenticatedJWT, async (req,res) => {
     try {
 
         // find if a game listing exist in the user's cart
@@ -89,7 +89,7 @@ router.post('/:gameListingId/subtract', async (req,res) => {
 
 
 // === [D] remove entire game listing from cart ===
-router.post('/:gameListingId/remove', async (req,res) => {
+router.post('/:gameListingId/remove', checkIfAuthenticatedJWT, async (req,res) => {
     try {
 
         // get a game listing from a particular user's cart
@@ -110,42 +110,6 @@ router.post('/:gameListingId/remove', async (req,res) => {
         res.send('Unexpected internal server error')
     }
 })
-
-// === [] potential checkout ===
-// router.post('/preparing', async (req,res) => {
-//     try {
-//         // clear previous potential order if any
-//         let prevPotentialOrder = await Order.collection().where({
-//             'user_id': req.body.user_id,
-//             'status_id': 1
-//         }).fetch({
-//             require: false
-//         })
-
-//         for (let each_prevPotentialOrder of prevPotentialOrder){
-//             each_prevPotentialOrder.destroy()
-//         }
-
-//          // add potential order info
-//         const order = new Order({
-//         'user_id': req.body.user_id,
-//         'status_id': 1,
-//         'order_date': new Date(),
-//         'total_cost': req.body.total_cost
-//         });
-//         await order.save()
-
-//         res.send(order.toJSON())
-//         res.status(200)
-//     } catch (e) {
-//         console.log(e)
-//         res.status(500)
-//         res.send('Unexpected internal server error')
-//     }
-// })
-
-
-
 
 
 module.exports = router;

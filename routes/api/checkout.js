@@ -42,8 +42,7 @@ router.get('/', async (req, res) => {
 
     const user = req.user
 
-    //
-    //testing
+   
     // clear previous potential order if any
         let prevPotentialOrder = await Order.collection().where({
             'user_id': user.id,

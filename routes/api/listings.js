@@ -51,7 +51,7 @@ router.post('/', async (req,res) => {
         }
 
         
-        if (req.body.searchCategories){
+        if (req.body.searchCategories.length){
             q = q.query("join", "categories_gameListings", "gameListings.id", "gameListing_id").where("category_id", "in", req.body.searchCategories)
         }
 
