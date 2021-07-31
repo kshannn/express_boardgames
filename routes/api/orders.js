@@ -18,8 +18,8 @@ router.get('/:userId/history', checkIfAuthenticatedJWT, async (req,res) => {
 
         const orders = await Order.collection().where(
             'user_id', req.params.userId
-        ).fetch({
-            withRelated: ['orderItem']
+        ).where('status_id','in' , [2,3,4,5]).fetch({
+            withRelated: ['orderItem','status']
         })
         
         

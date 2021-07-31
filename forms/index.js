@@ -150,6 +150,7 @@ const createGameForm = (category) => {
             }
         }),
         'duration': fields.string({
+            label: 'Duration(mins)',
             required: true,
             errorAfterField: true,
             cssClasses: {
@@ -270,6 +271,7 @@ const createSearchForm = (category) => {
             }
         }),
         'duration': fields.string({
+            label: 'Duration(mins)',
             required: false,
             errorAfterField: true,
             cssClasses: {
