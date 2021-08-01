@@ -6,7 +6,7 @@ const checkIfAuthenticated = (req, res, next) => {
         next()
     } else {
         req.flash('error_messages', 'Please sign in to access the page')
-        res.redirect('/auth/login')
+        res.redirect('/')
     }
 }
 

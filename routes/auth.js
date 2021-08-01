@@ -62,7 +62,7 @@ router.post('/create', async (req, res) => {
                 vendor.set('password', getHashedPassword(form.data.password))
                 await vendor.save();
                 req.flash("success_messages", `Account successfully created.`)
-                res.redirect('/auth/login')
+                res.redirect('/')
             } 
             else {
                 req.flash('error_messages', 'Current email has already been used. Please pick another email.')
@@ -79,72 +79,66 @@ router.post('/create', async (req, res) => {
 })
 
 
-// === [U] update vendor account ===
-// 1. render form
-// router.get('/update', async (req,res), {
 
+// // === Login for Vendor ===
+// // 1. render login form
+// router.get('/login', async (req, res) => {
+//     const loginForm = createLoginForm();
+//     res.render('auth/login', {
+//         'form': loginForm.toHTML(bootstrapField)
+//     })
 // })
 
+// // 2. process login form
+// router.post('/login', async (req, res) => {
+//     const loginForm = createLoginForm();
+//     loginForm.handle(req, {
+//         'success': async (form) => {
+//             // find vendor by email
+//             let vendor = await Vendor.where({
+//                 'email': form.data.email
+//             }).fetch({
+//                 require: false
+//             });
 
-// === Login for Vendor ===
-// 1. render login form
-router.get('/login', async (req, res) => {
-    const loginForm = createLoginForm();
-    res.render('auth/login', {
-        'form': loginForm.toHTML(bootstrapField)
-    })
-})
+//             // 1. case1 - vendor email doesn't match database (no data fetched)
+//             if (!vendor) {
+//                 req.flash("error_messages", "Sorry, the authentication details you have provided is invalid. Please try again.")
+//                 res.redirect('/auth/login')
+//             } else {
+//                 // 2. case2 - vendor email match database
+//                 // check if password matches database too
+//                 if (vendor.get('password') === getHashedPassword(form.data.password)){
 
-// 2. process login form
-router.post('/login', async (req, res) => {
-    const loginForm = createLoginForm();
-    loginForm.handle(req, {
-        'success': async (form) => {
-            // find vendor by email
-            let vendor = await Vendor.where({
-                'email': form.data.email
-            }).fetch({
-                require: false
-            });
+//                     // store vendor details in session if login is successful
+//                     req.session.vendor = {
+//                         id: vendor.get('id'),
+//                         username: vendor.get('username'),
+//                         email: vendor.get('email')
+//                     }
+//                     req.flash("success_messages", "Welcome, " + vendor.get('username'));
+//                     res.redirect('/listings');
+//                 } else {
+//                     req.flash("error_messages", "Sorry, the authentication details you have provided is invalid. Please try again.")
+//                     res.redirect('/auth/login')
+//                 }
+//             }
+//         }
+//     })
+// })
 
-            // 1. case1 - vendor email doesn't match database (no data fetched)
-            if (!vendor) {
-                req.flash("error_messages", "Sorry, the authentication details you have provided is invalid. Please try again.")
-                res.redirect('/auth/login')
-            } else {
-                // 2. case2 - vendor email match database
-                // check if password matches database too
-                if (vendor.get('password') === getHashedPassword(form.data.password)){
+// // === Logout for Vendor ===
+// router.get('/logout', async (req, res) => {
 
-                    // store vendor details in session if login is successful
-                    req.session.vendor = {
-                        id: vendor.get('id'),
-                        username: vendor.get('username'),
-                        email: vendor.get('email')
-                    }
-                    req.flash("success_messages", "Welcome, " + vendor.get('username'));
-                    res.redirect('/listings');
-                } else {
-                    req.flash("error_messages", "Sorry, the authentication details you have provided is invalid. Please try again.")
-                    res.redirect('/auth/login')
-                }
-            }
-        }
-    })
-})
-
-// === Logout for Vendor ===
-router.get('/logout', async (req, res) => {
-
-    if (req.session.vendor){
-        req.session.vendor = null
-        req.flash('success_messages','Logged out successfully. See you again!')
-        res.redirect('/auth/login')
-    } else {
-        req.flash('error_messages','You are currently not logged in. Please log in to access the feature.')
-        res.redirect('/auth/login')
-    }
+//     if (req.session.vendor){
+//         req.session.vendor = null
+//         req.flash('success_messages','Logged out successfully. See you again!')
+//         res.redirect('/auth/login')
+//     } else {
+//         req.flash('error_messages','You are currently not logged in. Please log in to access the feature.')
+//         res.redirect('/auth/login')
+//     }
    
-})
+// })
 
 module.exports = router;

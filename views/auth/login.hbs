@@ -1,12 +1,29 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<h1>Login</h1>
-<form method="POST">
-    <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-    {{{form}}}
-    <button class="btn btn-primary my-3">Login</button>
-</form>
+
+
+<div id="loginHeroImage">
+    <div id="loginPage">
+        <section id="loginExtraSection">
+            Board Games Society (Vendor)
+        </section>
+        <section id="loginFormSection">
+            <div id="loginContainer">
+                <h1>Vendor Login</h1>
+                <form method="POST">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+                    {{{form}}}
+                    <button id="loginBtn" class="btn my-3">Login</button>
+                </form>
+                <a href="/auth/create">Create an account</a>
+            </div>
+        </section>
+    </div>
+</div>
+
+
+
 
 {{/block}}
 

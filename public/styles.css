@@ -1,0 +1,89 @@
+* {
+    margin: 0;
+    padding:0;
+}
+
+/* === landing page === */
+#loginHeroImage {
+    width: 100%;
+    height: calc(100vh - 56px);
+    background-image: url('https://media.timeout.com/images/105627949/750/422/image.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: cover;
+}
+
+#loginPage {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(94, 60, 9, 0.356);
+    display: flex;
+}
+
+#loginExtraSection {
+    flex: 2;
+}
+
+#loginFormSection {
+flex: 1;
+padding: 80px 50px;
+
+}
+
+#loginContainer {
+height: 500px;
+width: 100%;
+min-width: 300px;
+padding: 50px 20px;
+background-color: white;
+border-radius: 5px;
+}
+
+#loginExtraSection {
+    color: white;
+    font-size: 3rem;
+    margin: 50px;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+}
+
+#loginBtn {
+    background-color: orange;
+    width: 100%;
+}
+
+#loginBtn:hover {
+    background-color: rgb(255, 145, 0);
+}
+
+#loginContainer > a {
+    color: orange;
+}
+
+#loginContainer > a:hover{
+    color: rgb(235, 135, 21);
+}
+
+.alert {
+    margin-bottom: 0;
+}
+
+
+/* listing page */
+#mainSection{
+    display:flex;
+    min-height: 100vh;
+}
+
+#searchSection{
+    flex:1;
+    padding: 0 20px;
+    /* background: blue; */
+}
+
+#displaySection{
+    flex: 5;
+    padding: 0 30px;
+    /* background: green; */
+}
