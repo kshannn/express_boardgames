@@ -151,21 +151,33 @@ border-radius: 5px;
     padding: 20px 50px;
 }
 
+#createListingPage h1 {
+    font-size: 1.5rem;
+}
+
 #createListingForm {
+    min-height: fit-content;
     width: 100%;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    background:rgb(255, 207, 207);
+    padding-bottom: 30px;
 }
 
-.form-group {
+#createListingForm > .form-group {
     width: 45%;
     margin: 0px 15px;
 }
 
 #btnContainer {
-    height: 100px;
+    height: 135px;
     width: 100%;
-    background: yellow;
+    display: flex;
+    flex-direction: column;
+    padding: 0px 3%;
+}
+
+#createBtn {
+    background-color: orange;
+    width: 125px;
 }
