@@ -19,9 +19,8 @@ router.get('/:userId/history', checkIfAuthenticatedJWT, async (req,res) => {
         const orders = await Order.collection().where(
             'user_id', req.params.userId
         ).where('status_id','in' , [2,3,4,5]).fetch({
-            withRelated: ['orderItem','status']
+            withRelated: ['orderItem','status', 'user', 'orderItem.gameListing']
         })
-        
         
         res.send(orders.toJSON())
         res.status(200)
