@@ -87,6 +87,7 @@ app.use(function (req, res, next) {
 
 
 
+
 // import routes
 const landingRoutes = require('./routes/landing')
 const listingsRoutes = require('./routes/listings')

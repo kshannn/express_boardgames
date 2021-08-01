@@ -3,28 +3,34 @@
 
 {{/block}}
 {{#block 'content'}}
-<h1>Create Boardgame Listing</h1>
-<form method="POST">
-    <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-    {{{form}}}
+<div id="createListingPage">
+  <h1>Create Boardgame Listing</h1>
+  <form method="POST">
+      <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+      <section id="createListingForm">
+        {{{form}}}
+      </section>
 
-    <input
-      type="hidden"
-      role="uploadcare-uploader"
-      data-public-key={{img_key}}
-      id="uploadcareImage"
-      name="image" />
+      <section id="btnContainer">
+        <input
+          type="hidden"
+          role="uploadcare-uploader"
+          data-public-key={{img_key}}
+          id="uploadcareImage"
+          name="image" />
 
 
-    <button class="btn btn-primary my-3">Create listing</button>
-    {{#if imgUrl}}
-      <div>
-        <img id="imgUrl" height="200px"src="{{imgUrl}}"/>
-      </div>
-    {{/if}}
-</form>
+        <button class="btn btn-primary my-3">Create listing</button>
+        {{#if imgUrl}}
+          <div>
+            <img id="imgUrl" height="200px"src="{{imgUrl}}"/>
+          </div>
+        {{/if}}
+      </section>
+  </form>
 
-{{/block}}
+  {{/block}}
+</div>
 
 {{#block 'js'}}
   <script

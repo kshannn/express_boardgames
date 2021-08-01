@@ -1,48 +1,51 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<h1>Your Orders</h1>
 
 
-   <table class="table">
-        <thead>
-            <tr>
-                <th>Order Id</th>
-                <th>Order Date</th>
-                <th>User ID</th>
-                <th>Total Amount</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            
-            {{#each orders}}
-            <tr>
-                <td>
-                    {{this.id}}
-                </td>
-                <td>
-                    {{this.order_date}}
-                </td>
-                <td>
-                    {{this.user_id}}
-                </td>
-                <td>
-                    {{this.total_cost}}
-                </td>
-                <td>
-                    {{this.status.name}}
-                </td>
-                <td>
-                    <a href="/orders/{{this.id}}">More details</a>
-                </td>
-            </tr>
-            {{/each}}
-            
-        </tbody>
-    </table>
 
+   <div id="ordersTable">
+    <h1 id="ordersHeader">Orders</h1>
+    <table class="table">
+            <thead>
+                <tr>
+                    <th>Order Id</th>
+                    <th>Order Date</th>
+                    <th>User ID</th>
+                    <th>Total Amount</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {{#each orders}}
+                <tr>
+                    <td>
+                        {{this.id}}
+                    </td>
+                    <td>
+                        {{this.order_date}}
+                    </td>
+                    <td>
+                        {{this.user_id}}
+                    </td>
+                    <td>
+                        {{this.total_cost}} 
+                    </td>
+                    <td>
+                        {{this.status.name}}
+                    </td>
+                    <td>
+                        <a href="/orders/{{this.id}}">More details</a>
+                    </td>
+                </tr>
+                {{/each}}
+                
+            </tbody>
+        </table>
+    </div>
+   
 
 
 {{/block}}

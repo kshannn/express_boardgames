@@ -65,7 +65,6 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
         'success': async (form) => {
            
             if (form.data.name) {
-                console.log(req.session.vendor.id)
                 q = q.where('name', 'like', '%' + form.data.name + '%')
             }
 
@@ -94,10 +93,6 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
                 q = q.where('min_age', '>=', form.data.min_age)
             }
 
-            // if (form.data.duration){
-            //     q = q.where('duration', )
-            // }
-
             if (form.data.designer){
                 q = q.where('designer', 'like', '%' + form.data.designer + '%')
             }
@@ -114,14 +109,14 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
 
             // }
 
-            console.log(q.query().toSQL());
+            // console.log(q.query().toSQL());
             
             // additional 'where' query set to limit to returning speficic vendor results
             let gameListings = await q.where('vendor_id', req.session.vendor.id).fetch({
                 withRelated: ['category']
             })
 
-            console.log(gameListings.toJSON())
+            // console.log(gameListings.toJSON())
 
             res.render('listings/index',{
                 'gameListings': gameListings.toJSON(),

@@ -82,8 +82,90 @@ border-radius: 5px;
     /* background: blue; */
 }
 
+#searchSection h2 {
+    font-size: 1.7rem;
+    margin-top: 20px;
+}
+
 #displaySection{
     flex: 5;
+    min-width: 500px;
     padding: 0 30px;
     /* background: green; */
+}
+
+#listingHeader {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    margin-top: 20px;
+}
+
+#listingHeader h1 {
+    font-size: 1.7rem;
+}
+
+#listingHeader a {
+    position: absolute;
+    right: 0px;
+    bottom: -5px;
+    background: orange;
+}
+
+#listingHeader a:hover {
+    background: rgb(255, 141, 10);
+}
+
+
+/* orders */
+#ordersTable {
+    margin: 10px 30px;
+}
+
+#ordersHeader {
+    font-size: 2rem;
+}
+
+/* individual order detail */
+#orderDetailsPage {
+    margin: 10px 30px;
+}
+
+#orderDetailsHeader {
+    font-size: 2rem;
+}
+
+#statusForm {
+    width: 200px;
+    font-size: 1.4rem;
+}
+
+#saveChangeBtn {
+    width: 200px;
+}
+
+/* create listing page */
+#createListingPage {
+    width: 100%;
+    height: calc(100vh - 56px);
+    padding: 20px 50px;
+}
+
+#createListingForm {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    background:rgb(255, 207, 207);
+}
+
+.form-group {
+    width: 45%;
+    margin: 0px 15px;
+}
+
+#btnContainer {
+    height: 100px;
+    width: 100%;
+    background: yellow;
 }

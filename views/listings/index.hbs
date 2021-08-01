@@ -2,13 +2,10 @@
 
 {{#block 'content'}}
 
-    <h1>Your Product Listings</h1>
-    <a href="/listings/create" class="btn btn-primary">Add Product</a>
-
-
     <div className="container-fluid" id="mainSection">
     {{!-- search forms --}}
         <section id="searchSection">
+            <h2>Filter</h2>
             <form method="GET">
                 {{{form}}}
                 <button class="btn btn-primary">Search</button>
@@ -17,6 +14,10 @@
 
         {{!-- owned listings --}}
         <section id="displaySection">
+            <div id="listingHeader">
+                 <h1>Your Products</h1><a href="/listings/create" class="btn">Add Product</a>
+            </div>
+            <hr></hr>
             <table class="table">
                 <thead>
                     <tr>

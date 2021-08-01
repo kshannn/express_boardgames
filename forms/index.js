@@ -103,15 +103,6 @@ const createGameForm = (category) => {
                 label: ['form-label']
             }
         }),
-        'categories':fields.string({
-            required: true,
-            errorAfterField: true,
-            cssClasses:{
-                label: ['form-label']
-            },
-            widget: widgets.multipleSelect(),
-            choices: category
-        }),
         'price': fields.string({
             required: true,
             errorAfterField: true,
@@ -119,14 +110,6 @@ const createGameForm = (category) => {
                 label: ['form-label']
             },
             validators:[validators.integer(), validators.min(0)]
-        }),
-        'description': fields.string({
-            required: true,
-            errorAfterField: true,
-            widget: forms.widgets.textarea(),
-            cssClasses: {
-                label: ['form-label']
-            }
         }),
         'min_player_count': fields.string({
             required: true,
@@ -185,8 +168,24 @@ const createGameForm = (category) => {
             cssClasses: {
                 label: ['form-label']
             }
-        })
-        ,
+        }),
+        'categories':fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses:{
+                label: ['form-label']
+            },
+            widget: widgets.multipleSelect(),
+            choices: category
+        }),
+        'description': fields.string({
+            required: true,
+            errorAfterField: true,
+            widget: forms.widgets.textarea(),
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
         'image': fields.string({
             required: true,
             errorAfterField: true,
@@ -264,14 +263,6 @@ const createSearchForm = (category) => {
             }
         }),
         'min_age': fields.string({
-            required: false,
-            errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            }
-        }),
-        'duration': fields.string({
-            label: 'Duration(mins)',
             required: false,
             errorAfterField: true,
             cssClasses: {
