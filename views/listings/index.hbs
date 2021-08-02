@@ -32,7 +32,7 @@
                     {{#each gameListings}}
                     <tr>
                         <td>
-                            {{this.posted_date}}
+                            {{moment this.posted_date 'LLL'}}
                         </td>
                         <td>
                             {{this.vendor_id}}

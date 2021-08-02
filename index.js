@@ -21,6 +21,11 @@ app.use(express.static("public"));
 wax.on(hbs.handlebars);
 wax.setLayoutPath("./views/layouts");
 
+var handlebars = require('handlebars-helpers');
+
+handlebars({
+    'handlebars':hbs.handlebars
+}) 
 
 // enable forms
 app.use(

@@ -75,7 +75,7 @@ router.get('/', async (req, res) => {
         });
         await potentialOrder.save()
 
-    //testing end
+  
 
 
     // get all items from cart
@@ -117,6 +117,7 @@ router.get('/', async (req, res) => {
     }).fetchOne()
 
     let latestOrderId =  order.toJSON().id
+
 
     // 2. create stripe payment
     let metaData = JSON.stringify(meta)
@@ -160,6 +161,7 @@ router.post('/process_payment', bodyParser.raw({type:
             console.log(e.message)
         } 
         if (event.type == 'checkout.session.completed'){
+    
             let stripeSession = event.data.object
 
             let metaInfo = JSON.parse(stripeSession.metadata.orders)
@@ -172,6 +174,8 @@ router.post('/process_payment', bodyParser.raw({type:
             }).fetchOne({
                 require: true
             })
+
+            console.log(confirmedOrder.toJSON())
 
             confirmedOrder.set('status_id', 2)
             confirmedOrder.set('order_date', new Date())
