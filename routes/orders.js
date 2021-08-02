@@ -24,49 +24,32 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
     // store orders in array 
     orders = Array.isArray(orders.toJSON())? orders.toJSON(): [orders.toJSON()]
     
+
+    // get orders that contain games owned by vendor and calculate subtotal for the specific game
     let filteredByVendorOrders = []
-    // let filteredByVendorOrderItems = []
+
     for (let order of orders){
-        // console.log(order.orderItem)
+        let filteredOrderItem = [];
+        let subtotal = 0;
         for (let orderItem of order.orderItem){
-            // console.log(orderItem)
-            // console.log(orderItem.gameListing.vendor_id)
             if (orderItem.gameListing.vendor_id == req.session.vendor.id){
-                filteredByVendorOrders.push(order)
-                // filteredByVendorOrderItems.push(orderItem)
+                filteredOrderItem.push(orderItem);
+                subtotal += orderItem.quantity * orderItem.unit_price;
             }
+        }
+        if(filteredOrderItem.length > 0){
+            order.orderItem = filteredOrderItem;
+            order["subtotal"] = subtotal;
+            filteredByVendorOrders.push(order);
         }
     }
 
     
-    // console.log(filteredByVendorOrderItems)
-
-    // let totalForEachOrder = []
-    // for (let orderItem of filteredByVendorOrderItems){
-    //         let total = orderItem.quantity * orderItem.unit_price
-    //         totalForEachOrder.push(total)
-    // }
-
-    // for (let eachFilteredByVendorOrders of filteredByVendorOrders){
-    //     for (let eachTotal of totalForEachOrder){
-    //         eachFilteredByVendorOrders["total_per_vendor"] = eachTotal
-    //     }
-    // }
-    
-
     // console.log(filteredByVendorOrders)
-    // console.log(totalForEachOrder)
 
-    // for (let order of filteredByVendorOrders){
-    //     // console.log(order)
-    //     for (let orderItem of order.orderItem){
-    //         console.log(orderItem)
-    //     }
-    // }
 
     res.render('orders/index', {
         'orders':filteredByVendorOrders
-        // 'totalForEachOrder': totalForEachOrder
     })
 })
 
@@ -78,8 +61,17 @@ router.get('/:orderId', checkIfAuthenticated, async(req,res) => {
         require: true
     })
 
-
     let orderItems = order.toJSON().orderItem
+
+    let filteredOrders = []
+    for (let item of orderItems){
+        if (item.gameListing.vendor_id == req.session.vendor.id){
+            filteredOrders.push(item)
+        }
+    }
+
+    // console.log(orderItems)
+
     let user = order.toJSON().user
 
 
@@ -94,7 +86,7 @@ router.get('/:orderId', checkIfAuthenticated, async(req,res) => {
 
     res.render('orders/details',{
         'order': order,
-        'orderItems': orderItems,
+        'orderItems': filteredOrders,
         'user': user,
         'form': orderForm.toHTML(bootstrapField)
     })
