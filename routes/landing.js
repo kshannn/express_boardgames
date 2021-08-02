@@ -65,6 +65,12 @@ router.post('/', async (req, res) => {
                     res.redirect('/')
                 }
             }
+        },
+        'error': async (form) => {
+            res.render('auth/login', {
+                'form': form.toHTML(bootstrapField)
+            })
+            req.flash('error_messages', 'Failed to login. Please try again.')
         }
     })
 })
