@@ -37,14 +37,16 @@ const createVendorRegistrationForm = () => {
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators: [validators.maxlength(25)],
         }),
         'address': fields.string({
             required: true,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators: [validators.maxlength(280)]
         }),
         'email': fields.email({
             required: true,
@@ -52,14 +54,15 @@ const createVendorRegistrationForm = () => {
             cssClasses: {
                 label: ['form-label']
             },
-            validators: [validators.email()]
+            validators: [validators.email(),validators.maxlength(320)]
         }),
         'password': fields.password({
             required: true,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators: [validators.maxlength(256)]
         }),
         'confirm_password': fields.password({
             required: true,
@@ -101,7 +104,8 @@ const createGameForm = (category) => {
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators: [validators.maxlength(45)],
         }),
         'price': fields.string({
             required: true,
@@ -145,21 +149,24 @@ const createGameForm = (category) => {
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators: [validators.maxlength(200)],
         }),
         'publisher': fields.string({
             required: true,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators: [validators.maxlength(150)],
         }),
         'stock': fields.string({
             required: true,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators:[validators.integer(), validators.min(1)]
         }),
         'published_date': fields.date({
             required: true,
@@ -184,7 +191,8 @@ const createGameForm = (category) => {
             widget: forms.widgets.textarea(),
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators: [validators.maxlength(350)],
         }),
         'image': fields.string({
             required: true,
