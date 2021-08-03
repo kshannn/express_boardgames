@@ -259,7 +259,7 @@ router.post('/:listingId/update', checkIfAuthenticated, async (req,res) => {
         },
         'error': async (form) => {
             res.render('listings/update', {
-                'form': gameForm.toHTML(bootstrapField),
+                'form': form.toHTML(bootstrapField),
                 'gameListing': gameListing.toJSON()
             }),
             req.flash('error_messages','There was an error in updating the listing. Please try again.')

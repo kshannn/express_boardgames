@@ -108,6 +108,7 @@ const createGameForm = (category) => {
             validators: [validators.maxlength(45)],
         }),
         'price': fields.string({
+            label: "Price (in cents)",
             required: true,
             errorAfterField: true,
             cssClasses: {
@@ -120,21 +121,25 @@ const createGameForm = (category) => {
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators:[validators.integer(), validators.min(1)]
         }),
         'max_player_count': fields.string({
+            label:'Max player count (i.e. if no max, type "0" in the field)',
             required: true,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators:[validators.integer()]
         }),
         'min_age': fields.string({
             required: true,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators:[validators.integer(),validators.min('0')]
         }),
         'duration': fields.string({
             label: 'Duration(mins)',
@@ -142,7 +147,8 @@ const createGameForm = (category) => {
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators:[validators.integer(),validators.min('0')]
         }),
         'designer': fields.string({
             required: true,
