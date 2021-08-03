@@ -34,23 +34,44 @@ const {checkIfAuthenticatedJWT} = require('../../middlewares')
 
 // === [C] create user account ===
 router.post('/create', async (req,res) => {
-    try {
-        // set data from req.body directly to database
-        const user = new User();
-        user.set('username', req.body.username)
-        user.set('email', req.body.email)
-        user.set('password', getHashedPassword(req.body.password))
-        user.set('address', req.body.address)
-        user.set('phone_number', req.body.phone_number)
-        await user.save()
-        
-        res.status(200)
-        res.send(user)
-    } catch (e) {
-        console.log(e)
-        res.status(500)
-        res.send('Unexpected internal server error')
+
+    // case: user email already exist in db
+    let user = await User.where({
+        'email': req.body.email
+    }).fetch({
+        require: false
+    });
+
+    // console.log(user)
+
+    let emailExist = false
+
+    if (user) {
+        emailExist = true
+        res.status(400)
+        res.send('Email taken.')
     }
+
+    // case 2: no existing user email in db
+    if (!emailExist){
+        try {
+            // set data from req.body directly to database
+            const user = new User();
+            user.set('username', req.body.username)
+            user.set('email', req.body.email)
+            user.set('password', getHashedPassword(req.body.password))
+            user.set('address', req.body.address)
+            user.set('phone_number', req.body.phone_number)
+            await user.save()
+            
+            res.status(200)
+            res.send(user)
+        } catch (e) {
+            console.log(e)
+            res.status(500)
+            res.send('Unexpected internal server error')
+        }
+    }   
 })
 
 
