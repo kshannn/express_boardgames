@@ -35,14 +35,12 @@ const {checkIfAuthenticatedJWT} = require('../../middlewares')
 // === [C] create user account ===
 router.post('/create', async (req,res) => {
 
-    // case: user email already exist in db
+    // case 1: user email already exist in db
     let user = await User.where({
         'email': req.body.email
     }).fetch({
         require: false
     });
-
-    // console.log(user)
 
     let emailExist = false
 
