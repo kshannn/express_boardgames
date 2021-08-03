@@ -150,7 +150,8 @@ router.get('/create', checkIfAuthenticated, async (req,res) => {
 
 // 2. process form
 router.post('/create', checkIfAuthenticated, async (req,res) => {
-    const gameForm = createGameForm();
+    let allCategories = await listingDataLayer.getAllCategories()
+    const gameForm = createGameForm(allCategories);
     gameForm.handle(req, {
         'success': async (form) => {
            // set all the fields from form.data in object format when creating an instance of GameListing
