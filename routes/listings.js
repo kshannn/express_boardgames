@@ -30,7 +30,7 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
     const searchForm = createSearchForm(allCategories)
 
 
-    // mastery query
+    // master query
     let q = GameListing.collection()
 
     searchForm.handle(req, {
@@ -109,7 +109,7 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
 
             // }
 
-            // console.log(q.query().toSQL());
+            console.log(q.query().toSQL());
             
             // additional 'where' query set to limit to returning speficic vendor results
             let gameListings = await q.where('vendor_id', req.session.vendor.id).fetch({

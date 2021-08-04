@@ -64,7 +64,7 @@ router.post('/:gameListingId/add', checkIfAuthenticatedJWT, async (req,res) => {
 
 })
 
-// === [] reduce quantity of game listing by one ===
+// === [U] reduce quantity of game listing by one ===
 router.post('/:gameListingId/subtract', checkIfAuthenticatedJWT, async (req,res) => {
     try {
 

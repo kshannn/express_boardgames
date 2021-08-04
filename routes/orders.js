@@ -6,8 +6,11 @@ const router = express.Router();
 // import model
 const { Order, Status } = require('../models')
 
+// import dal
+const listingDataLayer = require('../dal/listings')
+
 // import caolan form
-const { bootstrapField, updateOrderForm } = require('../forms');
+const { bootstrapField, updateOrderForm, createSearchForm } = require('../forms');
 
 // import middleware
 const { checkIfAuthenticated } = require('../middlewares');
@@ -16,16 +19,73 @@ const { checkIfAuthenticated } = require('../middlewares');
 // === [R] display all orders for vendors ===
 router.get('/', checkIfAuthenticated, async (req,res) => {
 
+    // === Search Engine ===
+    // fetch categories and populate form
+    let allCategories = await listingDataLayer.getAllCategories()
+    const orderSearchForm = createSearchForm(allCategories)
+
+
+    // master query
+    let q = Order.collection()
+
+    orderSearchForm.handle(req, {
+        'empty': async (form) => {
+            let orders = await Order.collection().fetch({
+                withRelated: ['orderItem', 'orderItem.gameListing', 'status'],
+                require: true
+            })
+        
+        
+            // store orders in array 
+            orders = Array.isArray(orders.toJSON())? orders.toJSON(): [orders.toJSON()]
+            
+        
+            // get orders that contain games owned by vendor and calculate subtotal for the specific game
+            let filteredByVendorOrders = []
+        
+        
+            for (let order of orders){
+                let filteredOrderItem = [];
+                let subtotal = 0;
+                for (let orderItem of order.orderItem){
+                    if (orderItem.gameListing.vendor_id == req.session.vendor.id){
+                        filteredOrderItem.push(orderItem);
+                        subtotal += orderItem.quantity * orderItem.unit_price;
+                    }
+                }
+                if(filteredOrderItem.length > 0){
+                    order.orderItem = filteredOrderItem;
+                    order["subtotal"] = subtotal;
+                    filteredByVendorOrders.push(order);
+                }
+            }
+        
+        
+            res.render('orders/index', {
+                'orders':filteredByVendorOrders,
+                'form': form.toHTML(bootstrapField)
+            })
+        },
+        'error': async (form) => {
+            
+           
+        },
+        'success': async (form) => {
+           
+           
+        }
+    })
+
+
     let orders = await Order.collection().fetch({
         withRelated: ['orderItem', 'orderItem.gameListing', 'status'],
         require: true
     })
 
-    
 
     // store orders in array 
     orders = Array.isArray(orders.toJSON())? orders.toJSON(): [orders.toJSON()]
-    console.log(orders)
+    
 
     // get orders that contain games owned by vendor and calculate subtotal for the specific game
     let filteredByVendorOrders = []
@@ -46,9 +106,6 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
             filteredByVendorOrders.push(order);
         }
     }
-
-    
-    console.log(filteredByVendorOrders)
 
 
     res.render('orders/index', {

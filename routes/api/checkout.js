@@ -186,7 +186,7 @@ router.post('/process_payment', bodyParser.raw({type:
             let metaInfo = JSON.parse(stripeSession.metadata.orders)
 
 
-            // update order info (change status)
+            // [U] update order info (change status)
             let confirmedOrder = await Order.collection().where({
                 'user_id': metaInfo[0].user_id,
                 'status_id': 1
@@ -216,7 +216,7 @@ router.post('/process_payment', bodyParser.raw({type:
                 await gameListing.save()
             }
 
-            // empty cart items
+            // [D] empty cart items
             let cartItemToEmpty = await cartItemDataLayer.getCartItemByUserId(metaInfo[0].user_id)
             for (let eachCartItemToEmpty of cartItemToEmpty){
                 eachCartItemToEmpty.destroy()
