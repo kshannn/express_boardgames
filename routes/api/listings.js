@@ -37,6 +37,7 @@ router.post('/', async (req,res) => {
             q = q.where('name', 'like', '%' + req.body.searchName + '%')
         }
         
+        req.body.searchMinPrice = parseInt(req.body.searchMinPrice) * 100
         if (req.body.searchMinPrice){
             q = q.where('price', '>=', req.body.searchMinPrice)
         }

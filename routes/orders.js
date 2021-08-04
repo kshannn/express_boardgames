@@ -21,12 +21,15 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
         require: true
     })
 
+    
+
     // store orders in array 
     orders = Array.isArray(orders.toJSON())? orders.toJSON(): [orders.toJSON()]
-    
+    console.log(orders)
 
     // get orders that contain games owned by vendor and calculate subtotal for the specific game
     let filteredByVendorOrders = []
+
 
     for (let order of orders){
         let filteredOrderItem = [];
@@ -45,7 +48,7 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
     }
 
     
-    // console.log(filteredByVendorOrders)
+    console.log(filteredByVendorOrders)
 
 
     res.render('orders/index', {
@@ -60,6 +63,7 @@ router.get('/:orderId', checkIfAuthenticated, async(req,res) => {
         withRelated: ['orderItem', 'orderItem.gameListing', 'status', 'user'],
         require: true
     })
+
 
     let orderItems = order.toJSON().orderItem
 
