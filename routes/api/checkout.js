@@ -45,47 +45,65 @@ router.get('/', async (req, res) => {
 
    
     // clear previous potential order if any
-        let prevPotentialOrder = await Order.collection().where({
-            'user_id': user.id,
-            'status_id': 1
-        }).fetch({
-            require: false
-        })
+    let prevPotentialOrder = await Order.collection().where({
+        'user_id': user.id,
+        'status_id': 1
+    }).fetch({
+        require: false
+    })
 
-        for (let each_prevPotentialOrder of prevPotentialOrder){
-            each_prevPotentialOrder.destroy()
-        }
+    for (let each_prevPotentialOrder of prevPotentialOrder){
+        each_prevPotentialOrder.destroy()
+    }
 
-        // get total cost of current cart item
-        let currentCartItems = await CartItem.collection().where('user_id',user.id).fetch({require:true})
+    // get total cost of current cart item
+    let currentCartItems = await CartItem.collection().where('user_id',user.id).fetch({require:true})
 
-        let total = 0
-        for (let each_cartItem of currentCartItems.toJSON()){
-            total += each_cartItem.unit_price * each_cartItem.quantity
-        }
-    
+    let total = 0
+    for (let each_cartItem of currentCartItems.toJSON()){
+        total += each_cartItem.unit_price * each_cartItem.quantity
+    }
 
 
-         // add potential order info
-        const potentialOrder = new Order({
-            'user_id': user.id,
-            'status_id': 1,
-            'order_date': new Date(),
-            'total_cost': total
-        });
-        await potentialOrder.save()
+
+    // add potential order info
+    const potentialOrder = new Order({
+        'user_id': user.id,
+        'status_id': 1,
+        'order_date': new Date(),
+        'total_cost': total
+    });
+    await potentialOrder.save()
 
   
 
 
     // get all items from cart
     const cartItems = await cartItemDataLayer.getCartItemByUserId(user.id)
- 
+
 
     // 1. create line items
     let lineItems = []
     let meta = []
     for (let cartItem of cartItems) {
+
+        // 1. TESTING!!! (working)(Create potential order items tgt with potential order above) 
+        let fetchedPotentialOrder = await Order.collection().where({
+            'user_id': user.id,
+            'status_id': 1
+        }).fetchOne({
+            require: true
+        })
+        console.log('fetachedPotentialOrder',fetchedPotentialOrder.get('id') )
+        
+        const potentialOrderItem = new OrderItem()
+            potentialOrderItem.set('order_id', fetchedPotentialOrder.get('id'))
+            potentialOrderItem.set('gameListing_id', cartItem.related('gameListing').get('id'))
+            potentialOrderItem.set('quantity', cartItem.get('quantity'))
+            potentialOrderItem.set('unit_price', cartItem.related('gameListing').get('price'))
+            await potentialOrderItem.save()
+
+        // Testing END
 
         const lineItem = {
             'name': cartItem.related('gameListing').get('name'),
@@ -117,6 +135,7 @@ router.get('/', async (req, res) => {
     }).fetchOne()
 
     let latestOrderId =  order.toJSON().id
+
 
 
     // 2. create stripe payment
@@ -175,7 +194,7 @@ router.post('/process_payment', bodyParser.raw({type:
                 require: true
             })
 
-            console.log(confirmedOrder.toJSON())
+            // console.log(confirmedOrder.toJSON())
 
             confirmedOrder.set('status_id', 2)
             confirmedOrder.set('order_date', new Date())
@@ -184,12 +203,12 @@ router.post('/process_payment', bodyParser.raw({type:
 
             // add each orderitems to orderItem table
             for (let eachMetaInfo of metaInfo){
-                const orderItem = new OrderItem()
-                orderItem.set('order_id', confirmedOrder.get('id'))
-                orderItem.set('gameListing_id', eachMetaInfo.gameListing_id)
-                orderItem.set('quantity', eachMetaInfo.quantity)
-                orderItem.set('unit_price', eachMetaInfo.unit_price)
-                await orderItem.save()
+                // const orderItem = new OrderItem() !!!!!!! Test muted (worked, can delete these muted lines of code)
+                // orderItem.set('order_id', confirmedOrder.get('id'))
+                // orderItem.set('gameListing_id', eachMetaInfo.gameListing_id)
+                // orderItem.set('quantity', eachMetaInfo.quantity)
+                // orderItem.set('unit_price', eachMetaInfo.unit_price)
+                // await orderItem.save()
 
                 // for each orderitem, delete corresponding game stock
                 let gameListing = await listingDataLayer.getGameListingById(eachMetaInfo.gameListing_id)
