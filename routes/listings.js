@@ -38,13 +38,16 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
             // 1. Case 1 - No search, returns all results
             let gameListings = await GameListing.collection().where(
                 'vendor_id', req.session.vendor.id
-            ).fetch()
+            ).fetch({
+                withRelated: ['category']
+            })
             
             // if return single item (i.e. not array), put in array
             gameListings = Array.isArray(gameListings.toJSON())? gameListings.toJSON(): [gameListings.toJSON()]
             
+
             res.render('listings/index',{
-                'gameListings': gameListings,
+                'gameListings': gameListings.reverse(),
                 'form': form.toHTML(bootstrapField)
             })
         },
@@ -81,33 +84,35 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
                 q = q.where('price', '<=', form.data.max_price)
             }
 
-            if (form.data.min_player_count){
-                q = q.where('min_player_count', '>=', form.data.min_player_count)
-            }
+            if (form.data.stock){
 
-            if (form.data.max_player_count){
-                q = q.where('max_player_count', '<=', form.data.max_player_count)
             }
+            
+            // if (form.data.min_player_count){
+            //     q = q.where('min_player_count', '>=', form.data.min_player_count)
+            // }
 
-            if (form.data.min_age){
-                q = q.where('min_age', '>=', form.data.min_age)
-            }
+            // if (form.data.max_player_count){
+            //     q = q.where('max_player_count', '<=', form.data.max_player_count)
+            // }
 
-            if (form.data.designer){
-                q = q.where('designer', 'like', '%' + form.data.designer + '%')
-            }
+            // if (form.data.min_age){
+            //     q = q.where('min_age', '>=', form.data.min_age)
+            // }
 
-            if (form.data.publisher){
-                q = q.where('publisher', 'like', '%' + form.data.publisher + '%')
-            }
+            // if (form.data.designer){
+            //     q = q.where('designer', 'like', '%' + form.data.designer + '%')
+            // }
+
+            // if (form.data.publisher){
+            //     q = q.where('publisher', 'like', '%' + form.data.publisher + '%')
+            // }
 
             // if (form.data.published_date){
 
             // }
 
-            // if (form.data.stock){
-
-            // }
+            
 
             console.log(q.query().toSQL());
             

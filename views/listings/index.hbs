@@ -8,7 +8,8 @@
             <h2>Filter</h2>
             <form method="GET">
                 {{{form}}}
-                <button class="btn btn-primary">Search</button>
+                <button class="btn btn-primary my-3">Search</button>
+                 <a class="btn resetFilterBtn" href="/listings">Reset</a>
             </form>
         </section>
 
@@ -22,8 +23,9 @@
                 <thead>
                     <tr>
                         <th>Date Posted</th>
-                        <th>Vendor ID</th>
                         <th>Name</th>
+                        <th>Categories</th>
+                        <th>Unit Price</th>
                         <th>Stock</th>
                         <th></th>
                     </tr>
@@ -35,10 +37,15 @@
                             {{moment this.posted_date 'LLL'}}
                         </td>
                         <td>
-                            {{this.vendor_id}}
+                            {{this.name}}
                         </td>
                         <td>
-                            {{this.name}}
+                            {{#each this.category}}
+                                 <span class="badge rounded-pill bg-secondary"> {{name}}</span>
+                            {{/each}}
+                        </td>
+                        <td>
+                            ${{divide this.price 100}}
                         </td>
                         <td>
                             {{this.stock}}

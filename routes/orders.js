@@ -63,7 +63,7 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
         
         
             res.render('orders/index', {
-                'orders':filteredByVendorOrders,
+                'orders':filteredByVendorOrders.reverse(),
                 'form': form.toHTML(bootstrapField)
             })
         },
@@ -100,7 +100,7 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
         
         
             res.render('orders/index', {
-                'orders':filteredByVendorOrders,
+                'orders':filteredByVendorOrders.reverse(),
                 'form': form.toHTML(bootstrapField)
             })
            
@@ -155,7 +155,7 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
             }
 
             res.render('orders/index', {
-                'orders':filteredByVendorOrders,
+                'orders':filteredByVendorOrders.reverse(),
                 'form': form.toHTML(bootstrapField)
             })
 
