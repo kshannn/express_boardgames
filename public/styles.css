@@ -42,6 +42,12 @@
     margin-right: 10px;
 }
 
+.userIconContainer {
+    position: absolute;
+    right: 70px;
+    top: 8px;
+}
+
 .navLoginLogout:hover, .nav-link:hover, #userIcon:hover {
     color: rgb(110, 110, 110) !important;
     cursor:pointer;
@@ -55,6 +61,7 @@
     background-size: cover;
     background-repeat:no-repeat;
 }
+
 
 /* === landing page === */
 #loginHeroImage {
