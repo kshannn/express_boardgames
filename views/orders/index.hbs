@@ -1,59 +1,60 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
+    <div class="container-fluid" id="orderPage">
+        {{!-- search forms --}}
+            <section id="orderSearchSection">
+                <h2>Filter</h2>
+                <form method="GET">
+                    {{{form}}}
+                    <button class="btn btn-primary">Search</button>
+                </form>
+            </section>
 
-    {{!-- search forms --}}
-        <section id="orderSearchSection">
-            <h2>Filter</h2>
-            <form method="GET">
-                {{{form}}}
-                <button class="btn btn-primary">Search</button>
-            </form>
-        </section>
-
-
-   <div id="ordersTable">
-    <h1 id="ordersHeader">Orders</h1>
-    <table class="table">
-            <thead>
-                <tr>
-                    <th>Order Id</th>
-                    <th>Order Date</th>
-                    <th>User ID</th>
-                    <th>Subtotal</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                
-                {{#each orders}}
-                <tr>
-                    <td>
-                        {{this.id}}
-                    </td>
-                    <td>
-                        {{moment this.order_date 'LLL'}}
-                    </td>
-                    <td>
-                        {{this.user_id}}
-                    </td>
-                    <td>
-                        ${{divide this.subtotal 100}}.00
-                    </td>
-                    <td>
-                        {{this.status.name}}
-                    </td>
-                    <td>
-                        <a href="/orders/{{this.id}}">More details</a>
-                    </td>
-                </tr>
-                {{/each}}
-                
-            </tbody>
-        </table>
-    </div>
-   
+            <section id="orderDisplaySection">
+                <div id="ordersTable">
+                    <h1 id="ordersHeader">Orders</h1>
+                    <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Order Id</th>
+                                    <th>Order Date</th>
+                                    <th>Recipient's ID</th>
+                                    <th>Subtotal</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                {{#each orders}}
+                                <tr>
+                                    <td>
+                                        {{this.id}}
+                                    </td>
+                                    <td>
+                                        {{moment this.order_date 'LLL'}}
+                                    </td>
+                                    <td>
+                                        {{this.user_id}}
+                                    </td>
+                                    <td>
+                                        ${{divide this.subtotal 100}}.00
+                                    </td>
+                                    <td>
+                                        {{this.status.name}}
+                                    </td>
+                                    <td>
+                                        <a href="/orders/{{this.id}}">More details</a>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+    </section>
+   </div>
 
 
 {{/block}}

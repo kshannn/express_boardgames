@@ -20,8 +20,9 @@ const { checkIfAuthenticated } = require('../middlewares');
 router.get('/', checkIfAuthenticated, async (req,res) => {
 
     // === Search Engine ===
-
-    const orderSearchForm = createOrdersSearchForm()
+    let allStatuses = await Status.fetchAll().map( status => [status.get('id'),status.get('name')])
+    allStatuses.unshift([0, "--- All Statuses ---"])
+    const orderSearchForm = createOrdersSearchForm(allStatuses)
 
 
     // master query
@@ -58,6 +59,7 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
                     filteredByVendorOrders.push(order);
                 }
             }
+
         
         
             res.render('orders/index', {
@@ -112,10 +114,17 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
                 q = q.where('id', '=', form.data.order_id)
             }
 
+            // user id
+            if (form.data.recipient_id) {
+                q = q.where('user_id', '=', form.data.recipient_id)
+            }
+
+            // status
+            if (form.data.status && form.data.status != "0"){
+                q = q.where('status_id', '=', form.data.status)
+            }
 
             
-
-
 
             let orders = await q.fetch({
                 withRelated: ['orderItem', 'orderItem.gameListing', 'status']
@@ -209,7 +218,6 @@ router.get('/:orderId', checkIfAuthenticated, async(req,res) => {
         }
     }
 
-    // console.log(orderItems)
 
     let user = order.toJSON().user
 

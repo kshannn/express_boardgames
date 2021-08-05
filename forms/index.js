@@ -317,7 +317,7 @@ const createSearchForm = (category) => {
 
 
 // search form for orders
-const createOrdersSearchForm = () => {
+const createOrdersSearchForm = (statuses) => {
     return forms.create({
         'order_id': fields.string({
             label: "Order ID",
@@ -326,7 +326,24 @@ const createOrdersSearchForm = () => {
             cssClasses: {
                 label: ['form-label']
             }
-        })
+        }),
+        'recipient_id': fields.string({
+            label: "Recipient ID",
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'status':fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses:{
+                label: ['form-label']
+            },
+            widget: widgets.select(),
+            choices: statuses
+        }),
     })
 }
 

@@ -118,6 +118,22 @@ border-radius: 5px;
 
 
 /* orders */
+
+#orderPage {
+    display:flex;
+    min-height: 100vh;
+    flex-wrap: wrap;
+}
+
+#orderSearchSection {
+    flex: 1;
+    min-width: 200px;
+}
+
+#orderDisplaySection {
+    flex: 5;
+}
+
 #ordersTable {
     margin: 10px 30px;
 }
