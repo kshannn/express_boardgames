@@ -315,11 +315,29 @@ const createSearchForm = (category) => {
     })
 }
 
+
+// search form for orders
+const createOrdersSearchForm = () => {
+    return forms.create({
+        'order_id': fields.string({
+            label: "Order ID",
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        })
+    })
+}
+
+
+
 module.exports = {
     bootstrapField,
     createGameForm,
     createVendorRegistrationForm,
     createLoginForm,
     updateOrderForm,
-    createSearchForm
+    createSearchForm,
+    createOrdersSearchForm
 }

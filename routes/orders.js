@@ -10,7 +10,7 @@ const { Order, Status } = require('../models')
 const listingDataLayer = require('../dal/listings')
 
 // import caolan form
-const { bootstrapField, updateOrderForm, createSearchForm } = require('../forms');
+const { bootstrapField, updateOrderForm, createOrdersSearchForm } = require('../forms');
 
 // import middleware
 const { checkIfAuthenticated } = require('../middlewares');
@@ -20,9 +20,8 @@ const { checkIfAuthenticated } = require('../middlewares');
 router.get('/', checkIfAuthenticated, async (req,res) => {
 
     // === Search Engine ===
-    // fetch categories and populate form
-    let allCategories = await listingDataLayer.getAllCategories()
-    const orderSearchForm = createSearchForm(allCategories)
+
+    const orderSearchForm = createOrdersSearchForm()
 
 
     // master query
@@ -30,11 +29,11 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
 
     orderSearchForm.handle(req, {
         'empty': async (form) => {
+            // case 1: searching on empty fields returns all result
             let orders = await Order.collection().fetch({
                 withRelated: ['orderItem', 'orderItem.gameListing', 'status'],
                 require: true
-            })
-        
+            })        
         
             // store orders in array 
             orders = Array.isArray(orders.toJSON())? orders.toJSON(): [orders.toJSON()]
@@ -67,50 +66,129 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
             })
         },
         'error': async (form) => {
+            // 2. Case 2 - Invalid search field, returns all results with validation msg
+            let orders = await Order.collection().fetch({
+                withRelated: ['orderItem', 'orderItem.gameListing', 'status'],
+                require: true
+            })        
+        
+            // store orders in array 
+            orders = Array.isArray(orders.toJSON())? orders.toJSON(): [orders.toJSON()]
             
+        
+            // get orders that contain games owned by vendor and calculate subtotal for the specific game
+            let filteredByVendorOrders = []
+        
+        
+            for (let order of orders){
+                let filteredOrderItem = [];
+                let subtotal = 0;
+                for (let orderItem of order.orderItem){
+                    if (orderItem.gameListing.vendor_id == req.session.vendor.id){
+                        filteredOrderItem.push(orderItem);
+                        subtotal += orderItem.quantity * orderItem.unit_price;
+                    }
+                }
+                if(filteredOrderItem.length > 0){
+                    order.orderItem = filteredOrderItem;
+                    order["subtotal"] = subtotal;
+                    filteredByVendorOrders.push(order);
+                }
+            }
+        
+        
+            res.render('orders/index', {
+                'orders':filteredByVendorOrders,
+                'form': form.toHTML(bootstrapField)
+            })
            
         },
         'success': async (form) => {
-           
+
+            // === Search form ===
+
+            // order id
+            if (form.data.order_id) {
+                q = q.where('id', '=', form.data.order_id)
+            }
+
+
+            
+
+
+
+            let orders = await q.fetch({
+                withRelated: ['orderItem', 'orderItem.gameListing', 'status']
+            })
+
+            // store orders in array 
+            orders = Array.isArray(orders.toJSON())? orders.toJSON(): [orders.toJSON()]
+            
+        
+            // get orders that contain games owned by vendor and calculate subtotal for the specific game
+            let filteredByVendorOrders = []
+        
+        
+            for (let order of orders){
+                let filteredOrderItem = [];
+                let subtotal = 0;
+                for (let orderItem of order.orderItem){
+                    if (orderItem.gameListing.vendor_id == req.session.vendor.id){
+                        filteredOrderItem.push(orderItem);
+                        subtotal += orderItem.quantity * orderItem.unit_price;
+                    }
+                }
+                if(filteredOrderItem.length > 0){
+                    order.orderItem = filteredOrderItem;
+                    order["subtotal"] = subtotal;
+                    filteredByVendorOrders.push(order);
+                }
+            }
+
+            res.render('orders/index', {
+                'orders':filteredByVendorOrders,
+                'form': form.toHTML(bootstrapField)
+            })
+
            
         }
     })
 
 
-    let orders = await Order.collection().fetch({
-        withRelated: ['orderItem', 'orderItem.gameListing', 'status'],
-        require: true
-    })
+    // let orders = await Order.collection().fetch({
+    //     withRelated: ['orderItem', 'orderItem.gameListing', 'status'],
+    //     require: true
+    // })
 
 
-    // store orders in array 
-    orders = Array.isArray(orders.toJSON())? orders.toJSON(): [orders.toJSON()]
+    // // store orders in array 
+    // orders = Array.isArray(orders.toJSON())? orders.toJSON(): [orders.toJSON()]
     
 
-    // get orders that contain games owned by vendor and calculate subtotal for the specific game
-    let filteredByVendorOrders = []
+    // // get orders that contain games owned by vendor and calculate subtotal for the specific game
+    // let filteredByVendorOrders = []
 
 
-    for (let order of orders){
-        let filteredOrderItem = [];
-        let subtotal = 0;
-        for (let orderItem of order.orderItem){
-            if (orderItem.gameListing.vendor_id == req.session.vendor.id){
-                filteredOrderItem.push(orderItem);
-                subtotal += orderItem.quantity * orderItem.unit_price;
-            }
-        }
-        if(filteredOrderItem.length > 0){
-            order.orderItem = filteredOrderItem;
-            order["subtotal"] = subtotal;
-            filteredByVendorOrders.push(order);
-        }
-    }
+    // for (let order of orders){
+    //     let filteredOrderItem = [];
+    //     let subtotal = 0;
+    //     for (let orderItem of order.orderItem){
+    //         if (orderItem.gameListing.vendor_id == req.session.vendor.id){
+    //             filteredOrderItem.push(orderItem);
+    //             subtotal += orderItem.quantity * orderItem.unit_price;
+    //         }
+    //     }
+    //     if(filteredOrderItem.length > 0){
+    //         order.orderItem = filteredOrderItem;
+    //         order["subtotal"] = subtotal;
+    //         filteredByVendorOrders.push(order);
+    //     }
+    // }
 
 
-    res.render('orders/index', {
-        'orders':filteredByVendorOrders
-    })
+    // res.render('orders/index', {
+    //     'orders':filteredByVendorOrders
+    // })
 })
 
 // === [R] display specific order ===
