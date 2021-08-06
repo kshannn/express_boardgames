@@ -5,7 +5,7 @@ const router = express.Router()
 
 // import model
 const {
-    CartItem, OrderItem, Order
+    CartItem, OrderItem, Order, User
 } = require('../../models')
 
 // import Stripe
@@ -64,6 +64,9 @@ router.get('/', async (req, res) => {
         total += each_cartItem.unit_price * each_cartItem.quantity
     }
 
+    // get user address from JWT user variable
+    let selectedUser = await User.where('id',user.id).fetch()
+    let userAddress = selectedUser.toJSON().address
 
 
     // add potential order info
@@ -71,7 +74,8 @@ router.get('/', async (req, res) => {
         'user_id': user.id,
         'status_id': 1,
         'order_date': new Date(),
-        'total_cost': total
+        'total_cost': total,
+        'user_address': userAddress
     });
     await potentialOrder.save()
 

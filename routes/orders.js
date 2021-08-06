@@ -225,11 +225,13 @@ router.get('/:orderId', checkIfAuthenticated, async(req,res) => {
     // fetch all statuses
     const allStatuses = await Status.fetchAll().map( status => [status.get('id'),status.get('name')])
 
-    // caolan form
+    // caolan form (update status)
     const orderForm = updateOrderForm(allStatuses)
 
-    // fill in existing status
+    // fill in existing status and user's address
     orderForm.fields.statuses.value = order.get('status_id')
+    orderForm.fields.user_address.value = order.get("user_address")
+
 
     res.render('orders/details',{
         'order': order,
@@ -252,10 +254,12 @@ router.post('/:orderId', checkIfAuthenticated, async(req,res) => {
  
      // caolan form
      const orderForm = updateOrderForm(allStatuses)
+     
 
      orderForm.handle(req, {
          'success': async(form) => {
              order.set('status_id', form.data.statuses)
+             order.set('user_address', form.data.user_address)
              await order.save()
          },
          'error': async (form) => {
@@ -269,7 +273,7 @@ router.post('/:orderId', checkIfAuthenticated, async(req,res) => {
          }
      })
 
-     req.flash('success_messages','Status successfully updated!')
+     req.flash('success_messages','Order information successfully updated!')
      res.redirect('/orders')
 
 

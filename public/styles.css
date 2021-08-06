@@ -219,13 +219,13 @@ border-radius: 5px;
     font-size: 2rem;
 }
 
-#statusForm {
-    width: 200px;
+#updateOrderForm {
+    width: 300px;
     font-size: 1.4rem;
 }
 
 #saveChangeBtn {
-    width: 200px;
+    width: fit-content;
 }
 
 /* create listing page */

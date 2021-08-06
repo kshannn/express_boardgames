@@ -5,7 +5,7 @@
     <h2>Customer's Details</h2>
     <hr></hr>
     <p>Username: {{user.username}}</p>
-    <p>Shipping address: {{user.address}}</p>
+    {{!-- <p>Shipping address: {{user.address}}</p> --}}
     <p>Contact number: {{user.phone_number}}</p>
     <p>Email: {{user.email}}</p>
 
@@ -15,11 +15,9 @@
 
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-        <div id="statusForm">{{{form}}}</div>
+        <div id="updateOrderForm">{{{form}}}</div>
         <button id="saveChangeBtn" class="btn btn-warning my-3">Save Changes</button>
         
-
-
 
     <table class="table">
         <thead>

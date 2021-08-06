@@ -232,9 +232,33 @@ const updateOrderForm = (status) => {
             },
             widget: widgets.select(),
             choices: status
+        }),
+        'user_address':fields.string({
+            label: "Order's Shipping Address",
+            required: true,
+            errorAfterField: true,
+            cssClasses:{
+                label: ['form-label']
+            },
+            validators: [validators.maxlength(280)]
         })   
     })
 }
+
+// const updateAddressForm = () => {
+//     return forms.create({
+//         'user_address':fields.string({
+//             label: "Shipping address",
+//             required: true,
+//             errorAfterField: true,
+//             cssClasses:{
+//                 label: ['form-label']
+//             },
+//             validators: [validators.maxlength(280)]
+//         })   
+//     })
+// }
+
 
 // ===== Search Engine =====
 const createSearchForm = (category) => {
@@ -367,5 +391,5 @@ module.exports = {
     createLoginForm,
     updateOrderForm,
     createSearchForm,
-    createOrdersSearchForm
+    createOrdersSearchForm,
 }
