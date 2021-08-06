@@ -94,7 +94,7 @@ router.get('/', async (req, res) => {
         }).fetchOne({
             require: true
         })
-        console.log('fetachedPotentialOrder',fetchedPotentialOrder.get('id') )
+        // console.log('fetachedPotentialOrder',fetchedPotentialOrder.get('id') )
         
         const potentialOrderItem = new OrderItem()
             potentialOrderItem.set('order_id', fetchedPotentialOrder.get('id'))

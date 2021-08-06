@@ -22,7 +22,7 @@ const generateAccessToken = (user) => {
         'id': user.get('id'),
         'email': user.get('email')
     }, process.env.TOKEN_SECRET, {
-        expiresIn: "1h"
+        expiresIn: "12h"
     });
 }
 

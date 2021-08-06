@@ -41,12 +41,21 @@ const createVendorRegistrationForm = () => {
             validators: [validators.maxlength(25)],
         }),
         'address': fields.string({
+            label:'Ship from Address',
             required: true,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
             },
             validators: [validators.maxlength(280)]
+        }),
+        'phone_number': fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            validators: [validators.integer(), validators.minlength(8), validators.maxlength(13)]
         }),
         'email': fields.email({
             required: true,
