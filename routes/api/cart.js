@@ -52,6 +52,7 @@ router.post('/:gameListingId/add', checkIfAuthenticatedJWT, async (req,res) => {
              cartItem.set('quantity', 1)
              cartItem.set('unit_price', req.body.unit_price)
              await cartItem.save()
+             res.send(cartItem.toJSON())
         }
 
         

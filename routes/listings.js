@@ -168,8 +168,9 @@ router.post('/create', checkIfAuthenticated, async (req,res) => {
             // console.log(form.data) // returns all key/value of all form fields
             // console.log(gameListingData) // returns all key/values for each form fields except for 'categories' field
             // console.log(categories) // returns just the values for categories in string
-        
-            gameListing.set('image', image.slice(1))
+            
+            let splitImage = image.split(',')[1]
+            gameListing.set('image', splitImage)
             gameListing.set('posted_date', new Date())
             gameListing.set('vendor_id', req.session.vendor.id)
             await gameListing.save()
@@ -183,7 +184,8 @@ router.post('/create', checkIfAuthenticated, async (req,res) => {
         },
         'error': async (form) => {
             res.render('listings/create',{
-                'form': form.toHTML(bootstrapField)
+                'form': form.toHTML(bootstrapField),
+                'img_key': img_key
             })
             req.flash('error_messages','There was an error in creating the listing. Please try again.')
         }
@@ -247,7 +249,11 @@ router.post('/:listingId/update', checkIfAuthenticated, async (req,res) => {
         'success': async(form) => {
             let {categories, image,...gameListingData} = form.data
             gameListing.set (gameListingData)
-            gameListing.set('image', image.slice(1))
+            console.log('img', image)
+
+            let slicedImage = image.split(',')[1]
+        
+            gameListing.set('image', slicedImage)
             await gameListing.save()
 
             // clear existing categories
@@ -259,13 +265,20 @@ router.post('/:listingId/update', checkIfAuthenticated, async (req,res) => {
                 await gameListing.category().attach(categories.split(","))
             }
 
+            
+
             req.flash('success_messages','Listing successfully updated!')
             res.redirect('/listings')
         },
         'error': async (form) => {
+            // fill in existing image
+            const prefilledImage = gameListing.get('image')
+
             res.render('listings/update', {
                 'form': form.toHTML(bootstrapField),
-                'gameListing': gameListing.toJSON()
+                'gameListing': gameListing.toJSON(),
+                'img_key': img_key,
+                'prefilledImage': prefilledImage
             }),
             req.flash('error_messages','There was an error in updating the listing. Please try again.')
         }
