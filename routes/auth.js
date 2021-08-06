@@ -15,6 +15,9 @@ const {
     Vendor
 } = require('../models')
 
+// import middleware
+const { checkIfAuthenticated } = require('../middlewares');
+
 // import crypto for password encryption
 const crypto = require('crypto');
 const getHashedPassword = (password) => {
@@ -79,66 +82,18 @@ router.post('/create', async (req, res) => {
 })
 
 
+// === [R] read vendor account ===
+router.get('/profile', checkIfAuthenticated, async (req,res) => {
+    let vendor = await Vendor.where({
+        'id': req.session.vendor.id
+    }).fetch({
+        require: true
+    });
 
-// // === Login for Vendor ===
-// // 1. render login form
-// router.get('/login', async (req, res) => {
-//     const loginForm = createLoginForm();
-//     res.render('auth/login', {
-//         'form': loginForm.toHTML(bootstrapField)
-//     })
-// })
+    res.render('auth/index', {
+        'vendor': vendor.toJSON()
+    })
 
-// // 2. process login form
-// router.post('/login', async (req, res) => {
-//     const loginForm = createLoginForm();
-//     loginForm.handle(req, {
-//         'success': async (form) => {
-//             // find vendor by email
-//             let vendor = await Vendor.where({
-//                 'email': form.data.email
-//             }).fetch({
-//                 require: false
-//             });
-
-//             // 1. case1 - vendor email doesn't match database (no data fetched)
-//             if (!vendor) {
-//                 req.flash("error_messages", "Sorry, the authentication details you have provided is invalid. Please try again.")
-//                 res.redirect('/auth/login')
-//             } else {
-//                 // 2. case2 - vendor email match database
-//                 // check if password matches database too
-//                 if (vendor.get('password') === getHashedPassword(form.data.password)){
-
-//                     // store vendor details in session if login is successful
-//                     req.session.vendor = {
-//                         id: vendor.get('id'),
-//                         username: vendor.get('username'),
-//                         email: vendor.get('email')
-//                     }
-//                     req.flash("success_messages", "Welcome, " + vendor.get('username'));
-//                     res.redirect('/listings');
-//                 } else {
-//                     req.flash("error_messages", "Sorry, the authentication details you have provided is invalid. Please try again.")
-//                     res.redirect('/auth/login')
-//                 }
-//             }
-//         }
-//     })
-// })
-
-// // === Logout for Vendor ===
-// router.get('/logout', async (req, res) => {
-
-//     if (req.session.vendor){
-//         req.session.vendor = null
-//         req.flash('success_messages','Logged out successfully. See you again!')
-//         res.redirect('/auth/login')
-//     } else {
-//         req.flash('error_messages','You are currently not logged in. Please log in to access the feature.')
-//         res.redirect('/auth/login')
-//     }
-   
-// })
+})
 
 module.exports = router;

@@ -1,0 +1,20 @@
+{{#extends 'base'}}
+
+{{#block 'content'}}
+
+<div id="vendorProfilePage">
+    <div id="profileContainer">
+        <h1>Your Profile</h1>
+        <hr></hr>
+        <p>Name: {{vendor.username}}</p>
+        <p>Email: {{vendor.email}}</p>
+        <p>Ship From Address: {{vendor.address}}</p>
+        <button class="btn btn-warning">Update</button>
+    </div>
+</div>
+
+
+
+{{/block}}
+
+{{/extends}}

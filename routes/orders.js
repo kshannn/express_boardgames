@@ -277,7 +277,7 @@ router.post('/:orderId', checkIfAuthenticated, async(req,res) => {
 
 // === [D] Delete specific order ===
 // 1. Render form 
-router.get('/:orderId/delete', async(req,res) => {
+router.get('/:orderId/delete',checkIfAuthenticated, async(req,res) => {
     // fetch order to be deleted
     let order = await Order.collection().where('id', req.params.orderId).fetchOne({
         withRelated: ['orderItem', 'orderItem.gameListing', 'status', 'user'],
@@ -290,7 +290,7 @@ router.get('/:orderId/delete', async(req,res) => {
 })
 
 // 2. Process form
-router.post('/:orderId/delete', async(req,res) => {
+router.post('/:orderId/delete',checkIfAuthenticated, async(req,res) => {
     // fetch order to be deleted
     let order = await Order.collection().where('id', req.params.orderId).fetchOne({
         withRelated: ['orderItem', 'orderItem.gameListing', 'status', 'user'],

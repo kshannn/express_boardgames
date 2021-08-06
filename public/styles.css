@@ -18,6 +18,10 @@
 
 .nav-link {
     color: white;
+    padding: 0;
+}
+.dropdown-menu {
+    min-width: 5rem;
 }
 
 .navLoginLogout {
@@ -169,7 +173,7 @@ border-radius: 5px;
 #listingHeader a {
     position: absolute;
     right: 0px;
-    bottom: -5px;
+    bottom: 5px;
     background: orange;
 }
 
@@ -310,4 +314,27 @@ border-radius: 5px;
 
 #deleteOrderPage h1 {
     font-size: 1.7rem;
+}
+
+/* === vendor profile page === */
+#vendorProfilePage {
+    width: 100%;
+    min-height: 100vh;
+    background: grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+
+#profileContainer {
+    padding: 50px;
+    width: 30%;
+    min-width: 300px;
+    min-height: 500px;
+    background: white;
+    border-radius: 5px;
+
+    
 }

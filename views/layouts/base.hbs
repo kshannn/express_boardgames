@@ -28,9 +28,25 @@
 
             <div class="ms-auto userIconContainer">
                {{#if vendor}}
-                <div class="userIcon">
+                {{!-- test --}}
+                <div class="nav-item dropdown">
+                    <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <div class="userIcon">
+                        <i class="fas fa-user-circle"></i> {{vendor.username}}
+                      </div>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li><a href="/auth/profile" class="dropdown-item">Your Profile</a></li>
+                    </ul>
+                  </div>
+
+
+                {{!-- test end --}}
+
+
+                {{!-- <div class="userIcon">
                   <i class="fas fa-user-circle"></i> {{vendor.username}}
-                </div>
+                </div> --}}
                  {{else}}
                   <div class="userIcon">
                     <i class="fas fa-user-circle"></i>Guest
