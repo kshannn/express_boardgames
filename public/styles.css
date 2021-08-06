@@ -139,6 +139,7 @@ border-radius: 5px;
 #searchSection{
     flex:1;
     padding: 0 20px;
+    margin: 5px;
     /* background: blue; */
 }
 
@@ -184,11 +185,17 @@ border-radius: 5px;
     display:flex;
     min-height: 100vh;
     flex-wrap: wrap;
+    padding: 15px;
 }
 
 #orderSearchSection {
     flex: 1;
     min-width: 200px;
+    margin: 15px;
+}
+
+#orderSearchSection h2, #ordersHeader {
+    font-size: 1.7rem;
 }
 
 #orderDisplaySection {
@@ -197,10 +204,6 @@ border-radius: 5px;
 
 #ordersTable {
     margin: 10px 30px;
-}
-
-#ordersHeader {
-    font-size: 2rem;
 }
 
 /* individual order detail */
@@ -275,4 +278,36 @@ border-radius: 5px;
 
 #updateListingPage .form-control {
     margin-bottom: 20px;
+}
+
+#updateListingPage .btn-secondary {
+    margin-left: 5px;
+}
+
+
+#updateListingPage .btn-danger {
+    display: block;
+    width: 90px;
+}
+
+/* === delete listing page === */
+#deleteListingPage {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+#deleteListingPage h1 {
+    font-size: 1.7rem;
+}
+
+/* === delete order page === */
+#deleteOrderPage {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+#deleteOrderPage h1 {
+    font-size: 1.7rem;
 }

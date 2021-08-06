@@ -1,18 +1,20 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
+<div id="deleteOrderPage">
 
-<h1>Deleting {{order.id}}</h1>
+    <h1>Deleting Order Id {{order.id}}</h1>
 
-<form method="POST">
-    <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-    <div class="alert alert-danger">
-        <p>Are you sure you want to remove {{order.id}} from your orders?</p>
-        <a href="/orders/{{order.id}}" class="btn btn-secondary">No</a>
-        <button class="btn btn-danger">Yes</button>
-    </div>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+        <div class="alert alert-danger">
+            <p>Are you sure you want to remove order Id {{order.id}} from your orders?</p>
+            <button class="btn btn-danger">Yes</button>
+            <a href="/orders/{{order.id}}" class="btn btn-secondary">No</a>
+        </div>
 
-</form>
+    </form>
+</div>
 
 
 {{/block}}
