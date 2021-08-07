@@ -33,15 +33,17 @@ router.get('/', async (req, res) => {
     // check if user is logged in (using tokens)
     await jwt.verify(req.query.token, process.env.TOKEN_SECRET, (err, user) => {
         if (err) {
-            res.redirect('https://3000-green-prawn-u4ktudfo.ws-us14.gitpod.io/login' + '?' + 'session=expire&' + 'callback_url=' + 'https://3000-green-prawn-u4ktudfo.ws-us14.gitpod.io/cart')
+            res.redirect('https://3000-green-prawn-u4ktudfo.ws-us13.gitpod.io/login' + '?' + 'session=expire&' + 'callback_url=' + 'https://3000-green-prawn-u4ktudfo.ws-us14.gitpod.io/cart')
 
         }
 
         req.user = user;
     });
 
-
     const user = req.user
+
+
+
 
    
     // clear previous potential order if any
@@ -56,12 +58,22 @@ router.get('/', async (req, res) => {
         each_prevPotentialOrder.destroy()
     }
 
-    // get total cost of current cart item
-    let currentCartItems = await CartItem.collection().where('user_id',user.id).fetch({require:true})
 
+    // get current cart items
+    let currentCartItems = await CartItem.collection().where('user_id',user.id).fetch({
+        withRelated: ['gameListing'],
+        require:true
+    })
+    console.log(currentCartItems.toJSON())
+
+    // get total cost of current cart item
     let total = 0
     for (let each_cartItem of currentCartItems.toJSON()){
-        total += each_cartItem.unit_price * each_cartItem.quantity
+        if (each_cartItem.quantity <= each_cartItem.gameListing.stock){
+            total += each_cartItem.unit_price * each_cartItem.quantity
+        } else {
+            res.redirect('https://3000-green-prawn-u4ktudfo.ws-us13.gitpod.io/cart' + '?' + 'stock=insufficient')
+        }
     }
 
     // get user address from JWT user variable

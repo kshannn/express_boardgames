@@ -80,7 +80,7 @@ router.post('/', async (req,res) => {
 router.get('/:listingId', async (req,res) => {
     try {
         const gameListing = await listingDataLayer.getGameListingById(req.params.listingId)
-        
+    
         res.send(gameListing.toJSON())
         res.status(200)
     } catch (e) {

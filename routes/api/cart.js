@@ -30,6 +30,20 @@ router.get('/:userId', checkIfAuthenticatedJWT, async (req,res) => {
     }
 })
 
+// === [R] read specific game cart item for a particular user ===
+router.post('/:gameListingId', checkIfAuthenticatedJWT, async (req,res) => {
+    try {
+        let cartItem = await cartItemDataLayer.getCartItemByGameIdAndUserId(req.params.gameListingId,req.body.user_id)
+        
+        res.send(cartItem.toJSON())
+        res.status(200)
+    } catch (e) {
+        console.log(e)
+        res.status(500)
+        res.send('Unexpected internal server error')
+    }
+})
+
 
 // === [C] add game listing to cart ===
 router.post('/:gameListingId/add', checkIfAuthenticatedJWT, async (req,res) => {
