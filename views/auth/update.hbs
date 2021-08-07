@@ -1,0 +1,14 @@
+{{#extends 'base'}}
+
+{{#block 'content'}}
+<h1>Update Profile</h1>
+<form method="POST">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+    {{{form}}}
+    <button class="btn btn-warning my-3 me-2">Save Changes</button>
+    <a href="/auth/profile" class="btn btn-secondary">Cancel</a>
+</form>
+
+{{/block}}
+
+{{/extends}}

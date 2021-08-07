@@ -85,6 +85,39 @@ const createVendorRegistrationForm = () => {
     })
 }
 
+// ===== Update (Vendor) =====
+const updateVendorForm = () => {
+    return forms.create({
+        'username': fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            validators: [validators.maxlength(25)],
+        }),
+        'phone_number': fields.string({
+            label: 'Contact No.',
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            validators: [validators.integer(), validators.minlength(8), validators.maxlength(13)]
+        }),
+        'address': fields.string({
+            label:'Ship from Address',
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            validators: [validators.maxlength(280)]
+        })
+    })
+}
+
+
 // ===== Login (Vendor) =====
 const createLoginForm = () => {
     return forms.create({
@@ -392,4 +425,5 @@ module.exports = {
     updateOrderForm,
     createSearchForm,
     createOrdersSearchForm,
+    updateVendorForm
 }

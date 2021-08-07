@@ -3,15 +3,16 @@
 
 {{/block}}
 {{#block 'content'}}
-<div id="createListingPage">
+<div class="container-fluid" id="createListingPage">
   <h1>Create Boardgame Listing</h1>
+  <hr></hr>
   <form method="POST">
       <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-      <section id="createListingForm">
+      
         {{{form}}}
-      </section>
+      
 
-      <section id="btnContainer">
+      <section>
         <input
           type="hidden"
           role="uploadcare-uploader"
@@ -21,11 +22,11 @@
 
 
         <button id="createBtn" class="btn my-3">Create</button>
-        {{#if imgUrl}}
+        {{!-- {{#if imgUrl}}
           <div>
             <img id="imgUrl" height="200px"src="{{imgUrl}}"/>
           </div>
-        {{/if}}
+        {{/if}} --}}
       </section>
   </form>
 

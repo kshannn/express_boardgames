@@ -7,7 +7,8 @@ const router = express.Router();
 const {
     bootstrapField,
     createVendorRegistrationForm,
-    createLoginForm
+    createLoginForm,
+    updateVendorForm
 } = require('../forms');
 
 // import model
@@ -96,5 +97,59 @@ router.get('/profile', checkIfAuthenticated, async (req,res) => {
     })
 
 })
+
+
+// === [U] update vendor account ===
+router.get('/update', checkIfAuthenticated, async (req,res) => {
+    let vendor = await Vendor.where({
+        'id': req.session.vendor.id
+    }).fetch({
+        require: true
+    });
+
+    const form = updateVendorForm()
+
+    // prefill vendor info
+    form.fields.username.value = vendor.get('username')
+    form.fields.address.value = vendor.get('address')
+    form.fields.phone_number.value = vendor.get('phone_number')
+
+
+    res.render('auth/update', {
+        'form': form.toHTML(bootstrapField)
+    })
+})
+
+router.post('/update', checkIfAuthenticated, async (req,res) => {
+    let vendor = await Vendor.where({
+        'id': req.session.vendor.id
+    }).fetch({
+        require: true
+    });
+
+    // console.log(vendor.toJSON())
+
+    const form = updateVendorForm()
+
+    form.handle(req, {
+        'success': async(form) =>{
+            let { ...vendorData } = form.data
+            vendor.set(vendorData)
+            await vendor.save()
+
+            req.flash('success_messages','Profile information successfully updated!')
+            res.redirect('profile')
+        },
+        'error': async(form) => {
+            res.render('auth/update', {
+                'form': form.toHTML(bootstrapField)
+            }),
+            req.flash('error_messages','There was an error in updating your profile. Please try again.')
+        }
+    })
+})
+
+
+
 
 module.exports = router;

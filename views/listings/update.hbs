@@ -2,7 +2,8 @@
 
 {{#block 'content'}}
 <div class="container-fluid" id="updateListingPage">
-  <h1>Update Boardgame Listing: {{gameListing.name}}</h1>
+  <h1>Update Listing: {{gameListing.name}}</h1>
+  <hr></hr>
   <form method="POST">
       <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
       {{{form}}}
