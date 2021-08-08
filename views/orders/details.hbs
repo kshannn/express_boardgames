@@ -10,13 +10,13 @@
     <p>Shipping address: {{user.address}}</p>
 
 
-    <h1 id="orderDetailsHeader">Order ID {{order.id}}</h1>
+    <h2>Order Id {{order.id}}</h1>
     <hr></hr>
 
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
         <div id="updateOrderForm">{{{form}}}</div>
-        <button id="saveChangeBtn" class="btn btn-warning my-3">Save Changes</button>
+        <button id="saveChangeBtn" class="btn btn-warning my-2">Save Changes</button>
         
 
     <table class="table">
@@ -54,7 +54,7 @@
             {{/each}}
         </tbody>
     </table>
-
+        <a class="btn btn-secondary" href="/orders">Back</a>
         <a class="btn btn-danger" href="/orders/{{order.id}}/delete">Delete</a>
 
     </form>

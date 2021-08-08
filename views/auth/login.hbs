@@ -3,14 +3,12 @@
 {{#block 'content'}}
 
 
-<div id="loginHeroImage">
+<div class="heroImage">
     <div id="loginPage">
-        <section id="loginExtraSection">
-            Board Games Society (Vendor)
-        </section>
-        <section id="loginFormSection">
+        
             <div id="loginContainer">
                 <h1>Vendor Login</h1>
+                <hr></hr>
                 <form method="POST">
                     <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
                     {{{form}}}
@@ -18,7 +16,7 @@
                 </form>
                 <a href="/auth/create">Create an account</a>
             </div>
-        </section>
+        
     </div>
 </div>
 
