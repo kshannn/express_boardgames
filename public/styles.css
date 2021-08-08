@@ -305,10 +305,10 @@ border-radius: 5px;
 }
 
 /* === vendor profile page === */
-#vendorProfilePage {
+#vendorProfilePage, #vendorUpdatePage {
     width: 100%;
     min-height: 100vh;
-    background: grey;
+    /* background: grey; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -316,13 +316,14 @@ border-radius: 5px;
 }
 
 
-#profileContainer {
+#profileContainer, #updateProfileContainer {
     padding: 50px;
     width: 30%;
     min-width: 300px;
     min-height: 500px;
     background: white;
     border-radius: 5px;
+    border: 1px solid grey;
 
     
 }
