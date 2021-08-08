@@ -84,9 +84,9 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
                 q = q.where('price', '<=', form.data.max_price)
             }
 
-            if (form.data.stock){
+            // if (form.data.stock){
 
-            }
+            // }
             
             // if (form.data.min_player_count){
             //     q = q.where('min_player_count', '>=', form.data.min_player_count)
@@ -160,7 +160,7 @@ router.post('/create', checkIfAuthenticated, async (req,res) => {
     gameForm.handle(req, {
         'success': async (form) => {
            // set all the fields from form.data in object format when creating an instance of GameListing
-            let {categories, image, ...gameListingData} = form.data 
+            let {categories, image, price, ...gameListingData} = form.data 
 
              // create new instance in games table
             const gameListing = new GameListing(gameListingData);
@@ -168,9 +168,10 @@ router.post('/create', checkIfAuthenticated, async (req,res) => {
             // console.log(form.data) // returns all key/value of all form fields
             // console.log(gameListingData) // returns all key/values for each form fields except for 'categories' field
             // console.log(categories) // returns just the values for categories in string
-            
+             
             let splitImage = image.split(',')[1]
             gameListing.set('image', splitImage)
+            gameListing.set('price', form.data.price * 100) //test
             gameListing.set('posted_date', new Date())
             gameListing.set('vendor_id', req.session.vendor.id)
             await gameListing.save()
@@ -206,7 +207,8 @@ router.get('/:listingId/update', checkIfAuthenticated, async (req, res) => {
 
     // fill in existing form
     gameForm.fields.name.value = gameListing.get('name')
-    gameForm.fields.price.value = gameListing.get('price')
+    gameForm.fields.price.value = gameListing.get('price')/100
+    console.log(gameListing.get('price'))
     gameForm.fields.description.value = gameListing.get('description')
     gameForm.fields.min_player_count.value = gameListing.get('min_player_count')
     gameForm.fields.max_player_count.value = gameListing.get('max_player_count')
@@ -247,12 +249,13 @@ router.post('/:listingId/update', checkIfAuthenticated, async (req,res) => {
     // process form
     gameForm.handle(req, {
         'success': async(form) => {
-            let {categories, image,...gameListingData} = form.data
+            let {categories, image, price, ...gameListingData} = form.data
             gameListing.set (gameListingData)
             console.log('img', image)
 
             let slicedImage = image.split(',')[1]
         
+            gameListing.set('price', form.data.price * 100)
             gameListing.set('image', slicedImage)
             await gameListing.save()
 

@@ -42,6 +42,7 @@ router.post('/', async (req,res) => {
             q = q.where('price', '>=', req.body.searchMinPrice)
         }
         
+        req.body.searchMaxPrice = parseInt(req.body.searchMaxPrice) * 100
         if (req.body.searchMaxPrice){
             q = q.where('price', '<=', req.body.searchMaxPrice)
         }
