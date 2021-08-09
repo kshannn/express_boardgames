@@ -19,7 +19,9 @@
                  <h1>Your Products</h1><a href="/listings/create" class="btn">Add Product</a>
             </div>
             <hr></hr>
-            <table class="table">
+
+            {{#if gameListings}}
+                <table class="table">
                 <thead>
                     <tr>
                         <th>Date Posted</th>
@@ -58,6 +60,11 @@
                     {{/each}}
                 </tbody>
             </table>
+
+            {{else}}
+            <p>No listings yet</p>
+            {{/if}}
+            
         </section>
     </div>
 

@@ -32,7 +32,7 @@ router.post('/', async (req,res) => {
         // master query
         let q = await GameListing.collection()
 
-        console.log('req body: ', req.body)
+        // console.log('req body: ', req.body)
         if (req.body.searchName){
             q = q.where('name', 'like', '%' + req.body.searchName + '%')
         }

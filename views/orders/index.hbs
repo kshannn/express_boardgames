@@ -16,7 +16,8 @@
                 <div id="ordersTable">
                     <h1 id="ordersHeader">Orders</h1>
                     <hr></hr>
-                    <table class="table">
+                    {{#if orders}}
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th>Order ID</th>
@@ -54,7 +55,14 @@
                                 
                             </tbody>
                         </table>
-                    </div>
+
+                    {{else}}
+
+                    <p>No orders to date</p>
+
+                    {{/if}}
+                    
+                </div>
     </section>
    </div>
 

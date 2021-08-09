@@ -208,7 +208,7 @@ router.get('/:listingId/update', checkIfAuthenticated, async (req, res) => {
     // fill in existing form
     gameForm.fields.name.value = gameListing.get('name')
     gameForm.fields.price.value = gameListing.get('price')/100
-    console.log(gameListing.get('price'))
+    // console.log(gameListing.get('price'))
     gameForm.fields.description.value = gameListing.get('description')
     gameForm.fields.min_player_count.value = gameListing.get('min_player_count')
     gameForm.fields.max_player_count.value = gameListing.get('max_player_count')
@@ -251,7 +251,7 @@ router.post('/:listingId/update', checkIfAuthenticated, async (req,res) => {
         'success': async(form) => {
             let {categories, image, price, ...gameListingData} = form.data
             gameListing.set (gameListingData)
-            console.log('img', image)
+            // console.log('img', image)
 
             let slicedImage = image.split(',')[1]
         
