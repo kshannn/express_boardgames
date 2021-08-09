@@ -1,18 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans+JP:wght@100;300;400;500;700;900&family=Noto+Serif+JP:wght@200;300;400;500;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&family=Noto+Serif+JP:wght@200;300;400;500;600;700;900&display=swap');
 
-
-/* font-family: 'Cormorant Garamond', serif; */
-/* font-family: 'Noto Serif JP', serif; */
-/* font-family: 'Noto Sans JP', sans-serif; */
 
 * {
     margin: 0;
-    padding:0;
-    /* font-family: 'Noto Serif JP', serif; */
+    padding: 0;
     font-family: 'Noto Sans JP', sans-serif;
 }
 
-h1, h2 {
+h1,
+h2 {
     font-family: 'Noto Serif JP', serif;
 }
 
@@ -26,6 +22,7 @@ h1, h2 {
     padding: 0;
     line-height: 1.5;
 }
+
 .dropdown-menu {
     min-width: 5rem;
 }
@@ -40,8 +37,9 @@ h1, h2 {
     color: white;
 }
 
-.userIcon, .logInOut {
-    display:inline-block;
+.userIcon,
+.logInOut {
+    display: inline-block;
     color: rgb(255, 255, 255);
 }
 
@@ -59,10 +57,12 @@ h1, h2 {
     top: 8px;
 }
 
-.navLoginLogout:hover, .nav-link:hover, #userIcon:hover {
+.navLoginLogout:hover,
+.nav-link:hover,
+#userIcon:hover {
     color: rgb(110, 110, 110) !important;
-    cursor:pointer;
-  }
+    cursor: pointer;
+}
 
 #logoContainer {
     height: 30px;
@@ -70,7 +70,7 @@ h1, h2 {
     background-image: url('./brandLogo.png');
     background-position: center;
     background-size: cover;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
 }
 
 #homeBtn {
@@ -98,12 +98,12 @@ h1, h2 {
 
 
 #loginContainer {
-height: 450px;
-width: 30%;
-min-width: 300px;
-padding: 50px 25px;
-background-color: white;
-border-radius: 5px;
+    height: 450px;
+    width: 30%;
+    min-width: 300px;
+    padding: 50px 25px;
+    background-color: white;
+    border-radius: 5px;
 }
 
 #loginContainer h1 {
@@ -122,11 +122,11 @@ border-radius: 5px;
     background-color: rgb(255, 145, 0);
 }
 
-#loginContainer > a {
+#loginContainer>a {
     color: orange;
 }
 
-#loginContainer > a:hover{
+#loginContainer>a:hover {
     color: rgb(235, 135, 21);
 }
 
@@ -136,14 +136,14 @@ border-radius: 5px;
 
 
 /* listing page */
-#mainSection{
-    display:flex;
+#mainSection {
+    display: flex;
     min-height: 100vh;
     flex-wrap: wrap;
 }
 
-#searchSection{
-    flex:1;
+#searchSection {
+    flex: 1;
     padding: 0 20px;
     margin: 5px;
     min-width: 200px;
@@ -154,11 +154,10 @@ border-radius: 5px;
     margin-top: 20px;
 }
 
-#displaySection{
+#displaySection {
     flex: 5;
     min-width: 500px;
     padding: 5px 30px;
-    /* background: green; */
 }
 
 #listingHeader {
@@ -184,11 +183,9 @@ border-radius: 5px;
 }
 
 
-
 /* orders page*/
-
 #orderPage {
-    display:flex;
+    display: flex;
     min-height: 100vh;
     flex-wrap: wrap;
     padding: 15px;
@@ -200,7 +197,8 @@ border-radius: 5px;
     margin: 15px;
 }
 
-#orderSearchSection h2, #ordersHeader {
+#orderSearchSection h2,
+#ordersHeader {
     font-size: 1.7rem;
 }
 
@@ -240,7 +238,6 @@ border-radius: 5px;
 #createListingPage {
     width: 100%;
     height: calc(100vh - 56px);
-    /* padding: 20px 50px; */
     padding: 30px 100px;
 }
 
@@ -291,6 +288,7 @@ border-radius: 5px;
 }
 
 /* === delete listing page === */
+
 #deleteListingPage {
     width: 100%;
     height: 100%;
@@ -302,6 +300,7 @@ border-radius: 5px;
 }
 
 /* === delete order page === */
+
 #deleteOrderPage {
     width: 100%;
     height: 100%;
@@ -313,10 +312,12 @@ border-radius: 5px;
 }
 
 /* === vendor profile page === */
-#vendorProfilePage, #vendorUpdatePage, #vendorCreatePage {
+
+#vendorProfilePage,
+#vendorUpdatePage,
+#vendorCreatePage {
     width: 100%;
     min-height: 100vh;
-    /* background: grey; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -324,7 +325,9 @@ border-radius: 5px;
 }
 
 
-#profileContainer, #updateProfileContainer, #createProfileContainer {
+#profileContainer,
+#updateProfileContainer,
+#createProfileContainer {
     padding: 50px;
     width: 30%;
     min-width: 300px;
@@ -344,24 +347,27 @@ border-radius: 5px;
 }
 
 /* register vendor page */
+
 #createProfileContainer h1 {
     font-size: 1.7rem;
     font-weight: 600;
 }
 
 /* ========= FOR SMALLER DEVICES ========= */
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
 
     /* create and update listing page */
-    #createListingPage, #updateListingPage {
+    #createListingPage,
+    #updateListingPage {
         padding: 30px 30px;
     }
 
-    #createListingPage h1, #updateListingPage h1 {
+    #createListingPage h1,
+    #updateListingPage h1 {
         font-size: 1.2rem;
     }
 
 
-    
+
 
 }
