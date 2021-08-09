@@ -4,18 +4,20 @@ const express = require('express')
 const router = express.Router()
 
 // import model
-const { GameListing } = require('../../models')
+const {
+    GameListing
+} = require('../../models')
 
 // import dal
 const listingDataLayer = require('../../dal/listings')
 
 // =================================== ROUTES =================================== 
 // === [R] display all games ===
-router.get('/', async (req,res) => {
+router.get('/', async (req, res) => {
     try {
 
         const gameListings = await GameListing.collection().fetch()
-        
+
         res.send(gameListings.toJSON())
         res.status(200)
     } catch (e) {
@@ -26,46 +28,34 @@ router.get('/', async (req,res) => {
 })
 
 // === [] display filtered games ===
-router.post('/', async (req,res) => {
+router.post('/', async (req, res) => {
     try {
-        
-        // master query
-        let q = await GameListing.collection()
 
-        // console.log('req body: ', req.body)
-        if (req.body.searchName){
+        // master query
+        let q = GameListing.collection()
+
+        if (req.body.searchName) {
             q = q.where('name', 'like', '%' + req.body.searchName + '%')
         }
-        
+
         req.body.searchMinPrice = parseInt(req.body.searchMinPrice) * 100
-        if (req.body.searchMinPrice){
+        if (req.body.searchMinPrice) {
             q = q.where('price', '>=', req.body.searchMinPrice)
         }
-        
+
         req.body.searchMaxPrice = parseInt(req.body.searchMaxPrice) * 100
-        if (req.body.searchMaxPrice){
+        if (req.body.searchMaxPrice) {
             q = q.where('price', '<=', req.body.searchMaxPrice)
         }
 
-      
-        if (req.body.searchAge){
-            q = q.where('age', '>=', req.body.searchAge)
-        }
-
-        
-        if (req.body.searchCategories.length){
+        if (req.body.searchCategories.length) {
             q = q.query("join", "categories_gameListings", "gameListings.id", "gameListing_id").where("category_id", "in", req.body.searchCategories)
         }
-
-
-
-      
 
         let gameListings = await q.fetch({
             withRelated: ['category']
         })
 
-        
         res.send(gameListings.toJSON())
         res.status(200)
     } catch (e) {
@@ -78,10 +68,10 @@ router.post('/', async (req,res) => {
 
 
 // === [R] display selected game ===
-router.get('/:listingId', async (req,res) => {
+router.get('/:listingId', async (req, res) => {
     try {
         const gameListing = await listingDataLayer.getGameListingById(req.params.listingId)
-    
+
         res.send(gameListing.toJSON())
         res.status(200)
     } catch (e) {

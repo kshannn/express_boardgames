@@ -4,7 +4,9 @@ const express = require('express')
 const router = express.Router()
 
 // import model
-const { User } = require('../../models')
+const {
+    User
+} = require('../../models')
 
 // import crypto for password encryption
 const crypto = require('crypto');
@@ -27,13 +29,15 @@ const generateAccessToken = (user) => {
 }
 
 // import middleware
-const {checkIfAuthenticatedJWT} = require('../../middlewares')
+const {
+    checkIfAuthenticatedJWT
+} = require('../../middlewares')
 
 
 // =================================== ROUTES =================================== 
 
 // === [C] create user account ===
-router.post('/create', async (req,res) => {
+router.post('/create', async (req, res) => {
 
     // case 1: user email already exist in db
     let user = await User.where({
@@ -51,7 +55,7 @@ router.post('/create', async (req,res) => {
     }
 
     // case 2: no existing user email in db
-    if (!emailExist){
+    if (!emailExist) {
         try {
             // set data from req.body directly to database
             const user = new User();
@@ -61,7 +65,7 @@ router.post('/create', async (req,res) => {
             user.set('address', req.body.address)
             user.set('phone_number', req.body.phone_number)
             await user.save()
-            
+
             res.status(200)
             res.send(user)
         } catch (e) {
@@ -69,22 +73,22 @@ router.post('/create', async (req,res) => {
             res.status(500)
             res.send('Unexpected internal server error')
         }
-    }   
+    }
 })
 
 
-// === [] user login ===
+// === User login ===
 // process login form
 router.post('/login', async (req, res) => {
 
     try {
         // fetch user data
-        const user = await User.where('email',req.body.email).fetch({
+        const user = await User.where('email', req.body.email).fetch({
             require: false
         })
 
         // case 1 - email exist and password match. grant access token
-        if (user && (user.get('password') == getHashedPassword(req.body.password))){
+        if (user && (user.get('password') == getHashedPassword(req.body.password))) {
             let accessToken = generateAccessToken(user);
             res.send({
                 accessToken
@@ -96,7 +100,7 @@ router.post('/login', async (req, res) => {
                 'error': 'Invalid login details. Please try again.'
             })
         }
-        
+
     } catch (e) {
         console.log(e)
         res.status(500)
@@ -106,10 +110,10 @@ router.post('/login', async (req, res) => {
 
 
 // [R] User profile page
-router.get('/profile', checkIfAuthenticatedJWT, async (req,res) => {
+router.get('/profile', checkIfAuthenticatedJWT, async (req, res) => {
     try {
         let user = await User.where('id', req.user.id).fetch({
-            columns: ['username','id','email','address','phone_number']
+            columns: ['username', 'id', 'email', 'address', 'phone_number']
         })
         res.send(user.toJSON())
         res.status(200)
@@ -121,8 +125,8 @@ router.get('/profile', checkIfAuthenticatedJWT, async (req,res) => {
 })
 
 // [U] Update user details
-router.post('/profile/update', checkIfAuthenticatedJWT, async(req,res) => {
-    
+router.post('/profile/update', checkIfAuthenticatedJWT, async (req, res) => {
+
     try {
         let user = await User.where('id', req.user.id).fetch()
 
@@ -145,4 +149,3 @@ router.post('/profile/update', checkIfAuthenticatedJWT, async(req,res) => {
 
 
 module.exports = router;
-

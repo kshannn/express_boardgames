@@ -58,8 +58,8 @@ router.post('/:gameListingId/add', checkIfAuthenticatedJWT, async (req,res) => {
             cartItem.set('quantity', cartItem.get('quantity') + 1)
             await cartItem.save()
             res.send(cartItem.toJSON())
+        // case 2 - Game does not exist in cart, add game to cart item            
         } else {
-             // case 2 - Game does not exist in cart, add game to cart item
              const cartItem = new CartItem()
              cartItem.set('user_id', req.body.user_id)
              cartItem.set('gameListing_id', req.params.gameListingId)

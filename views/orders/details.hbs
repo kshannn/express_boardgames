@@ -1,65 +1,63 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<div id="orderDetailsPage">
-    <h2>Customer's Details</h2>
-    <hr></hr>
-    <p>Username: {{user.username}}</p>
-    <p>Contact number: {{user.phone_number}}</p>
-    <p>Email: {{user.email}}</p>
-    <p>Shipping address: {{user.address}}</p>
+    <div id="orderDetailsPage">
+        <h2>Customer's Details</h2>
+        <hr></hr>
+        <p>Username: {{user.username}}</p>
+        <p>Contact number: {{user.phone_number}}</p>
+        <p>Email: {{user.email}}</p>
+        <p>Shipping address: {{user.address}}</p>
 
+        <h2>Order Id {{order.id}}</h1>
+        <hr></hr>
 
-    <h2>Order Id {{order.id}}</h1>
-    <hr></hr>
-
-    <form method="POST">
-        <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-        <div id="updateOrderForm">{{{form}}}</div>
-        <button id="saveChangeBtn" class="btn btn-warning my-2">Save Changes</button>
-        
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Order Id</th>
-                <th>Game Id</th>
-                <th>Name</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-
-            </tr>
-        </thead>
-        <tbody>
-            {{#each orderItems}}
-            <tr>
-                <td>
-                    {{this.order_id}}
-                </td>
-                <td>
-                    {{this.gameListing_id}}
-                </td>
-                <td>
-                    {{this.gameListing.name}}
-                </td>
-                <td>
-                    {{this.quantity}}
-                </td>
-                <td>
-                    ${{divide this.unit_price 100}}.00
-                </td>
+        <form method="POST">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+            <div id="updateOrderForm">{{{form}}}</div>
+            <button id="saveChangeBtn" class="btn btn-warning my-2">Save Changes</button>
             
-            </tr>
 
-            {{/each}}
-        </tbody>
-    </table>
-        <a class="btn btn-secondary" href="/orders">Back</a>
-        <a class="btn btn-danger" href="/orders/{{order.id}}/delete">Delete</a>
+        <table class="table">
 
-    </form>
-</div>
+            <thead>
+                <tr>
+                    <th>Order Id</th>
+                    <th>Game Id</th>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
 
+                </tr>
+            </thead>
+
+            <tbody>
+                {{#each orderItems}}
+                <tr>
+                    <td>
+                        {{this.order_id}}
+                    </td>
+                    <td>
+                        {{this.gameListing_id}}
+                    </td>
+                    <td>
+                        {{this.gameListing.name}}
+                    </td>
+                    <td>
+                        {{this.quantity}}
+                    </td>
+                    <td>
+                        ${{divide this.unit_price 100}}.00
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+            <a class="btn btn-secondary" href="/orders">Back</a>
+            <a class="btn btn-danger" href="/orders/{{order.id}}/delete">Delete</a>
+
+        </form>
+    </div>
 {{/block}}
 
 {{/extends}}

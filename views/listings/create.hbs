@@ -1,37 +1,25 @@
 {{#extends 'base'}}
-{{#block 'jsHead'}}
+
+{{#block 'content'}}
+  <div class="container-fluid" id="createListingPage">
+    <h1>Create Boardgame Listing</h1>
+    <hr></hr>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+          {{{form}}}
+        <section>
+          <input
+            type="hidden"
+            role="uploadcare-uploader"
+            data-public-key={{img_key}}
+            id="uploadcareImage"
+            name="image" />
+          <button id="createBtn" class="btn my-3">Create</button>
+        </section>
+    </form>
+  </div>
 
 {{/block}}
-{{#block 'content'}}
-<div class="container-fluid" id="createListingPage">
-  <h1>Create Boardgame Listing</h1>
-  <hr></hr>
-  <form method="POST">
-      <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-      
-        {{{form}}}
-      
-
-      <section>
-        <input
-          type="hidden"
-          role="uploadcare-uploader"
-          data-public-key={{img_key}}
-          id="uploadcareImage"
-          name="image" />
-
-
-        <button id="createBtn" class="btn my-3">Create</button>
-        {{!-- {{#if imgUrl}}
-          <div>
-            <img id="imgUrl" height="200px"src="{{imgUrl}}"/>
-          </div>
-        {{/if}} --}}
-      </section>
-  </form>
-
-  {{/block}}
-</div>
 
 {{#block 'js'}}
   <script

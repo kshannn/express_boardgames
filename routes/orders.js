@@ -4,20 +4,29 @@ const express = require('express')
 const router = express.Router();
 
 // import model
-const { Order, Status } = require('../models')
+const {
+    Order,
+    Status
+} = require('../models')
 
 // import caolan form
-const { bootstrapField, updateOrderForm, createOrdersSearchForm } = require('../forms');
+const {
+    bootstrapField,
+    updateOrderForm,
+    createOrdersSearchForm
+} = require('../forms');
 
 // import middleware
-const { checkIfAuthenticated } = require('../middlewares');
+const {
+    checkIfAuthenticated
+} = require('../middlewares');
 
 // =================================== ROUTES =================================== 
 // === [R] display all orders for vendors ===
-router.get('/', checkIfAuthenticated, async (req,res) => {
+router.get('/', checkIfAuthenticated, async (req, res) => {
 
     // === Search Engine ===
-    let allStatuses = await Status.fetchAll().map( status => [status.get('id'),status.get('name')])
+    let allStatuses = await Status.fetchAll().map(status => [status.get('id'), status.get('name')])
     allStatuses.unshift([0, "--- All Statuses ---"])
     const orderSearchForm = createOrdersSearchForm(allStatuses)
 
@@ -31,35 +40,35 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
             let orders = await Order.collection().fetch({
                 withRelated: ['orderItem', 'orderItem.gameListing', 'status'],
                 require: true
-            })        
-        
+            })
+
             // store orders in array 
-            orders = Array.isArray(orders.toJSON())? orders.toJSON(): [orders.toJSON()]
-            
-        
+            orders = Array.isArray(orders.toJSON()) ? orders.toJSON() : [orders.toJSON()]
+
+
             // get orders that contain games owned by vendor and calculate subtotal for the specific game
             let filteredByVendorOrders = []
-        
-        
-            for (let order of orders){
+
+
+            for (let order of orders) {
                 let filteredOrderItem = [];
                 let subtotal = 0;
-                for (let orderItem of order.orderItem){
-                    if (orderItem.gameListing.vendor_id == req.session.vendor.id){
+                for (let orderItem of order.orderItem) {
+                    if (orderItem.gameListing.vendor_id == req.session.vendor.id) {
                         filteredOrderItem.push(orderItem);
                         subtotal += orderItem.quantity * orderItem.unit_price;
                     }
                 }
-                if(filteredOrderItem.length > 0){
+                if (filteredOrderItem.length > 0) {
                     order.orderItem = filteredOrderItem;
                     order["subtotal"] = subtotal;
                     filteredByVendorOrders.push(order);
                 }
             }
 
-        
+
             res.render('orders/index', {
-                'orders':filteredByVendorOrders.reverse(),
+                'orders': filteredByVendorOrders.reverse(),
                 'form': form.toHTML(bootstrapField)
             })
         },
@@ -68,38 +77,38 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
             let orders = await Order.collection().fetch({
                 withRelated: ['orderItem', 'orderItem.gameListing', 'status'],
                 require: true
-            })        
-        
+            })
+
             // store orders in array 
-            orders = Array.isArray(orders.toJSON())? orders.toJSON(): [orders.toJSON()]
-            
-        
+            orders = Array.isArray(orders.toJSON()) ? orders.toJSON() : [orders.toJSON()]
+
+
             // get orders that contain games owned by vendor and calculate subtotal for the specific game
             let filteredByVendorOrders = []
-        
-        
-            for (let order of orders){
+
+
+            for (let order of orders) {
                 let filteredOrderItem = [];
                 let subtotal = 0;
-                for (let orderItem of order.orderItem){
-                    if (orderItem.gameListing.vendor_id == req.session.vendor.id){
+                for (let orderItem of order.orderItem) {
+                    if (orderItem.gameListing.vendor_id == req.session.vendor.id) {
                         filteredOrderItem.push(orderItem);
                         subtotal += orderItem.quantity * orderItem.unit_price;
                     }
                 }
-                if(filteredOrderItem.length > 0){
+                if (filteredOrderItem.length > 0) {
                     order.orderItem = filteredOrderItem;
                     order["subtotal"] = subtotal;
                     filteredByVendorOrders.push(order);
                 }
             }
-        
-        
+
+
             res.render('orders/index', {
-                'orders':filteredByVendorOrders.reverse(),
+                'orders': filteredByVendorOrders.reverse(),
                 'form': form.toHTML(bootstrapField)
             })
-           
+
         },
         'success': async (form) => {
 
@@ -116,34 +125,34 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
             }
 
             // status
-            if (form.data.status && form.data.status != "0"){
+            if (form.data.status && form.data.status != "0") {
                 q = q.where('status_id', '=', form.data.status)
             }
 
-            
+
 
             let orders = await q.fetch({
                 withRelated: ['orderItem', 'orderItem.gameListing', 'status']
             })
 
             // store orders in array 
-            orders = Array.isArray(orders.toJSON())? orders.toJSON(): [orders.toJSON()]
-            
-        
+            orders = Array.isArray(orders.toJSON()) ? orders.toJSON() : [orders.toJSON()]
+
+
             // get orders that contain games owned by vendor and calculate subtotal for the specific game
             let filteredByVendorOrders = []
-        
-        
-            for (let order of orders){
+
+
+            for (let order of orders) {
                 let filteredOrderItem = [];
                 let subtotal = 0;
-                for (let orderItem of order.orderItem){
-                    if (orderItem.gameListing.vendor_id == req.session.vendor.id){
+                for (let orderItem of order.orderItem) {
+                    if (orderItem.gameListing.vendor_id == req.session.vendor.id) {
                         filteredOrderItem.push(orderItem);
                         subtotal += orderItem.quantity * orderItem.unit_price;
                     }
                 }
-                if(filteredOrderItem.length > 0){
+                if (filteredOrderItem.length > 0) {
                     order.orderItem = filteredOrderItem;
                     order["subtotal"] = subtotal;
                     filteredByVendorOrders.push(order);
@@ -151,18 +160,18 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
             }
 
             res.render('orders/index', {
-                'orders':filteredByVendorOrders.reverse(),
+                'orders': filteredByVendorOrders.reverse(),
                 'form': form.toHTML(bootstrapField)
             })
 
-           
+
         }
     })
 })
 
 // === [R] display specific order ===
 // 1. Render form
-router.get('/:orderId', checkIfAuthenticated, async(req,res) => {
+router.get('/:orderId', checkIfAuthenticated, async (req, res) => {
     let order = await Order.collection().where('id', req.params.orderId).fetchOne({
         withRelated: ['orderItem', 'orderItem.gameListing', 'status', 'user'],
         require: true
@@ -172,8 +181,8 @@ router.get('/:orderId', checkIfAuthenticated, async(req,res) => {
     let orderItems = order.toJSON().orderItem
 
     let filteredOrders = []
-    for (let item of orderItems){
-        if (item.gameListing.vendor_id == req.session.vendor.id){
+    for (let item of orderItems) {
+        if (item.gameListing.vendor_id == req.session.vendor.id) {
             filteredOrders.push(item)
         }
     }
@@ -183,7 +192,7 @@ router.get('/:orderId', checkIfAuthenticated, async(req,res) => {
 
 
     // fetch all statuses
-    const allStatuses = await Status.fetchAll().map( status => [status.get('id'),status.get('name')])
+    const allStatuses = await Status.fetchAll().map(status => [status.get('id'), status.get('name')])
 
     // caolan form (update status)
     const orderForm = updateOrderForm(allStatuses)
@@ -193,7 +202,7 @@ router.get('/:orderId', checkIfAuthenticated, async(req,res) => {
     orderForm.fields.user_address.value = order.get("user_address")
 
 
-    res.render('orders/details',{
+    res.render('orders/details', {
         'order': order,
         'orderItems': filteredOrders,
         'user': user,
@@ -202,46 +211,46 @@ router.get('/:orderId', checkIfAuthenticated, async(req,res) => {
 })
 
 // 2. Process form
-router.post('/:orderId', checkIfAuthenticated, async(req,res) => {
+router.post('/:orderId', checkIfAuthenticated, async (req, res) => {
     // get the order to update
     let order = await Order.collection().where('id', req.params.orderId).fetchOne({
         withRelated: ['orderItem', 'orderItem.gameListing', 'status', 'user'],
         require: true
     })
 
-     // fetch all statuses
-     const allStatuses = await Status.fetchAll().map( status => [status.get('id'),status.get('name')])
- 
-     // caolan form
-     const orderForm = updateOrderForm(allStatuses)
-     
+    // fetch all statuses
+    const allStatuses = await Status.fetchAll().map(status => [status.get('id'), status.get('name')])
 
-     orderForm.handle(req, {
-         'success': async(form) => {
-             order.set('status_id', form.data.statuses)
-             order.set('user_address', form.data.user_address)
-             await order.save()
-         },
-         'error': async (form) => {
-             res.render('orders/detail', {
-                'order': order,
-                'orderItems': orderItems,
-                'user': user,
-                'form': orderForm.toHTML(bootstrapField)
-             }),
-             req.flash('error_messages','There was an error when updating the order status. Please try again.')
-         }
-     })
+    // caolan form
+    const orderForm = updateOrderForm(allStatuses)
 
-     req.flash('success_messages','Order information successfully updated!')
-     res.redirect('/orders')
+
+    orderForm.handle(req, {
+        'success': async (form) => {
+            order.set('status_id', form.data.statuses)
+            order.set('user_address', form.data.user_address)
+            await order.save()
+        },
+        'error': async (form) => {
+            res.render('orders/detail', {
+                    'order': order,
+                    'orderItems': orderItems,
+                    'user': user,
+                    'form': orderForm.toHTML(bootstrapField)
+                }),
+                req.flash('error_messages', 'There was an error when updating the order status. Please try again.')
+        }
+    })
+
+    req.flash('success_messages', 'Order information successfully updated!')
+    res.redirect('/orders')
 
 
 })
 
 // === [D] Delete specific order ===
 // 1. Render form 
-router.get('/:orderId/delete',checkIfAuthenticated, async(req,res) => {
+router.get('/:orderId/delete', checkIfAuthenticated, async (req, res) => {
     // fetch order to be deleted
     let order = await Order.collection().where('id', req.params.orderId).fetchOne({
         withRelated: ['orderItem', 'orderItem.gameListing', 'status', 'user'],
@@ -254,7 +263,7 @@ router.get('/:orderId/delete',checkIfAuthenticated, async(req,res) => {
 })
 
 // 2. Process form
-router.post('/:orderId/delete',checkIfAuthenticated, async(req,res) => {
+router.post('/:orderId/delete', checkIfAuthenticated, async (req, res) => {
     // fetch order to be deleted
     let order = await Order.collection().where('id', req.params.orderId).fetchOne({
         withRelated: ['orderItem', 'orderItem.gameListing', 'status', 'user'],

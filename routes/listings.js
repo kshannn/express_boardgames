@@ -4,10 +4,16 @@ const express = require('express');
 const router = express.Router();
 
 // import caolan form
-const { bootstrapField, createGameForm, createSearchForm } = require('../forms');
+const {
+    bootstrapField,
+    createGameForm,
+    createSearchForm
+} = require('../forms');
 
 // import model
-const { GameListing } = require('../models')
+const {
+    GameListing
+} = require('../models')
 
 // import dal
 const listingDataLayer = require('../dal/listings')
@@ -16,12 +22,14 @@ const listingDataLayer = require('../dal/listings')
 const img_key = process.env.UPLOADCARE_PUBLIC_KEY
 
 // import middleware
-const { checkIfAuthenticated } = require('../middlewares');
+const {
+    checkIfAuthenticated
+} = require('../middlewares');
 
 
 // =================================== ROUTES =================================== 
 // === [R] display all games ===
-router.get('/', checkIfAuthenticated, async (req,res) => {
+router.get('/', checkIfAuthenticated, async (req, res) => {
 
 
     // === Search Engine ===
@@ -41,12 +49,12 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
             ).fetch({
                 withRelated: ['category']
             })
-            
-            // if return single item (i.e. not array), put in array
-            gameListings = Array.isArray(gameListings.toJSON())? gameListings.toJSON(): [gameListings.toJSON()]
-            
 
-            res.render('listings/index',{
+            // if return single item (i.e. not array), put in array
+            gameListings = Array.isArray(gameListings.toJSON()) ? gameListings.toJSON() : [gameListings.toJSON()]
+
+
+            res.render('listings/index', {
                 'gameListings': gameListings.reverse(),
                 'form': form.toHTML(bootstrapField)
             })
@@ -56,76 +64,81 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
             let gameListings = await GameListing.collection().where(
                 'vendor_id', req.session.vendor.id
             ).fetch()
-            
+
             // if return single item (i.e. not array), put in array
-            gameListings = Array.isArray(gameListings.toJSON())? gameListings.toJSON(): [gameListings.toJSON()]
-            
-            res.render('listings/index',{
+            gameListings = Array.isArray(gameListings.toJSON()) ? gameListings.toJSON() : [gameListings.toJSON()]
+
+            res.render('listings/index', {
                 'gameListings': gameListings,
                 'form': form.toHTML(bootstrapField)
             })
         },
         'success': async (form) => {
-           
+
             if (form.data.name) {
                 q = q.where('name', 'like', '%' + form.data.name + '%')
             }
 
-        
-            if (form.data.categories){
+
+            if (form.data.categories) {
                 q = q.query("join", "categories_gameListings", "gameListings.id", "gameListing_id").where("category_id", "in", form.data.categories.split(","))
             }
 
-            if (form.data.min_price){
+            if (form.data.min_price) {
                 q = q.where('price', '>=', form.data.min_price)
             }
-            
-            if (form.data.max_price){
+
+            if (form.data.max_price) {
                 q = q.where('price', '<=', form.data.max_price)
             }
-            
+
             // additional 'where' query set to limit to returning specific vendor results
             let gameListings = await q.where('vendor_id', req.session.vendor.id).fetch({
                 withRelated: ['category']
             })
 
-            res.render('listings/index',{
+            res.render('listings/index', {
                 'gameListings': gameListings.toJSON(),
                 'form': form.toHTML(bootstrapField)
-            }) 
+            })
         }
-    })    
+    })
 })
 
 // === [C] create game ===
 // 1. render form
-router.get('/create', checkIfAuthenticated, async (req,res) => {
+router.get('/create', checkIfAuthenticated, async (req, res) => {
     // fetch categories
     let allCategories = await listingDataLayer.getAllCategories()
 
     const gameForm = createGameForm(allCategories);
-    res.render('listings/create',{
+    res.render('listings/create', {
         'form': gameForm.toHTML(bootstrapField),
         'img_key': img_key
     })
 })
 
 // 2. process form
-router.post('/create', checkIfAuthenticated, async (req,res) => {
+router.post('/create', checkIfAuthenticated, async (req, res) => {
     let allCategories = await listingDataLayer.getAllCategories()
     const gameForm = createGameForm(allCategories);
     gameForm.handle(req, {
         'success': async (form) => {
-           // set all the fields from form.data in object format when creating an instance of GameListing
-            let {categories, image, price, ...gameListingData} = form.data 
+            // set all the fields from form.data in object format when creating an instance of GameListing
+            let {
+                categories,
+                image,
+                price,
+                ...gameListingData
+            } = form.data
 
-             // create new instance in games table
+            // create new instance in games table
             const gameListing = new GameListing(gameListingData);
 
-             
+
             let splitImage = image.split(',')[1]
             gameListing.set('image', splitImage)
-            gameListing.set('price', form.data.price * 100) 
+            gameListing.set('price', form.data.price * 100)
             gameListing.set('posted_date', new Date())
             gameListing.set('vendor_id', req.session.vendor.id)
             await gameListing.save()
@@ -134,15 +147,15 @@ router.post('/create', checkIfAuthenticated, async (req,res) => {
             if (categories) {
                 await gameListing.category().attach(categories.split(","))
             }
-            req.flash('success_messages','Listing successfully created!')
+            req.flash('success_messages', 'Listing successfully created!')
             res.redirect('/listings')
         },
         'error': async (form) => {
-            res.render('listings/create',{
+            res.render('listings/create', {
                 'form': form.toHTML(bootstrapField),
                 'img_key': img_key
             })
-            req.flash('error_messages','There was an error in creating the listing. Please try again.')
+            req.flash('error_messages', 'There was an error in creating the listing. Please try again.')
         }
     })
 })
@@ -161,7 +174,7 @@ router.get('/:listingId/update', checkIfAuthenticated, async (req, res) => {
 
     // fill in existing form
     gameForm.fields.name.value = gameListing.get('name')
-    gameForm.fields.price.value = gameListing.get('price')/100
+    gameForm.fields.price.value = gameListing.get('price') / 100
     gameForm.fields.description.value = gameListing.get('description')
     gameForm.fields.min_player_count.value = gameListing.get('min_player_count')
     gameForm.fields.max_player_count.value = gameListing.get('max_player_count')
@@ -189,24 +202,29 @@ router.get('/:listingId/update', checkIfAuthenticated, async (req, res) => {
 })
 
 // 2. process form
-router.post('/:listingId/update', checkIfAuthenticated, async (req,res) => {
+router.post('/:listingId/update', checkIfAuthenticated, async (req, res) => {
     // retrieve listing to update
     const gameListing = await listingDataLayer.getGameListingById(req.params.listingId)
 
-     // fetch categories
-     let allCategories = await listingDataLayer.getAllCategories()
+    // fetch categories
+    let allCategories = await listingDataLayer.getAllCategories()
 
     // retrieve form
-    const gameForm = createGameForm(allCategories); 
-    
+    const gameForm = createGameForm(allCategories);
+
     // process form
     gameForm.handle(req, {
-        'success': async(form) => {
-            let {categories, image, price, ...gameListingData} = form.data
-            gameListing.set (gameListingData)
+        'success': async (form) => {
+            let {
+                categories,
+                image,
+                price,
+                ...gameListingData
+            } = form.data
+            gameListing.set(gameListingData)
 
             let slicedImage = image.split(',')[1]
-        
+
             gameListing.set('price', form.data.price * 100)
             gameListing.set('image', slicedImage)
             await gameListing.save()
@@ -220,7 +238,7 @@ router.post('/:listingId/update', checkIfAuthenticated, async (req,res) => {
                 await gameListing.category().attach(categories.split(","))
             }
 
-            req.flash('success_messages','Listing successfully updated!')
+            req.flash('success_messages', 'Listing successfully updated!')
             res.redirect('/listings')
         },
         'error': async (form) => {
@@ -228,12 +246,12 @@ router.post('/:listingId/update', checkIfAuthenticated, async (req,res) => {
             const prefilledImage = gameListing.get('image')
 
             res.render('listings/update', {
-                'form': form.toHTML(bootstrapField),
-                'gameListing': gameListing.toJSON(),
-                'img_key': img_key,
-                'prefilledImage': prefilledImage
-            }),
-            req.flash('error_messages','There was an error in updating the listing. Please try again.')
+                    'form': form.toHTML(bootstrapField),
+                    'gameListing': gameListing.toJSON(),
+                    'img_key': img_key,
+                    'prefilledImage': prefilledImage
+                }),
+                req.flash('error_messages', 'There was an error in updating the listing. Please try again.')
         }
     })
 })
@@ -241,7 +259,7 @@ router.post('/:listingId/update', checkIfAuthenticated, async (req,res) => {
 
 // === [D] delete game ===
 // 1. render 
-router.get('/:listingId/delete', checkIfAuthenticated, async (req,res)=> {
+router.get('/:listingId/delete', checkIfAuthenticated, async (req, res) => {
     // fetch listing to be deleted
     const gameListing = await listingDataLayer.getGameListingById(req.params.listingId)
 
@@ -251,7 +269,7 @@ router.get('/:listingId/delete', checkIfAuthenticated, async (req,res)=> {
 })
 
 // 2. process
-router.post('/:listingId/delete', checkIfAuthenticated, async (req,res) => {
+router.post('/:listingId/delete', checkIfAuthenticated, async (req, res) => {
     // fetch listing to be deleted
     const gameListing = await listingDataLayer.getGameListingById(req.params.listingId)
 

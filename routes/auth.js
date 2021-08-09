@@ -17,7 +17,9 @@ const {
 } = require('../models')
 
 // import middleware
-const { checkIfAuthenticated } = require('../middlewares');
+const {
+    checkIfAuthenticated
+} = require('../middlewares');
 
 // import crypto for password encryption
 const crypto = require('crypto');
@@ -26,7 +28,7 @@ const getHashedPassword = (password) => {
     const hash = sha256.update(password).digest('base64');
     return hash;
 }
- 
+
 // =================================== ROUTES =================================== 
 // === [C] create vendor account ===
 // 1. render form
@@ -81,15 +83,15 @@ router.post('/create', async (req, res) => {
                 await vendor.save();
                 req.flash("success_messages", `Account successfully created.`)
                 res.redirect('/')
-            // case 4 - email exist in database
-            } else if (emailExist && !usernameExist){
+                // case 4 - email exist in database
+            } else if (emailExist && !usernameExist) {
                 req.flash('error_messages', 'Current email has already been used. Please pick another email.')
                 res.redirect('/auth/create')
-            // case 5 - username exist in database
-            } else if (usernameExist && !emailExist){
+                // case 5 - username exist in database
+            } else if (usernameExist && !emailExist) {
                 req.flash('error_messages', 'Current username has already been used. Please pick another username.')
                 res.redirect('/auth/create')
-            // case 6 - email and username exist in database
+                // case 6 - email and username exist in database
             } else {
                 req.flash('error_messages', 'Current email and username has already been used. Please try again.')
                 res.redirect('/auth/create')
@@ -106,7 +108,7 @@ router.post('/create', async (req, res) => {
 
 
 // === [R] read vendor account ===
-router.get('/profile', checkIfAuthenticated, async (req,res) => {
+router.get('/profile', checkIfAuthenticated, async (req, res) => {
     let vendor = await Vendor.where({
         'id': req.session.vendor.id
     }).fetch({
@@ -120,7 +122,7 @@ router.get('/profile', checkIfAuthenticated, async (req,res) => {
 
 
 // === [U] update vendor account ===
-router.get('/update', checkIfAuthenticated, async (req,res) => {
+router.get('/update', checkIfAuthenticated, async (req, res) => {
     let vendor = await Vendor.where({
         'id': req.session.vendor.id
     }).fetch({
@@ -140,7 +142,7 @@ router.get('/update', checkIfAuthenticated, async (req,res) => {
     })
 })
 
-router.post('/update', checkIfAuthenticated, async (req,res) => {
+router.post('/update', checkIfAuthenticated, async (req, res) => {
     let vendor = await Vendor.where({
         'id': req.session.vendor.id
     }).fetch({
@@ -150,7 +152,7 @@ router.post('/update', checkIfAuthenticated, async (req,res) => {
     const form = updateVendorForm()
 
     form.handle(req, {
-        'success': async(form) =>{
+        'success': async (form) => {
 
             // case 1 - username already exist in database
             let sameUsernameVendor = await Vendor.where({
@@ -166,23 +168,25 @@ router.post('/update', checkIfAuthenticated, async (req,res) => {
             }
 
             // case 2 - username does not exist in database
-            if (!usernameExist){
-                let { ...vendorData } = form.data
+            if (!usernameExist) {
+                let {
+                    ...vendorData
+                } = form.data
                 vendor.set(vendorData)
                 await vendor.save()
 
-                req.flash('success_messages','Profile information successfully updated!')
+                req.flash('success_messages', 'Profile information successfully updated!')
                 res.redirect('profile')
             } else {
                 req.flash('error_messages', 'Current username has already been used. Please try another username.')
                 res.redirect('/auth/update')
             }
         },
-        'error': async(form) => {
+        'error': async (form) => {
             res.render('auth/update', {
-                'form': form.toHTML(bootstrapField)
-            }),
-            req.flash('error_messages','There was an error in updating your profile. Please try again.')
+                    'form': form.toHTML(bootstrapField)
+                }),
+                req.flash('error_messages', 'There was an error in updating your profile. Please try again.')
         }
     })
 })

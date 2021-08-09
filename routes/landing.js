@@ -50,7 +50,7 @@ router.post('/', async (req, res) => {
             } else {
                 // 2. case2 - vendor email match database
                 // check if password matches database too
-                if (vendor.get('password') === getHashedPassword(form.data.password)){
+                if (vendor.get('password') === getHashedPassword(form.data.password)) {
 
                     // store vendor details in session if login is successful
                     req.session.vendor = {
@@ -78,15 +78,15 @@ router.post('/', async (req, res) => {
 // === Logout for Vendor ===
 router.get('/logout', async (req, res) => {
 
-    if (req.session.vendor){
+    if (req.session.vendor) {
         req.session.vendor = null
-        req.flash('success_messages','Logged out successfully. See you again!')
+        req.flash('success_messages', 'Logged out successfully. See you again!')
         res.redirect('/')
     } else {
-        req.flash('error_messages','You are currently not logged in. Please log in to access the feature.')
+        req.flash('error_messages', 'You are currently not logged in. Please log in to access the feature.')
         res.redirect('/')
     }
-   
+
 })
 
 module.exports = router;

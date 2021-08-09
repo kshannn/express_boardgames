@@ -1,38 +1,33 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<div class="container-fluid" id="updateListingPage">
-  <h1>Update Listing: {{gameListing.name}}</h1>
-  <hr></hr>
-  <form method="POST">
-      <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-      {{{form}}}
+  <div class="container-fluid" id="updateListingPage">
+    <h1>Update Listing: {{gameListing.name}}</h1>
+    <hr></hr>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+        {{{form}}}
 
-      <input
-        type="hidden"
-        role="uploadcare-uploader"
-        data-public-key={{img_key}}
-        id="uploadcareImage"
-        name="image"
-        value={{prefilledImage}}
-        />
-      
-      <button class="btn btn-primary my-3">Update listing</button>
-      <a class="btn btn-secondary" href="/listings">Cancel</a>
-      <a class="btn btn-danger" href="/listings/{{gameListing.id}}/delete">Delete</a>
-    {{!-- {{#if gameListing.image}}
-      <div>
-        <img height="200px"src="{{gameListing.image}}"/>
-      </div>
-    {{/if}} --}}
-  </form>
-</div>
+        <input
+          type="hidden"
+          role="uploadcare-uploader"
+          data-public-key={{img_key}}
+          id="uploadcareImage"
+          name="image"
+          value={{prefilledImage}}
+          />
+        
+        <button class="btn btn-primary my-3">Update listing</button>
+        <a class="btn btn-secondary" href="/listings">Cancel</a>
+        <a class="btn btn-danger" href="/listings/{{gameListing.id}}/delete">Delete</a>
+    </form>
+  </div>
 {{/block}}
 
 {{#block 'js'}}
-<script
-  src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js">
-</script>
+  <script
+    src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js">
+  </script>
 {{/block}}
 
 {{/extends}}

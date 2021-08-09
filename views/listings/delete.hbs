@@ -2,23 +2,19 @@
 
 {{#block 'content'}}
 
-<div id="deleteListingPage">
+    <div id="deleteListingPage">
 
-    <h1>Deleting {{gameListing.name}}</h1>
+        <h1>Deleting {{gameListing.name}}</h1>
 
-    <form method="POST">
-        <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
-        <div class="alert alert-danger">
-            <p>Are you sure you want to remove {{gameListing.name}} from your listing?</p>
-            <button class="btn btn-danger">Yes</button>
-            <a href="/listings/{{gameListing.id}}/update" class="btn btn-secondary">No</a>
-            
-        </div>
-
-    </form>
-
-</div>
-
+        <form method="POST">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+            <div class="alert alert-danger">
+                <p>Are you sure you want to remove {{gameListing.name}} from your listing?</p>
+                <button class="btn btn-danger">Yes</button>
+                <a href="/listings/{{gameListing.id}}/update" class="btn btn-secondary">No</a>
+            </div>
+        </form>
+    </div>
 
 {{/block}}
 
