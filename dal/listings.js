@@ -13,7 +13,7 @@ const getAllCategories = async () => {
 const getGameListingById = async (listingId) => {
     return await GameListing.where('id',listingId).fetch({
         require: true,
-        withRelated: ['category']
+        withRelated: ['category', 'vendor']
     })
 }
 

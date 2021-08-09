@@ -57,8 +57,21 @@ router.post('/create', async (req, res) => {
                 emailExist = true
             }
 
-            // case 2 - email does not exist in database
-            if (!emailExist) {
+            // case 2 - username already exist in database
+            let sameUsernameVendor = await Vendor.where({
+                'username': form.data.username
+            }).fetch({
+                require: false
+            });
+
+            let usernameExist = false
+
+            if (sameUsernameVendor) {
+                usernameExist = true
+            }
+
+            // case 3 - email does not exist in database
+            if (!emailExist && !usernameExist) {
                 const vendor = new Vendor()
                 vendor.set('username', form.data.username)
                 vendor.set('address', form.data.address)
@@ -68,9 +81,14 @@ router.post('/create', async (req, res) => {
                 await vendor.save();
                 req.flash("success_messages", `Account successfully created.`)
                 res.redirect('/')
-            } 
-            else {
+            } else if (emailExist && !usernameExist){
                 req.flash('error_messages', 'Current email has already been used. Please pick another email.')
+                res.redirect('/auth/create')
+            } else if (usernameExist && !emailExist){
+                req.flash('error_messages', 'Current username has already been used. Please pick another username.')
+                res.redirect('/auth/create')
+            } else {
+                req.flash('error_messages', 'Current email and username has already been used. Please try again.')
                 res.redirect('/auth/create')
             }
         },
@@ -133,12 +151,35 @@ router.post('/update', checkIfAuthenticated, async (req,res) => {
 
     form.handle(req, {
         'success': async(form) =>{
-            let { ...vendorData } = form.data
-            vendor.set(vendorData)
-            await vendor.save()
 
-            req.flash('success_messages','Profile information successfully updated!')
-            res.redirect('profile')
+            // case 1 - username already exist in database
+            let sameUsernameVendor = await Vendor.where({
+                'username': form.data.username
+            }).fetch({
+                require: false
+            });
+
+            let usernameExist = false
+
+            if (sameUsernameVendor) {
+                usernameExist = true
+            }
+
+            if (!usernameExist){
+                let { ...vendorData } = form.data
+                vendor.set(vendorData)
+                await vendor.save()
+
+                req.flash('success_messages','Profile information successfully updated!')
+                res.redirect('profile')
+            } else {
+                req.flash('error_messages', 'Current username has already been used. Please try another username.')
+                res.redirect('/auth/update')
+            }
+
+
+
+            
         },
         'error': async(form) => {
             res.render('auth/update', {
