@@ -83,61 +83,18 @@ router.get('/', checkIfAuthenticated, async (req,res) => {
             if (form.data.max_price){
                 q = q.where('price', '<=', form.data.max_price)
             }
-
-            // if (form.data.stock){
-
-            // }
             
-            // if (form.data.min_player_count){
-            //     q = q.where('min_player_count', '>=', form.data.min_player_count)
-            // }
-
-            // if (form.data.max_player_count){
-            //     q = q.where('max_player_count', '<=', form.data.max_player_count)
-            // }
-
-            // if (form.data.min_age){
-            //     q = q.where('min_age', '>=', form.data.min_age)
-            // }
-
-            // if (form.data.designer){
-            //     q = q.where('designer', 'like', '%' + form.data.designer + '%')
-            // }
-
-            // if (form.data.publisher){
-            //     q = q.where('publisher', 'like', '%' + form.data.publisher + '%')
-            // }
-
-            // if (form.data.published_date){
-
-            // }
-
-            
-
-            // console.log(q.query().toSQL());
-            
-            // additional 'where' query set to limit to returning speficic vendor results
+            // additional 'where' query set to limit to returning specific vendor results
             let gameListings = await q.where('vendor_id', req.session.vendor.id).fetch({
                 withRelated: ['category']
             })
 
-            // console.log(gameListings.toJSON())
-
             res.render('listings/index',{
                 'gameListings': gameListings.toJSON(),
                 'form': form.toHTML(bootstrapField)
-            })
-           
+            }) 
         }
-    })
-
-    
-
-
-
-
-
-    
+    })    
 })
 
 // === [C] create game ===
@@ -165,13 +122,10 @@ router.post('/create', checkIfAuthenticated, async (req,res) => {
              // create new instance in games table
             const gameListing = new GameListing(gameListingData);
 
-            // console.log(form.data) // returns all key/value of all form fields
-            // console.log(gameListingData) // returns all key/values for each form fields except for 'categories' field
-            // console.log(categories) // returns just the values for categories in string
              
             let splitImage = image.split(',')[1]
             gameListing.set('image', splitImage)
-            gameListing.set('price', form.data.price * 100) //test
+            gameListing.set('price', form.data.price * 100) 
             gameListing.set('posted_date', new Date())
             gameListing.set('vendor_id', req.session.vendor.id)
             await gameListing.save()
@@ -208,7 +162,6 @@ router.get('/:listingId/update', checkIfAuthenticated, async (req, res) => {
     // fill in existing form
     gameForm.fields.name.value = gameListing.get('name')
     gameForm.fields.price.value = gameListing.get('price')/100
-    // console.log(gameListing.get('price'))
     gameForm.fields.description.value = gameListing.get('description')
     gameForm.fields.min_player_count.value = gameListing.get('min_player_count')
     gameForm.fields.max_player_count.value = gameListing.get('max_player_count')
@@ -251,7 +204,6 @@ router.post('/:listingId/update', checkIfAuthenticated, async (req,res) => {
         'success': async(form) => {
             let {categories, image, price, ...gameListingData} = form.data
             gameListing.set (gameListingData)
-            // console.log('img', image)
 
             let slicedImage = image.split(',')[1]
         
@@ -267,8 +219,6 @@ router.post('/:listingId/update', checkIfAuthenticated, async (req,res) => {
             if (categories) {
                 await gameListing.category().attach(categories.split(","))
             }
-
-            
 
             req.flash('success_messages','Listing successfully updated!')
             res.redirect('/listings')
@@ -286,9 +236,6 @@ router.post('/:listingId/update', checkIfAuthenticated, async (req,res) => {
             req.flash('error_messages','There was an error in updating the listing. Please try again.')
         }
     })
-    
- 
-    
 })
 
 

@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
                 require: false
             });
 
-            // 1. case1 - vendor email doesn't match database (no data fetched)
+            // 1. case 1 - vendor email doesn't match database (no data fetched)
             if (!vendor) {
                 req.flash("error_messages", "Sorry, the authentication details you have provided is invalid. Please try again.")
                 res.redirect('/')

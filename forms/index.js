@@ -1,9 +1,6 @@
 // import in caolan forms
 const forms = require('forms');
 
-// import in models
-const { GameListing } = require('../models')
-
 // create shortcuts
 const fields = forms.fields;
 const validators = forms.validators;
@@ -29,7 +26,7 @@ var bootstrapField = function (name, object) {
 };
 
 
-// ===== Vendor =====
+// ===== Vendor (Create)=====
 const createVendorRegistrationForm = () => {
     return forms.create({
         'username': fields.string({
@@ -85,7 +82,7 @@ const createVendorRegistrationForm = () => {
     })
 }
 
-// ===== Update (Vendor) =====
+// ===== Vendor (Update) =====
 const updateVendorForm = () => {
     return forms.create({
         'username': fields.string({
@@ -118,7 +115,7 @@ const updateVendorForm = () => {
 }
 
 
-// ===== Login (Vendor) =====
+// ===== Vendor (Login) =====
 const createLoginForm = () => {
     return forms.create({
         'email': fields.string({
@@ -138,7 +135,7 @@ const createLoginForm = () => {
     })
 }
 
-// ===== Games =====
+// ===== Games (Create) =====
 const createGameForm = (category) => {
     return forms.create({
         'name': fields.string({
@@ -253,7 +250,7 @@ const createGameForm = (category) => {
     })
 }
 
-// ===== Orders =====
+// ===== Orders (Update)=====
 const updateOrderForm = (status) => {
     return forms.create({
         'statuses':fields.string({
@@ -278,22 +275,9 @@ const updateOrderForm = (status) => {
     })
 }
 
-// const updateAddressForm = () => {
-//     return forms.create({
-//         'user_address':fields.string({
-//             label: "Shipping address",
-//             required: true,
-//             errorAfterField: true,
-//             cssClasses:{
-//                 label: ['form-label']
-//             },
-//             validators: [validators.maxlength(280)]
-//         })   
-//     })
-// }
 
 
-// ===== Search Engine =====
+// ===== Search (For Games) =====
 const createSearchForm = (category) => {
     return forms.create({
         'name': fields.string({
@@ -311,80 +295,12 @@ const createSearchForm = (category) => {
             },
             widget: widgets.multipleSelect(),
             choices: category
-        }),
-        // 'min_price': fields.string({
-        //     required: false,
-        //     errorAfterField: true,
-        //     cssClasses: {
-        //         label: ['form-label']
-        //     },
-        //     validators:[validators.integer(), validators.min(0)]
-        // }),
-        // 'max_price': fields.string({
-        //     required: false,
-        //     errorAfterField: true,
-        //     cssClasses: {
-        //         label: ['form-label']
-        //     },
-        //     validators:[validators.integer(), validators.min(0)]
-        // }),
-        // ,
-        // 'min_player_count': fields.string({
-        //     required: false,
-        //     errorAfterField: true,
-        //     cssClasses: {
-        //         label: ['form-label']
-        //     }
-        // }),
-        // 'max_player_count': fields.string({
-        //     required: false,
-        //     errorAfterField: true,
-        //     cssClasses: {
-        //         label: ['form-label']
-        //     }
-        // }),
-        // 'min_age': fields.string({
-        //     required: false,
-        //     errorAfterField: true,
-        //     cssClasses: {
-        //         label: ['form-label']
-        //     }
-        // }),
-        // 'designer': fields.string({
-        //     required: false,
-        //     errorAfterField: true,
-        //     cssClasses: {
-        //         label: ['form-label']
-        //     }
-        // }),
-        // 'publisher': fields.string({
-        //     required: false,
-        //     errorAfterField: true,
-        //     cssClasses: {
-        //         label: ['form-label']
-        //     }
-        // }),
-        // 'stock': fields.string({
-        //     required: false,
-        //     errorAfterField: true,
-        //     cssClasses: {
-        //         label: ['form-label']
-        //     }
-        // })
-        // ,
-        // 'published_date': fields.date({
-        //     required: false,
-        //     errorAfterField: true,
-        //     widget: forms.widgets.date(),
-        //     cssClasses: {
-        //         label: ['form-label']
-        //     }
-        // })
+        })
     })
 }
 
 
-// search form for orders
+// ===== Search (For Orders) =====
 const createOrdersSearchForm = (statuses) => {
     return forms.create({
         'order_id': fields.string({

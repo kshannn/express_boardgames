@@ -70,7 +70,7 @@ router.post('/create', async (req, res) => {
                 usernameExist = true
             }
 
-            // case 3 - email does not exist in database
+            // case 3 - email and username does not exist in database
             if (!emailExist && !usernameExist) {
                 const vendor = new Vendor()
                 vendor.set('username', form.data.username)
@@ -81,12 +81,15 @@ router.post('/create', async (req, res) => {
                 await vendor.save();
                 req.flash("success_messages", `Account successfully created.`)
                 res.redirect('/')
+            // case 4 - email exist in database
             } else if (emailExist && !usernameExist){
                 req.flash('error_messages', 'Current email has already been used. Please pick another email.')
                 res.redirect('/auth/create')
+            // case 5 - username exist in database
             } else if (usernameExist && !emailExist){
                 req.flash('error_messages', 'Current username has already been used. Please pick another username.')
                 res.redirect('/auth/create')
+            // case 6 - email and username exist in database
             } else {
                 req.flash('error_messages', 'Current email and username has already been used. Please try again.')
                 res.redirect('/auth/create')
@@ -113,7 +116,6 @@ router.get('/profile', checkIfAuthenticated, async (req,res) => {
     res.render('auth/index', {
         'vendor': vendor.toJSON()
     })
-
 })
 
 
@@ -145,8 +147,6 @@ router.post('/update', checkIfAuthenticated, async (req,res) => {
         require: true
     });
 
-    // console.log(vendor.toJSON())
-
     const form = updateVendorForm()
 
     form.handle(req, {
@@ -165,6 +165,7 @@ router.post('/update', checkIfAuthenticated, async (req,res) => {
                 usernameExist = true
             }
 
+            // case 2 - username does not exist in database
             if (!usernameExist){
                 let { ...vendorData } = form.data
                 vendor.set(vendorData)
@@ -176,10 +177,6 @@ router.post('/update', checkIfAuthenticated, async (req,res) => {
                 req.flash('error_messages', 'Current username has already been used. Please try another username.')
                 res.redirect('/auth/update')
             }
-
-
-
-            
         },
         'error': async(form) => {
             res.render('auth/update', {
