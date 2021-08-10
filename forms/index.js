@@ -156,6 +156,7 @@ const createGameForm = (category) => {
             validators:[validators.integer(), validators.min(0)]
         }),
         'min_player_count': fields.string({
+            label: 'Min. player count',
             required: true,
             errorAfterField: true,
             cssClasses: {
@@ -164,7 +165,7 @@ const createGameForm = (category) => {
             validators:[validators.integer(), validators.min(1)]
         }),
         'max_player_count': fields.string({
-            label:'Max player count (i.e. if no max, type "0" in the field)',
+            label:'Max. player count (i.e. if no max, type "0" in the field)',
             required: true,
             errorAfterField: true,
             cssClasses: {
@@ -173,6 +174,7 @@ const createGameForm = (category) => {
             validators:[validators.integer()]
         }),
         'min_age': fields.string({
+            label: 'Min. age',
             required: true,
             errorAfterField: true,
             cssClasses: {
@@ -181,7 +183,7 @@ const createGameForm = (category) => {
             validators:[validators.integer(),validators.min('0')]
         }),
         'duration': fields.string({
-            label: 'Duration(mins)',
+            label: 'Min. duration(mins)',
             required: true,
             errorAfterField: true,
             cssClasses: {
