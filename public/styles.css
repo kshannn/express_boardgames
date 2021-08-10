@@ -154,10 +154,28 @@ h2 {
     margin-top: 20px;
 }
 
+#searchSection button, #orderSearchSection button {
+    background-color: #ad4848;
+    color: white;
+}
+
+#searchSection button:hover, #orderSearchSection button:hover {
+    background-color: #9b3d3d;
+    color: white;
+}
+
 #displaySection {
     flex: 5;
     min-width: 500px;
     padding: 5px 30px;
+}
+
+#displaySection a:nth-child(1) {
+    color: rgb(255, 145, 0);
+}
+
+#displaySection a:nth-child(1):hover {
+    color: grey;
 }
 
 #listingHeader {
@@ -209,6 +227,14 @@ h2 {
 
 #ordersTable {
     margin: 10px 30px;
+}
+
+#ordersTable a {
+    color:rgb(255, 145, 0);
+}
+
+#ordersTable a:hover {
+    color:grey;
 }
 
 /* individual order detail */
@@ -336,6 +362,10 @@ h2 {
     border-radius: 5px;
     box-shadow: 0px 0px 10px #a28282;
 
+}
+
+#updateProfileContainer h1 {
+    font-size: 1.7rem;
 }
 
 #profileContainer a {
