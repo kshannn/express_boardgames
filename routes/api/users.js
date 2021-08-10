@@ -54,6 +54,8 @@ router.post('/create', async (req, res) => {
         res.send('Email taken.')
     }
 
+    
+
     // case 2: no existing user email in db
     if (!emailExist) {
         try {
