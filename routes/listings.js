@@ -120,6 +120,7 @@ router.get('/create', checkIfAuthenticated, async (req, res) => {
 
 // 2. process form
 router.post('/create', checkIfAuthenticated, async (req, res) => {
+    console.log('creating')
     let allCategories = await listingDataLayer.getAllCategories()
     const gameForm = createGameForm(allCategories);
     gameForm.handle(req, {
@@ -131,7 +132,7 @@ router.post('/create', checkIfAuthenticated, async (req, res) => {
                 price,
                 ...gameListingData
             } = form.data
-            gameListingData.name = gameListingData.toUpperCase();
+            gameListingData.name = gameListingData.name.toUpperCase();
 
             // create new instance in games table
             const gameListing = new GameListing(gameListingData);
