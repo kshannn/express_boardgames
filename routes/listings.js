@@ -76,7 +76,7 @@ router.get('/', checkIfAuthenticated, async (req, res) => {
         'success': async (form) => {
 
             if (form.data.name) {
-                q = q.where('name', 'like', '%' + form.data.name + '%')
+                q = q.where('name', 'like', '%' + form.data.name.toUpperCase() + '%')
             }
 
 
@@ -131,6 +131,7 @@ router.post('/create', checkIfAuthenticated, async (req, res) => {
                 price,
                 ...gameListingData
             } = form.data
+            gameListingData.name = gameListingData.toUpperCase();
 
             // create new instance in games table
             const gameListing = new GameListing(gameListingData);
@@ -221,7 +222,9 @@ router.post('/:listingId/update', checkIfAuthenticated, async (req, res) => {
                 price,
                 ...gameListingData
             } = form.data
+            gameListingData.name = gameListingData.name.toUpperCase()
             gameListing.set(gameListingData)
+            
 
             let slicedImage = image.split(',')[1]
 

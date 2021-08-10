@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
         let q = GameListing.collection()
 
         if (req.body.searchName) {
-            q = q.where('name', 'like', '%' + req.body.searchName + '%')
+            q = q.where('name', 'like', '%' + req.body.searchName.toUpperCase() + '%')
         }
 
         req.body.searchMinPrice = parseInt(req.body.searchMinPrice) * 100
