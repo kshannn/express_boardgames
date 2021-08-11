@@ -38,12 +38,12 @@ router.post('/', async (req, res) => {
             q = q.where('name', 'like', '%' + req.body.searchName.toUpperCase() + '%')
         }
 
-        req.body.searchMinPrice = parseInt(req.body.searchMinPrice) * 100
+        req.body.searchMinPrice = parseFloat(req.body.searchMinPrice) * 100
         if (req.body.searchMinPrice) {
             q = q.where('price', '>=', req.body.searchMinPrice)
         }
-
-        req.body.searchMaxPrice = parseInt(req.body.searchMaxPrice) * 100
+        
+        req.body.searchMaxPrice = parseFloat(req.body.searchMaxPrice) * 100
         if (req.body.searchMaxPrice) {
             q = q.where('price', '<=', req.body.searchMaxPrice)
         }
