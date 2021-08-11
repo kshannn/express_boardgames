@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
             q = q.query("join", "categories_gameListings", "gameListings.id", "gameListing_id").where("category_id", "in", req.body.searchCategories)
         }
 
-        let gameListings = await q.fetch({
+        let gameListings = await q.orderBy('posted_date','ASC').fetch({
             withRelated: ['category']
         })
 
