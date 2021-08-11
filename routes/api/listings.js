@@ -16,7 +16,7 @@ const listingDataLayer = require('../../dal/listings')
 router.get('/', async (req, res) => {
     try {
 
-        const gameListings = await GameListing.collection().fetch()
+        const gameListings = await GameListing.collection().orderBy('posted_date','ASC').fetch()
 
         res.send(gameListings.toJSON())
         res.status(200)
