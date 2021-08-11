@@ -37,7 +37,7 @@ router.get('/', checkIfAuthenticated, async (req, res) => {
     orderSearchForm.handle(req, {
         'empty': async (form) => {
             // case 1: searching on empty fields returns all result
-            let orders = await Order.collection().fetch({
+            let orders = await Order.collection().orderBy('order_date','ASC').fetch({
                 withRelated: ['orderItem', 'orderItem.gameListing', 'status'],
                 require: true
             })
@@ -74,7 +74,7 @@ router.get('/', checkIfAuthenticated, async (req, res) => {
         },
         'error': async (form) => {
             // 2. Case 2 - Invalid search field, returns all results with validation msg
-            let orders = await Order.collection().fetch({
+            let orders = await Order.collection().orderBy('order_date','ASC').fetch({
                 withRelated: ['orderItem', 'orderItem.gameListing', 'status'],
                 require: true
             })
@@ -131,7 +131,7 @@ router.get('/', checkIfAuthenticated, async (req, res) => {
 
 
 
-            let orders = await q.fetch({
+            let orders = await q.orderBy('order_date','ASC').fetch({
                 withRelated: ['orderItem', 'orderItem.gameListing', 'status']
             })
 
