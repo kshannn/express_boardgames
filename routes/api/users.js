@@ -133,7 +133,6 @@ router.post('/profile/update', checkIfAuthenticatedJWT, async (req, res) => {
         let user = await User.where('id', req.user.id).fetch()
 
         user.set('username', req.body.username)
-        // user.set('email', req.body.email)
         user.set('address', req.body.address)
         user.set('phone_number', req.body.phone_number)
         await user.save()
@@ -147,7 +146,6 @@ router.post('/profile/update', checkIfAuthenticatedJWT, async (req, res) => {
         res.send('Unexpected internal server error')
     }
 })
-
 
 
 module.exports = router;
