@@ -147,7 +147,7 @@ const createGameForm = (category) => {
             validators: [validators.maxlength(45)],
         }),
         'price': fields.string({
-            label: "Price ($)",
+            label: "Price (in cents)",
             required: true,
             errorAfterField: true,
             cssClasses: {

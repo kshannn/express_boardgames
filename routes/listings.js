@@ -129,7 +129,7 @@ router.post('/create', checkIfAuthenticated, async (req, res) => {
             let {
                 categories,
                 image,
-                price,
+                // price,
                 ...gameListingData
             } = form.data
             gameListingData.name = gameListingData.name.toUpperCase();
@@ -140,7 +140,7 @@ router.post('/create', checkIfAuthenticated, async (req, res) => {
 
             let splitImage = image.split(',')[1]
             gameListing.set('image', splitImage)
-            gameListing.set('price', form.data.price * 100)
+            // gameListing.set('price', form.data.price * 100)
             gameListing.set('posted_date', new Date())
             gameListing.set('vendor_id', req.session.vendor.id)
             await gameListing.save()
@@ -176,7 +176,7 @@ router.get('/:listingId/update', checkIfAuthenticated, async (req, res) => {
 
     // fill in existing form
     gameForm.fields.name.value = gameListing.get('name')
-    gameForm.fields.price.value = gameListing.get('price') / 100
+    gameForm.fields.price.value = gameListing.get('price') 
     gameForm.fields.description.value = gameListing.get('description')
     gameForm.fields.min_player_count.value = gameListing.get('min_player_count')
     gameForm.fields.max_player_count.value = gameListing.get('max_player_count')
@@ -220,7 +220,7 @@ router.post('/:listingId/update', checkIfAuthenticated, async (req, res) => {
             let {
                 categories,
                 image,
-                price,
+                // price,
                 ...gameListingData
             } = form.data
             gameListingData.name = gameListingData.name.toUpperCase()
@@ -229,7 +229,7 @@ router.post('/:listingId/update', checkIfAuthenticated, async (req, res) => {
 
             let slicedImage = image.split(',')[1]
 
-            gameListing.set('price', form.data.price * 100)
+            // gameListing.set('price', form.data.price * 100)
             gameListing.set('image', slicedImage)
             await gameListing.save()
 
