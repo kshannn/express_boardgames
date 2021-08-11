@@ -17,4 +17,4 @@ Access the live link (for vendor) [here](https://kls-boardgames.herokuapp.com/)
 Game On! is a mobile-responsive open platform for vendors to put up their boardgame listings and for customers to browse and purchase boardgames from.
 
 
-Please refer to the full README documentation [here]("https://github.com/kshannn/react_boardgames")
+Please refer to the full README documentation [here](https://github.com/kshannn/react_boardgames)
