@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
     // check if user is logged in (using tokens)
     await jwt.verify(req.query.token, process.env.TOKEN_SECRET, (err, user) => {
         if (err) {
-            res.redirect('https://3000-green-prawn-u4ktudfo.ws-us13.gitpod.io/login' + '?' + 'session=expire&' + 'callback_url=' + 'https://3000-green-prawn-u4ktudfo.ws-us14.gitpod.io/cart')
+            res.redirect('https://loving-mayer-9f2c72.netlify.app/login' + '?' + 'session=expire&' + 'callback_url=' + 'https://loving-mayer-9f2c72.netlify.app/cart')
         }
 
         req.user = user;
@@ -65,7 +65,7 @@ router.get('/', async (req, res) => {
         if (each_cartItem.quantity <= each_cartItem.gameListing.stock) {
             total += each_cartItem.unit_price * each_cartItem.quantity
         } else {
-            res.redirect('https://3000-green-prawn-u4ktudfo.ws-us13.gitpod.io/cart' + '?' + 'stock=insufficient')
+            res.redirect('https://loving-mayer-9f2c72.netlify.app/cart' + '?' + 'stock=insufficient')
         }
     }
 
