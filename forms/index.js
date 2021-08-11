@@ -116,14 +116,16 @@ const createLoginForm = () => {
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators: [validators.email(),validators.maxlength(320)]
         }),
         'password': fields.password({
             required: true,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators: [validators.maxlength(256)]
         })
     })
 }
@@ -280,7 +282,8 @@ const createSearchForm = (category) => {
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators: [validators.maxlength(45)]
         }),
         'categories':fields.string({
             required: false,
@@ -304,7 +307,8 @@ const createOrdersSearchForm = (statuses) => {
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators: [validators.maxlength(45)]
         }),
         'recipient_id': fields.string({
             label: "Recipient ID",
@@ -312,7 +316,8 @@ const createOrdersSearchForm = (statuses) => {
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators: [validators.maxlength(45)]
         }),
         'status':fields.string({
             required: false,
