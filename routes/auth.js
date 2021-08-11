@@ -132,7 +132,6 @@ router.get('/update', checkIfAuthenticated, async (req, res) => {
     const form = updateVendorForm()
 
     // prefill vendor info
-    form.fields.username.value = vendor.get('username')
     form.fields.address.value = vendor.get('address')
     form.fields.phone_number.value = vendor.get('phone_number')
 
@@ -154,21 +153,7 @@ router.post('/update', checkIfAuthenticated, async (req, res) => {
     form.handle(req, {
         'success': async (form) => {
 
-            // case 1 - username already exist in database
-            let sameUsernameVendor = await Vendor.where({
-                'username': form.data.username
-            }).fetch({
-                require: false
-            });
-
-            let usernameExist = false
-
-            if (sameUsernameVendor) {
-                usernameExist = true
-            }
-
-            // case 2 - username does not exist in database
-            if (!usernameExist) {
+            
                 let {
                     ...vendorData
                 } = form.data
@@ -177,10 +162,7 @@ router.post('/update', checkIfAuthenticated, async (req, res) => {
 
                 req.flash('success_messages', 'Profile information successfully updated!')
                 res.redirect('profile')
-            } else {
-                req.flash('error_messages', 'Current username has already been used. Please try another username.')
-                res.redirect('/auth/update')
-            }
+          
         },
         'error': async (form) => {
             res.render('auth/update', {

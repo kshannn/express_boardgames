@@ -30,6 +30,7 @@ var bootstrapField = function (name, object) {
 const createVendorRegistrationForm = () => {
     return forms.create({
         'username': fields.string({
+            label: "Username (cannot be changed later)",
             required: true,
             errorAfterField: true,
             cssClasses: {
@@ -85,14 +86,6 @@ const createVendorRegistrationForm = () => {
 // ===== Vendor (Update) =====
 const updateVendorForm = () => {
     return forms.create({
-        'username': fields.string({
-            required: true,
-            errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            },
-            validators: [validators.maxlength(25)],
-        }),
         'phone_number': fields.string({
             label: 'Contact No.',
             required: true,
