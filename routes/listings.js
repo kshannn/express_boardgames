@@ -46,7 +46,7 @@ router.get('/', checkIfAuthenticated, async (req, res) => {
             // 1. Case 1 - No search, returns all results
             let gameListings = await GameListing.collection().where(
                 'vendor_id', req.session.vendor.id
-            ).fetch({
+            ).orderBy('posted_date','ASC').fetch({
                 withRelated: ['category']
             })
 
@@ -63,7 +63,7 @@ router.get('/', checkIfAuthenticated, async (req, res) => {
             // 2. Case 2 - Invalid search field, returns all results with validation msg
             let gameListings = await GameListing.collection().where(
                 'vendor_id', req.session.vendor.id
-            ).fetch()
+            ).orderBy('posted_date','ASC').fetch()
 
             // if return single item (i.e. not array), put in array
             gameListings = Array.isArray(gameListings.toJSON()) ? gameListings.toJSON() : [gameListings.toJSON()]
@@ -93,7 +93,7 @@ router.get('/', checkIfAuthenticated, async (req, res) => {
             }
 
             // additional 'where' query set to limit to returning specific vendor results
-            let gameListings = await q.where('vendor_id', req.session.vendor.id).fetch({
+            let gameListings = await q.where('vendor_id', req.session.vendor.id).orderBy('posted_date','ASC').fetch({
                 withRelated: ['category']
             })
 
@@ -130,7 +130,7 @@ router.post('/create', checkIfAuthenticated, async (req, res) => {
                 image,
                 ...gameListingData
             } = form.data
-            console.log(image)
+           
             gameListingData.name = gameListingData.name.toUpperCase();
 
             // create new instance in games table
@@ -139,7 +139,6 @@ router.post('/create', checkIfAuthenticated, async (req, res) => {
 
             let splitImage = image.split(',')[1]
             gameListing.set('image', splitImage)
-            // gameListing.set('price', form.data.price * 100)
             gameListing.set('posted_date', new Date())
             gameListing.set('vendor_id', req.session.vendor.id)
             await gameListing.save()
@@ -228,7 +227,7 @@ router.post('/:listingId/update', checkIfAuthenticated, async (req, res) => {
 
             let slicedImage = image.split(',')[1]
 
-            // gameListing.set('price', form.data.price * 100)
+            
             gameListing.set('image', slicedImage)
             await gameListing.save()
 
