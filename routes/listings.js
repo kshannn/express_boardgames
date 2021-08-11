@@ -120,7 +120,6 @@ router.get('/create', checkIfAuthenticated, async (req, res) => {
 
 // 2. process form
 router.post('/create', checkIfAuthenticated, async (req, res) => {
-    console.log('creating')
     let allCategories = await listingDataLayer.getAllCategories()
     const gameForm = createGameForm(allCategories);
     gameForm.handle(req, {

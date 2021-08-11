@@ -25,6 +25,7 @@
                 <thead>
                     <tr>
                         <th>Date Posted</th>
+                        <th>Image</th>
                         <th>Name</th>
                         <th>Categories</th>
                         <th>Unit Price</th>
@@ -37,6 +38,9 @@
                     <tr>
                         <td>
                             {{moment this.posted_date 'LLL'}}
+                        </td>
+                        <td>
+                            <div id="listingPreviewContainer" style="background-image: url({{this.image}})"></div>
                         </td>
                         <td>
                             {{this.name}}

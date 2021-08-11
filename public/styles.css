@@ -200,6 +200,13 @@ h2 {
     background: rgb(255, 141, 10);
 }
 
+#listingPreviewContainer {
+    height: 100px;
+    width: 100px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
 
 /* orders page*/
 #orderPage {
