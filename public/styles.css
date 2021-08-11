@@ -12,7 +12,8 @@ h2 {
     font-family: 'Noto Serif JP', serif;
 }
 
-/* === nav bar === */
+
+/* ==================== Navigation Bar ====================*/
 .navbar {
     background-color: #2f211b;
 }
@@ -77,7 +78,8 @@ h2 {
     margin-bottom: 5px;
 }
 
-/* === landing page === */
+
+/* ==================== Landing Page ====================*/
 .heroImage {
     width: 100%;
     min-height: calc(100vh - 56px);
@@ -135,7 +137,7 @@ h2 {
 }
 
 
-/* listing page */
+/* ==================== Listing Page ====================*/
 #mainSection {
     display: flex;
     min-height: 100vh;
@@ -208,7 +210,7 @@ h2 {
 }
 
 
-/* orders page*/
+/* ==================== Orders Page ====================*/
 #orderPage {
     display: flex;
     min-height: 100vh;
@@ -244,7 +246,7 @@ h2 {
     color:grey;
 }
 
-/* individual order detail */
+/* ==================== Individual Order Detail ====================*/
 #orderDetailsPage {
     margin: 20px 30px;
 }
@@ -267,7 +269,7 @@ h2 {
     width: fit-content;
 }
 
-/* create listing page */
+/* ==================== Create Listing Page ====================*/
 #createListingPage {
     width: 100%;
     height: calc(100vh - 56px);
@@ -296,7 +298,8 @@ h2 {
     background-color: rgb(255, 145, 0);
 }
 
-/* === update listing page === */
+
+/* ==================== Update Listing Page ====================*/
 
 #updateListingPage {
     padding: 30px 100px;
@@ -320,7 +323,7 @@ h2 {
     width: 90px;
 }
 
-/* === delete listing page === */
+/* ==================== Delete Listing Page ====================*/
 
 #deleteListingPage {
     width: 100%;
@@ -332,7 +335,8 @@ h2 {
     font-size: 1.7rem;
 }
 
-/* === delete order page === */
+
+/* ==================== Delete Order Page ====================*/
 
 #deleteOrderPage {
     width: 100%;
@@ -344,7 +348,7 @@ h2 {
     font-size: 1.7rem;
 }
 
-/* === vendor profile page === */
+/* ==================== Vendor Profile Page ====================*/
 
 #vendorProfilePage,
 #vendorUpdatePage,
@@ -383,7 +387,7 @@ h2 {
     font-size: 1.7rem;
 }
 
-/* register vendor page */
+/* ==================== Register Vendor Page ====================*/
 
 #createProfileContainer h1 {
     font-size: 1.7rem;
@@ -393,7 +397,7 @@ h2 {
 /* ========= FOR SMALLER DEVICES ========= */
 @media screen and (max-width: 768px) {
 
-    /* create and update listing page */
+    /* === create and update listing page === */
     #createListingPage,
     #updateListingPage {
         padding: 30px 30px;
