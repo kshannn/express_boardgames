@@ -128,9 +128,9 @@ router.post('/create', checkIfAuthenticated, async (req, res) => {
             let {
                 categories,
                 image,
-                // price,
                 ...gameListingData
             } = form.data
+            console.log(image)
             gameListingData.name = gameListingData.name.toUpperCase();
 
             // create new instance in games table
