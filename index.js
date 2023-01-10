@@ -47,7 +47,7 @@ const FileStore = require('session-file-store')(session);
 
 // set up sessions
 app.use(session({
-    'store': new FileStore(),
+    'store': new FileStore({logFn: function(){}}),
     'secret': process.env.SESSION_SECRET,
     'resave': false,
     saveUninitialized: true
